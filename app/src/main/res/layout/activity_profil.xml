@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffff"
+    tools:context=".Main.Profil">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="150dp"
+                    android:layout_height="400dp"
+                    android:src="@drawable/undraw_missed_chances_k3cq"/>
+
+            </LinearLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="700dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/iv_profil_foto"
+                        android:layout_width="150dp"
+                        android:layout_marginTop="50dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_height="150dp"
+                        android:src="@drawable/undraw_jason_mask_t07o"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+                        <EditText
+                            android:id="@+id/et_profil_nama"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="95dp"
+                            android:layout_marginStart="20dp"
+                            android:layout_marginEnd="20dp"
+                            android:layout_gravity="center"
+                            android:text="Nama"/>
+                        <EditText
+                            android:id="@+id/et_profil_email"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="20dp"
+                            android:layout_marginEnd="20dp"
+                            android:layout_gravity="center"
+                            android:text="Email"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:padding="10dp"
+                    android:orientation="vertical">
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <Button
+                            android:id="@+id/btn_profil_simpan"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@color/colorPrimary"
+                            android:textColor="#ffff"
+                            android:layout_margin="2.5dp"
+                            android:layout_weight="1"
+                            android:text="Simpan"/>
+                        <Button
+                            android:id="@+id/btn_profil_chat"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="#ffff"
+                            android:background="#673AB7"
+                            android:layout_margin="2.5dp"
+                            android:layout_weight="1"
+                            android:text="Chat doi"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
+            </RelativeLayout>
+        </FrameLayout>
+    </ScrollView>
+</LinearLayout>
