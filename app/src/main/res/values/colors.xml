@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#4285f4</color>
+    <color name="colorPrimaryDark">#4283F0</color>
+    <color name="colorAccent">#333333</color>
+
+    <color name="colorbubbleleft">#5f6587</color>
+
+    <color name="colorbubbleright">#4285f4</color>
+
+    <color name="satu">#00906f</color>
+    <color name="dua">#ffffff</color>
+    <color name="tiga">#76b389</color>
+    <color name="empat">#2b2b2b</color>
+    <color name="lima">#333333</color>
+
+    <color name="colorTextPrimary">#D9FFFFFF</color>
+    <color name="colorTextPrimaryHighlighted">#F2FFFFFF</color>
+    <color name="colorTextSecondary">#8CFFFFFF</color>
+
+    <!--basic colors-->
+    <color name="colorTransparent">#00000000</color>
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="colorBlack">#000000</color>
+    <color name="colorEmptyStates">#40ffffff</color>
+    <color name="colorGrey">#BDBDBD</color>
+    <color name="colorRed">#F44336</color>
+    <color name="colorPink">#de7172</color>
+
+    <!--theme colors-->
+    <color name="colorShadow">#41000000</color>
+    <color name="colorBackground">#2b2b2b</color>
+    <color name="colorForeground">#ffffff</color>
+    <!--fab colors-->
+</resources>
