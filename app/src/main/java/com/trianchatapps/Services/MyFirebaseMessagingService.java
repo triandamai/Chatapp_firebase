@@ -1,10 +1,12 @@
 package com.trianchatapps.Services;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.Person;
 import android.support.v4.app.RemoteInput;
 import android.content.Context;
 import android.content.Intent;
@@ -32,17 +34,22 @@ import com.google.firebase.messaging.RemoteMessage;
 import com.trianchatapps.R;
 import com.trianchatapps.Thread.ThreadChat;
 
+import org.joda.time.DateTime;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Date;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
     public static final String TAG = "FIREBASEMEssagingService";
     public static final String REPLY_ACTION = "reply";
     public static final String KEY_NOTIFICATION_ID = "id_notif";
+    public static final int NOTIFICATION_ID = 1;
     public static final String ISI_PESAN = "id";
     public static final String REPLY_KEY = "key";
+    public static final String NOTIFICATION_CHANNEL_ID = "ChatsApp";
     public String instanceId = null;
     @Override
     public void onNewToken(String s) {
@@ -92,6 +99,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
 
 
+    @RequiresApi(api = Build.VERSION_CODES.P)
     private void sendNotification(String notificationTitle, String notificationBody, String from, String img ) {
         Intent intent = new Intent(this, ThreadChat.class);
         intent.putExtra("uid",from);
@@ -118,14 +126,19 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel CHANNEL_ID = new NotificationChannel("ChatsApp", "name", NotificationManager.IMPORTANCE_HIGH);
-            CHANNEL_ID.setDescription("ChatsApp");
+            NotificationChannel CHANNEL_ID = new NotificationChannel(NOTIFICATION_CHANNEL_ID, "name", NotificationManager.IMPORTANCE_HIGH);
+            CHANNEL_ID.setDescription(NOTIFICATION_CHANNEL_ID);
             CHANNEL_ID.enableLights(true);
             CHANNEL_ID.enableVibration(true);
-            CHANNEL_ID.setVibrationPattern(new long[]{100, 200 ,400 ,500,400,300,200,400,100});
+            //CHANNEL_ID.setVibrationPattern(new long[]{100, 200 ,400 ,500,400,300,200,400,100});
             notificationManager.createNotificationChannel(CHANNEL_ID);
         }
 
+        Person user = new Person.Builder().setName(notificationTitle)
+                .setIcon(null)
+                .build();
+        long time = new Date().getTime();
+        Notification.MessagingStyle.Message message = new Notification.MessagingStyle.Message(notificationBody,time, notificationTitle);
 
         RemoteInput remoteInput = new RemoteInput.Builder(REPLY_KEY)
                 .setLabel("Enter untuk membalas")
@@ -133,14 +146,18 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         NotificationCompat.Action action = new NotificationCompat.Action.Builder(android.R.drawable.ic_delete,
                 "Balas Sekarang",pendding(from,notificationBody) )
                 .addRemoteInput(remoteInput)
+                .setAllowGeneratedReplies(true)
                 .build();
+        NotificationCompat.MessagingStyle style = new NotificationCompat.MessagingStyle(notificationTitle);
+        style.addMessage(notificationTitle, time,notificationBody);
 
-        Notification notificationBuilder = new NotificationCompat.Builder(this,"ChatsApp")
+
+        Notification notificationBuilder = new NotificationCompat
+                .Builder(this,NOTIFICATION_CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_chat_black_24dp)
                 .setContentTitle(notificationTitle)
                 .setContentText(notificationBody)
-                .setStyle(new NotificationCompat.InboxStyle()
-                .addLine(notificationBody))
+                .setStyle(style)
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setLargeIcon(getRoundbmp(bmp))
@@ -151,7 +168,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 .build();
 
 
-        notificationManager.notify(0, notificationBuilder);
+        notificationManager.notify(NOTIFICATION_ID, notificationBuilder);
 
     }
 

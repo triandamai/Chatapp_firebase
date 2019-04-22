@@ -59,12 +59,13 @@ public class MainActivity extends AppCompatActivity {
 
         if (user != null) {
             tambahkeuser(user);
+            toolbar.setTitle(user.getDisplayName());
+            toolbar.setSubtitle(user.getPhoneNumber());
         } else {
             pindahActivity(1);
         }
 
-        toolbar.setTitle(user.getDisplayName());
-        toolbar.setSubtitle(user.getPhoneNumber());
+
 
         adapter = new TabAdapterMainActivity(getSupportFragmentManager());
         adapter.addFragment(new FragmentListChat(), "Chat");
@@ -86,6 +87,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onPostResume() {
         super.onPostResume();
         new Function.IsOnline().execute();
+    }
+
+    @OnClick(R.id.toolbar)
+    public void ke_profil(){
+        startActivity(new Intent(context, MyProfil.class));
+
     }
 
     @OnClick(R.id.menu_new_contact)

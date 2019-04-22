@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
@@ -30,9 +31,9 @@ public class Profil extends AppCompatActivity {
     @BindView(R.id.iv_profil_foto)
     CircleImageView ivProfilFoto;
     @BindView(R.id.et_profil_nama)
-    EditText etProfilNama;
+    TextView etProfilNama;
     @BindView(R.id.et_profil_email)
-    EditText etProfilEmail;
+    TextView etProfilEmail;
     @BindView(R.id.btn_profil_simpan)
     Button btnProfilSimpan;
     @BindView(R.id.btn_profil_chat)

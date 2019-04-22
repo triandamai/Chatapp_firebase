@@ -45,7 +45,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="vertical">
-                        <EditText
+                        <TextView
                             android:id="@+id/et_profil_nama"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -53,8 +53,9 @@
                             android:layout_marginStart="20dp"
                             android:layout_marginEnd="20dp"
                             android:layout_gravity="center"
+                            android:textSize="20sp"
                             android:text="Nama"/>
-                        <EditText
+                        <TextView
                             android:id="@+id/et_profil_email"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"

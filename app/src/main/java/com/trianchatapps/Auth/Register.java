@@ -3,12 +3,11 @@ package com.trianchatapps.Auth;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.Button;
-import android.widget.Toast;
 
 import com.google.android.gms.auth.api.Auth;
 import com.google.firebase.auth.FirebaseAuth;
@@ -20,22 +19,16 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.auth.PhoneAuthCredential;
-import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
 import com.trianchatapps.Helper.Bantuan;
-import com.trianchatapps.Helper.EditTextPrefix;
 import com.trianchatapps.Main.MainActivity;
 import com.trianchatapps.R;
-
-import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -47,6 +40,8 @@ public class Register extends AppCompatActivity implements GoogleApiClient.OnCon
     private DatabaseReference databaseReference;
     GoogleApiClient googleApiClient;
     private static final int RC_SIGN_IN = 9001;
+
+    SweetAlertDialog dialog;
 
     Context context;
     ProgressDialog progressDialog;
@@ -69,6 +64,8 @@ public class Register extends AppCompatActivity implements GoogleApiClient.OnCon
         } else {
 
         }
+
+
     }
 
 
@@ -111,16 +108,17 @@ public class Register extends AppCompatActivity implements GoogleApiClient.OnCon
     }
 
     private void authWithGogle(final GoogleSignInAccount account) {
+       new Bantuan(context).swal_loading("Tunggu ya").show();
         final AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
         firebaseAuth.signInWithCredential(credential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-                    //new Bantuan(context).toastLong("berhasil"+account.getDisplayName());
+                    new Bantuan(context).swal_loading("").dismiss();
                     startActivity(new Intent(context, MainActivity.class));
                     finish();
                 } else {
-                    new Bantuan(context).toastLong("gagal");
+                    new Bantuan(context).alertDialogPeringatan("Duh gagal");
                 }
             }
         });
@@ -128,6 +126,6 @@ public class Register extends AppCompatActivity implements GoogleApiClient.OnCon
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        new Bantuan(context).alertDialogInformasi("Upps..Koneksi anda buruk");
+       new Bantuan(context).alertDialogPeringatan("Kayanya jaringan kamu jelek..");
     }
 }

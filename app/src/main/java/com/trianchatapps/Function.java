@@ -1,24 +1,11 @@
 package com.trianchatapps;
 
-import android.app.ProgressDialog;
-import android.content.Context;
-import android.media.MediaPlayer;
 import android.os.AsyncTask;
-import android.support.annotation.NonNull;
-import android.view.View;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.trianchatapps.AdapterRecyclerview.AdapterListContact;
-import com.trianchatapps.Helper.Bantuan;
-import com.trianchatapps.Model.Message;
 import com.trianchatapps.Model.StatusAktif;
 
 import org.joda.time.DateTime;
@@ -27,11 +14,8 @@ import org.joda.time.Interval;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
 
 public class Function {
     private DatabaseReference databaseReference;

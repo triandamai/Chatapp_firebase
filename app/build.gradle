@@ -55,6 +55,13 @@ dependencies {
     implementation 'com.android.support:support-emoji:28.0.0'
     implementation 'com.android.support:support-compat:28.0.0'
 
+    //sweet alert https://github.com/pedant/sweet-alert-dialog
+    implementation 'com.github.thomper:sweet-alert-dialog:1.4.0'
+
+    
+    //particle https://github.com/ibrahimsn98/android-particles
+    implementation 'com.github.ibrahimsn98:android-particles:1.6'
+
 }
 //TODO:: firebase
 apply plugin: 'com.google.gms.google-services'
