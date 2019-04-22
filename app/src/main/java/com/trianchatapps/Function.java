@@ -13,6 +13,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.trianchatapps.Model.Contact;
 import com.trianchatapps.Model.StatusAktif;
 
+import com.trianchatapps.Model.User;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.joda.time.Interval;
@@ -31,6 +32,7 @@ public class Function {
         private DatabaseReference databaseReference;
         private FirebaseUser firebaseUser;
         long timestamp = new Date().getTime();
+        public User user ;
 
 
         @Override
@@ -141,35 +143,8 @@ public class Function {
         return calendar.getTimeInMillis();
     }
 
-    public List<Contact> contact(String UserId){
 
-        final List<Contact> contacts = new ArrayList<>();
-            databaseReference.child(GlobalVariabel.CHILD_CONTACT)
-                    .child(UserId)
-                    .child(GlobalVariabel.CHILD_CONTACT_FRIEND_REQUEST)
-                    .addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            if (dataSnapshot.exists()){
-                                 Contact contact = new Contact();
-                                for (DataSnapshot data : dataSnapshot.getChildren()){
-                                    if (data.child("isfriend").getValue(boolean.class) != true) {
-                                        contact = data.getValue(Contact.class);
-                                    }
-                                }
-                                contacts.add(contact);
-                            }
-                        }
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                        }
-                    });
-        
-        return contacts;
-    }
-    
 
 
 
