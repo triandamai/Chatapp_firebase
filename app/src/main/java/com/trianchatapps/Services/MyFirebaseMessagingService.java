@@ -88,13 +88,127 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             mesfrom = remoteMessage.getData().get("user_id");
             userIMg = remoteMessage.getData().get("icon");
 
-           sendNotification(notificationTitle,  notificationBody, mesfrom , userIMg) ;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                sendNotification(notificationTitle,  notificationBody, mesfrom , userIMg) ;
+            }else if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
+                sendNotificationN(notificationTitle,  notificationBody, mesfrom , userIMg);
+            }else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N){
+                sendNotificationM(notificationTitle,  notificationBody, mesfrom , userIMg);
+            }
 
         }
 
 
 
 
+    }
+
+    private void sendNotificationM(String notificationTitle, String notificationBody, String mesfrom, String userIMg) {
+        Intent intent = new Intent(this, ThreadChat.class);
+        intent.putExtra("uid",mesfrom);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
+
+        Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        //load image
+        Bitmap bmp = null;
+        try {
+            InputStream inputStream = new URL(userIMg).openStream();
+            bmp = BitmapFactory.decodeStream(inputStream);
+
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        long time = new Date().getTime();
+
+
+
+
+        Notification notificationBuilder = new NotificationCompat
+                .Builder(this,NOTIFICATION_CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_chat_black_24dp)
+                .setContentTitle(notificationTitle)
+                .setContentText(notificationBody)
+                .setStyle(new NotificationCompat.BigTextStyle()
+                .bigText(notificationBody))
+                .setDefaults(Notification.DEFAULT_ALL)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setLargeIcon(getRoundbmp(bmp))
+                .setContentIntent(pendingIntent)
+                .setSound(defaultSoundUri)
+                .setAutoCancel(true)
+                .build();
+
+
+        notificationManager.notify(NOTIFICATION_ID, notificationBuilder);
+    }
+
+    private void sendNotificationN(String notificationTitle, String notificationBody, String mesfrom, String userIMg) {
+        Intent intent = new Intent(this, ThreadChat.class);
+        intent.putExtra("uid",mesfrom);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
+
+        Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        //load image
+        Bitmap bmp = null;
+        try {
+            InputStream inputStream = new URL(userIMg).openStream();
+            bmp = BitmapFactory.decodeStream(inputStream);
+
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+
+
+
+        long time = new Date().getTime();
+
+        RemoteInput remoteInput = new RemoteInput.Builder(REPLY_KEY)
+                .setLabel("Enter untuk membalas")
+                .build();
+        NotificationCompat.Action action = new NotificationCompat.Action.Builder(android.R.drawable.ic_menu_send,
+                "Balas Sekarang",pendding(mesfrom,notificationBody) )
+                .addRemoteInput(remoteInput)
+                .setAllowGeneratedReplies(true)
+                .build();
+
+        Notification notificationBuilder = new NotificationCompat
+                .Builder(this,NOTIFICATION_CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_chat_black_24dp)
+                .setContentTitle(notificationTitle)
+                .setContentText(notificationBody)
+                .setStyle(new NotificationCompat.InboxStyle()
+                .addLine(notificationBody))
+                .setDefaults(Notification.DEFAULT_ALL)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setLargeIcon(getRoundbmp(bmp))
+                .setContentIntent(pendingIntent)
+                .setSound(defaultSoundUri)
+                .setAutoCancel(true)
+                .addAction(action)
+                .build();
+
+
+        notificationManager.notify(NOTIFICATION_ID, notificationBuilder);
     }
 
 
@@ -149,8 +263,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 .setAllowGeneratedReplies(true)
                 .build();
         NotificationCompat.MessagingStyle style = new NotificationCompat.MessagingStyle(notificationTitle);
-        style.addMessage(notificationTitle, time,notificationBody);
-
+        style.addMessage(notificationBody, time,notificationTitle);
+        style.setGroupConversation(true);
 
         Notification notificationBuilder = new NotificationCompat
                 .Builder(this,NOTIFICATION_CHANNEL_ID)
