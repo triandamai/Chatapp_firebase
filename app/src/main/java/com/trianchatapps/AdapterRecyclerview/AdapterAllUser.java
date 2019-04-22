@@ -12,12 +12,20 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.trianchatapps.GlobalVariabel;
+import com.trianchatapps.Helper.Bantuan;
+import com.trianchatapps.Model.Contact;
 import com.trianchatapps.Model.User;
 import com.trianchatapps.R;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -28,12 +36,13 @@ public class AdapterAllUser extends RecyclerView.Adapter<AdapterAllUser.myViewHo
     Context context;
     List<User> userList = new ArrayList<>();
     DatabaseReference databaseReference;
-    private String owner;
+    FirebaseUser firebaseUser;
+    private String Uidsaya;
 
     public AdapterAllUser(Context context, String owner, List<User> users) {
         this.context = context;
         this.userList = users;
-        this.owner = owner;
+        this.Uidsaya = owner;
     }
 
     @NonNull
@@ -47,25 +56,51 @@ public class AdapterAllUser extends RecyclerView.Adapter<AdapterAllUser.myViewHo
 
     @Override
     public void onBindViewHolder(@NonNull final myViewHolder myViewholder, int i) {
-        User user = new User();
+        final User user ;
         user = userList.get(i);
 
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        final Bantuan bantuan =  new Bantuan(context);
 
         Glide.with(context)
                 .load(user.getPhotoUrl())
                 .into(myViewholder.ivUser);
         myViewholder.tvNama.setText(user.getDisplayName());
 
-        final User finalUser1 = user;
+
         myViewholder.btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                long timestamp = new Date().getTime();
+                Contact contact =
+                        new Contact(
+                                false,
+                                timestamp,
+                                firebaseUser.getDisplayName(),
+                                firebaseUser.getUid());
+
                 databaseReference = FirebaseDatabase.getInstance().getReference();
-                databaseReference.child("CONTACT")
-                        .child(owner)
-                        .child(finalUser1.getUid().toString())
-                        .setValue("true");
-                myViewholder.btnAdd.setEnabled(false);
+                databaseReference.child(GlobalVariabel.CHILD_CONTACT)
+                        .child(user.getUid())
+                        .child(GlobalVariabel.CHILD_CONTACT_FRIEND_REQUEST)
+                        .push()
+                        .setValue(contact).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+
+                        new Bantuan(context).swal_sukses("Berhasil Menambahkan");
+
+
+                    }
+
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        new Bantuan(context).swal_error("Gagal Mnambahkan");
+                    }
+                });
+
+
 
             }
         });

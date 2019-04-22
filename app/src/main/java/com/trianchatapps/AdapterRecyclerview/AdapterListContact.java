@@ -41,7 +41,7 @@ public class AdapterListContact extends RecyclerView.Adapter<AdapterListContact.
     private String saya;
 
 
-    public AdapterListContact(Context context, String owner, ArrayList<Contact> listkontak) {
+    public AdapterListContact(Context context, String owner,List<Contact> listkontak) {
         this.context = context;
         this.contacts = listkontak;
         this.saya = owner;

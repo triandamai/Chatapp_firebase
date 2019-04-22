@@ -1,11 +1,16 @@
 package com.trianchatapps;
 
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.trianchatapps.Model.Contact;
 import com.trianchatapps.Model.StatusAktif;
 
 import org.joda.time.DateTime;
@@ -14,8 +19,10 @@ import org.joda.time.Interval;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class Function {
     private DatabaseReference databaseReference;
@@ -132,6 +139,35 @@ public class Function {
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MINUTE, 0);
         return calendar.getTimeInMillis();
+    }
+
+    public List<Contact> contact(String UserId){
+
+        final List<Contact> contacts = new ArrayList<>();
+            databaseReference.child(GlobalVariabel.CHILD_CONTACT)
+                    .child(UserId)
+                    .child(GlobalVariabel.CHILD_CONTACT_FRIEND_REQUEST)
+                    .addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.exists()){
+                                 Contact contact = new Contact();
+                                for (DataSnapshot data : dataSnapshot.getChildren()){
+                                    if (data.child("isfriend").getValue(boolean.class) != true) {
+                                        contact = data.getValue(Contact.class);
+                                    }
+                                }
+                                contacts.add(contact);
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+        
+        return contacts;
     }
     
 

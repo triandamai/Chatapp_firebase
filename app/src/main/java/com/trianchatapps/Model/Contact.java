@@ -5,6 +5,19 @@ public class Contact {
     long timestap;
     String name, friedsUid ;
 
+    public Contact() {
+    }
+
+    public Contact(boolean isFriend,
+                   long timestap,
+                   String name,
+                   String friedsUid) {
+        this.isFriend = isFriend;
+        this.timestap = timestap;
+        this.name = name;
+        this.friedsUid = friedsUid;
+    }
+
     public boolean isFriend() {
         return isFriend;
     }
