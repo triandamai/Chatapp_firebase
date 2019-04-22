@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -12,7 +13,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.*;
 import com.trianchatapps.AdapterRecyclerview.AdapterListContact;
-import com.trianchatapps.Function;
 import com.trianchatapps.GlobalVariabel;
 import com.trianchatapps.Model.Contact;
 import com.trianchatapps.R;
@@ -53,11 +53,14 @@ public class FriendRequest extends AppCompatActivity {
 
 
       if (firebaseUser != null){
-        load_contact();
+        load_request_contact();
       }
     }
 
-    private void load_contact() {
+    private void load_request_contact() {
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(context);
+        rv.setLayoutManager(layoutManager);
+
         final List<Contact> contacts = new ArrayList<>();
         databaseReference.child(GlobalVariabel.CHILD_CONTACT)
                 .child(firebaseUser.getUid())
@@ -73,6 +76,7 @@ public class FriendRequest extends AppCompatActivity {
                                 }
                             }
                             contacts.add(contact);
+                            adapterListContact = new AdapterListContact(context,firebaseUser.getUid(),contacts);
                         }
                     }
 

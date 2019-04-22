@@ -16,7 +16,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.trianchatapps.AdapterRecyclerview.AdapterAllUser;
-import com.trianchatapps.Function;
 import com.trianchatapps.Model.User;
 import com.trianchatapps.R;
 
@@ -39,7 +38,7 @@ public class ListUser extends AppCompatActivity {
             Context context;
     private List<User> userList ;
     private AdapterAllUser adapter;
-    private String owner;
+    private String Uidsaya;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +56,7 @@ public class ListUser extends AppCompatActivity {
         rv.setLayoutManager(layoutManager);
 
         loadData();
-        owner = FirebaseAuth.getInstance().getCurrentUser().getUid().toString();
+        Uidsaya = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
     }
 
@@ -74,13 +73,13 @@ public class ListUser extends AppCompatActivity {
                             linearIsi.setVisibility(View.VISIBLE);
                             for (DataSnapshot data : dataSnapshot.getChildren()){
                                 user = data.getValue(User.class);
-                                if (user.getUid().equals(owner)){
+                                if (user.getUid().equals(Uidsaya)){
                                     //gausah diinput
                                 }else {
                                     userList.add(user);
                                 }
                             }
-                            adapter = new AdapterAllUser(context,owner,userList);
+                            adapter = new AdapterAllUser(context, Uidsaya,userList);
                             rv.setAdapter(adapter);
 
                         }else{

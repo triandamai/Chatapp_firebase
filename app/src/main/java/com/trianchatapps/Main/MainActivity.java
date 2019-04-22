@@ -7,7 +7,11 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-
+import android.widget.ImageView;
+import android.widget.TextView;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -21,10 +25,6 @@ import com.trianchatapps.Auth.Register;
 import com.trianchatapps.Function;
 import com.trianchatapps.Model.User;
 import com.trianchatapps.R;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity {
     Context context;
@@ -45,6 +45,12 @@ public class MainActivity extends AppCompatActivity {
     FloatingActionMenu fab;
 
     String instanceId;
+    @BindView(R.id.txt_main_title)
+    TextView txtMainTitle;
+    @BindView(R.id.txt_main_subtitle)
+    TextView txtMainSubtitle;
+    @BindView(R.id.iv_main_notif)
+    ImageView ivMainNotif;
     private TabAdapterMainActivity adapter;
 
 
@@ -59,12 +65,11 @@ public class MainActivity extends AppCompatActivity {
 
         if (user != null) {
             tambahkeuser(user);
-            toolbar.setTitle(user.getDisplayName());
-            toolbar.setSubtitle(user.getPhoneNumber());
+           txtMainTitle.setText(user.getDisplayName());
+           txtMainSubtitle.setText(user.getEmail());
         } else {
             pindahActivity(1);
         }
-
 
 
         adapter = new TabAdapterMainActivity(getSupportFragmentManager());
@@ -75,6 +80,11 @@ public class MainActivity extends AppCompatActivity {
 
         viewpager.setAdapter(adapter);
         tab.setupWithViewPager(viewpager);
+    }
+
+    @OnClick(R.id.iv_main_notif)
+    public void main_notification(){
+        startActivity(new Intent(context, FriendRequest.class));
     }
 
     @Override
@@ -90,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @OnClick(R.id.toolbar)
-    public void ke_profil(){
+    public void ke_profil() {
         startActivity(new Intent(context, MyProfil.class));
 
     }
@@ -99,8 +109,11 @@ public class MainActivity extends AppCompatActivity {
     public void tambah_user() {
         startActivity(new Intent(context, ListUser.class));
     }
+
     @OnClick(R.id.menu_new_message)
-    public void tambah_chat() {   }
+    public void tambah_chat() {
+    }
+
     private void pindahActivity(int i) {
         switch (i) {
             case 1:

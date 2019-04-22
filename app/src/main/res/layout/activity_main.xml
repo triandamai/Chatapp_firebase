@@ -20,16 +20,51 @@
             android:background="@color/colorPrimary"
             app:layout_scrollFlags="scroll|enterAlways"
             app:popupTheme="@style/AppTheme.PopupOverlay" >
+            <LinearLayout
+                 android:layout_width="match_parent"
+                 android:layout_height="match_parent"
+                 android:orientation="horizontal">
+                <LinearLayout
+                     android:layout_width="350dp"
+                     android:layout_marginTop="5dp"
+                     android:layout_height="wrap_content"
+                     android:orientation="vertical">
+                    <TextView
+                         android:id="@+id/txt_main_title"
+                         android:layout_width="350dp"
+                         android:layout_height="wrap_content"
+                         android:text="Trian Damai"
+                         android:textSize="20sp"
+                         android:textColor="#ffff"
+                         android:textStyle="bold"/>
+                    <TextView
+                         android:id="@+id/txt_main_subtitle"
+                         android:layout_width="350dp"
+                         android:layout_height="wrap_content"
+                         android:text="Nurizkillah"
+                         android:textColor="#ffff"
+                         android:textSize="12sp"
+                         />
+                </LinearLayout>
 
+                <ImageView
+                     android:id="@+id/iv_main_notif"
+                     android:layout_width="30dp"
+                     android:layout_height="30dp"
+                     android:layout_marginTop="5dp"
+                     android:src="@drawable/ic_notifications_none"/>
+            </LinearLayout>
         </android.support.v7.widget.Toolbar>
         <android.support.design.widget.TabLayout
             android:id="@+id/tab"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="?actionBarSize"
+            android:layout_height="40dp"
+            android:minHeight="40dp"
             app:tabGravity="fill"
             app:tabMode="fixed"
-            app:tabBackground="@color/colorWhite"
+            app:tabTextColor="@color/colorWhite"
+            app:tabBackground="@color/colorPrimary"
+            app:tabIndicatorColor="@color/colorWhite"
             android:theme="@style/Base.Theme.AppCompat.Light.DarkActionBar">
 
         </android.support.design.widget.TabLayout>
