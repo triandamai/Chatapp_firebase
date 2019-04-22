@@ -31,19 +31,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.messaging.FirebaseMessagingService;
 import com.trianchatapps.Function;
 import com.trianchatapps.GlobalVariabel;
-import com.trianchatapps.Main.MainActivity;
 import com.trianchatapps.Model.Message;
-import com.trianchatapps.Model.User;
-import com.trianchatapps.R;
-import com.trianchatapps.Thread.ThreadChat;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Date;
 
 
@@ -110,16 +101,6 @@ public class NotifikasiService extends BroadcastReceiver {
                 databaseReference.child(GlobalVariabel.CHILD_NOTIF)
                         .push()
                         .setValue(message);
-                Notification repliedNotification =
-                        new Notification.Builder(context)
-                                .setSmallIcon(
-                                        android.R.drawable.ic_dialog_info)
-                                .setContentText("Reply received")
-                                .build();
-
-                @SuppressLint("ServiceCast") NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-                notificationManager.notify(1,
-                        repliedNotification);
 
             }
         }else {

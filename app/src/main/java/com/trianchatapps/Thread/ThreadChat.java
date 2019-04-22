@@ -3,6 +3,7 @@ package com.trianchatapps.Thread;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -92,6 +93,7 @@ public class ThreadChat extends AppCompatActivity {
     int tambah_jumlah_unseen_msg;
     int jumlah;
     final ArrayList<Message> messages = new ArrayList<>();
+    private MediaPlayer mediaPlayer;
 
 
     @Override
@@ -137,8 +139,8 @@ public class ThreadChat extends AppCompatActivity {
                 "com.google.android.gms",
                 "Noto Color Emoji Compat",
                 R.array.com_google_android_gms_fonts_certs);
-        EmojiCompat.Config config = new FontRequestEmojiCompatConfig(this,fontRequest)
-       .setReplaceAll(true)
+        EmojiCompat.Config config = new FontRequestEmojiCompatConfig(this, fontRequest)
+                .setReplaceAll(true)
                 .setEmojiSpanIndicatorEnabled(true)
                 .setEmojiSpanIndicatorColor(Color.GREEN)
                 .registerInitCallback(new EmojiCompat.InitCallback() {

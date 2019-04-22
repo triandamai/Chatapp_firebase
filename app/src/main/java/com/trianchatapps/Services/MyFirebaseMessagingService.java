@@ -1,7 +1,6 @@
 package com.trianchatapps.Services;
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -51,11 +50,12 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     public static final String REPLY_KEY = "key";
     public static final String NOTIFICATION_CHANNEL_ID = "ChatsApp";
     public String instanceId = null;
+
     @Override
     public void onNewToken(String s) {
         super.onNewToken(s);
 
-     instanceId = s;
+        instanceId = s;
 
         Log.d("@@@@", "onTokenRefresh: " + instanceId);
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -82,37 +82,36 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         if (remoteMessage.getData().size() > 0) {
 
 
-           // Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
+            // Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
             notificationTitle = remoteMessage.getData().get("title");
             notificationBody = remoteMessage.getData().get("body");
             mesfrom = remoteMessage.getData().get("user_id");
             userIMg = remoteMessage.getData().get("icon");
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                sendNotification(notificationTitle,  notificationBody, mesfrom , userIMg) ;
-            }else if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
-                sendNotificationN(notificationTitle,  notificationBody, mesfrom , userIMg);
-            }else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N){
-                sendNotificationM(notificationTitle,  notificationBody, mesfrom , userIMg);
+                sendNotification(notificationTitle, notificationBody, mesfrom, userIMg);
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                sendNotificationN(notificationTitle, notificationBody, mesfrom, userIMg);
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                sendNotificationM(notificationTitle, notificationBody, mesfrom, userIMg);
+            } else {
+                //dibawah m
             }
 
         }
-
-
-
 
     }
 
     private void sendNotificationM(String notificationTitle, String notificationBody, String mesfrom, String userIMg) {
         Intent intent = new Intent(this, ThreadChat.class);
-        intent.putExtra("uid",mesfrom);
+        intent.putExtra("uid", mesfrom);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
 
-        Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         //load image
         Bitmap bmp = null;
         try {
@@ -131,15 +130,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         long time = new Date().getTime();
 
 
-
-
         Notification notificationBuilder = new NotificationCompat
-                .Builder(this,NOTIFICATION_CHANNEL_ID)
+                .Builder(this, NOTIFICATION_CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_chat_black_24dp)
                 .setContentTitle(notificationTitle)
                 .setContentText(notificationBody)
                 .setStyle(new NotificationCompat.BigTextStyle()
-                .bigText(notificationBody))
+                        .bigText(notificationBody))
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setLargeIcon(getRoundbmp(bmp))
@@ -154,14 +151,14 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private void sendNotificationN(String notificationTitle, String notificationBody, String mesfrom, String userIMg) {
         Intent intent = new Intent(this, ThreadChat.class);
-        intent.putExtra("uid",mesfrom);
+        intent.putExtra("uid", mesfrom);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
 
-        Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         //load image
         Bitmap bmp = null;
         try {
@@ -178,26 +175,24 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
 
-
-
         long time = new Date().getTime();
 
         RemoteInput remoteInput = new RemoteInput.Builder(REPLY_KEY)
                 .setLabel("Enter untuk membalas")
                 .build();
         NotificationCompat.Action action = new NotificationCompat.Action.Builder(android.R.drawable.ic_menu_send,
-                "Balas Sekarang",pendding(mesfrom,notificationBody) )
+                "Balas Sekarang", pendding(mesfrom, notificationBody))
                 .addRemoteInput(remoteInput)
                 .setAllowGeneratedReplies(true)
                 .build();
 
         Notification notificationBuilder = new NotificationCompat
-                .Builder(this,NOTIFICATION_CHANNEL_ID)
+                .Builder(this, NOTIFICATION_CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_chat_black_24dp)
                 .setContentTitle(notificationTitle)
                 .setContentText(notificationBody)
                 .setStyle(new NotificationCompat.InboxStyle()
-                .addLine(notificationBody))
+                        .addLine(notificationBody))
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setLargeIcon(getRoundbmp(bmp))
@@ -211,19 +206,17 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         notificationManager.notify(NOTIFICATION_ID, notificationBuilder);
     }
 
-
-
     @RequiresApi(api = Build.VERSION_CODES.P)
-    private void sendNotification(String notificationTitle, String notificationBody, String from, String img ) {
+    private void sendNotification(String notificationTitle, String notificationBody, String from, String img) {
         Intent intent = new Intent(this, ThreadChat.class);
-        intent.putExtra("uid",from);
+        intent.putExtra("uid", from);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
-            PendingIntent.FLAG_UPDATE_CURRENT);
+                PendingIntent.FLAG_UPDATE_CURRENT);
 
 
-        Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         //load image
         Bitmap bmp = null;
         try {
@@ -252,22 +245,22 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 .setIcon(null)
                 .build();
         long time = new Date().getTime();
-        Notification.MessagingStyle.Message message = new Notification.MessagingStyle.Message(notificationBody,time, notificationTitle);
+        Notification.MessagingStyle.Message message = new Notification.MessagingStyle.Message(notificationBody, time, notificationTitle);
 
         RemoteInput remoteInput = new RemoteInput.Builder(REPLY_KEY)
                 .setLabel("Enter untuk membalas")
                 .build();
         NotificationCompat.Action action = new NotificationCompat.Action.Builder(android.R.drawable.ic_delete,
-                "Balas Sekarang",pendding(from,notificationBody) )
+                "Balas Sekarang", pendding(from, notificationBody))
                 .addRemoteInput(remoteInput)
                 .setAllowGeneratedReplies(true)
                 .build();
         NotificationCompat.MessagingStyle style = new NotificationCompat.MessagingStyle(notificationTitle);
-        style.addMessage(notificationBody, time,notificationTitle);
+        style.addMessage(notificationBody, time, notificationTitle);
         style.setGroupConversation(true);
 
         Notification notificationBuilder = new NotificationCompat
-                .Builder(this,NOTIFICATION_CHANNEL_ID)
+                .Builder(this, NOTIFICATION_CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_chat_black_24dp)
                 .setContentTitle(notificationTitle)
                 .setContentText(notificationBody)
@@ -288,14 +281,14 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private PendingIntent pendding(String from, String body) {
         Intent intent;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             intent = new Intent(this, NotifikasiService.class);
             intent.setAction(REPLY_ACTION);
             intent.putExtra(KEY_NOTIFICATION_ID, from);
             intent.putExtra(ISI_PESAN, body);
             return PendingIntent.getBroadcast(getApplicationContext(), 100, intent,
                     PendingIntent.FLAG_UPDATE_CURRENT);
-        }else {
+        } else {
             // start your activity for Android M and below
             intent = new Intent(this, NotifikasiService.class);
             intent.setAction(REPLY_ACTION);

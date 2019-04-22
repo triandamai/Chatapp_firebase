@@ -18,12 +18,15 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.trianchatapps.GlobalVariabel;
 import com.trianchatapps.Main.Profil;
+import com.trianchatapps.Model.Contact;
 import com.trianchatapps.Model.User;
 import com.trianchatapps.R;
 import com.trianchatapps.Thread.ThreadChat;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,14 +35,16 @@ public class AdapterListContact extends RecyclerView.Adapter<AdapterListContact.
 
 
 
-    private ArrayList<String> list;
+    private List<Contact> contacts;
     private Context context;
     private DatabaseReference databaseReference;
+    private String saya;
 
 
-    public AdapterListContact(Context context, String owner, ArrayList<String> listkontak) {
+    public AdapterListContact(Context context, String owner, ArrayList<Contact> listkontak) {
         this.context = context;
-        this.list = listkontak;
+        this.contacts = listkontak;
+        this.saya = owner;
     }
 
     @NonNull
@@ -53,11 +58,11 @@ public class AdapterListContact extends RecyclerView.Adapter<AdapterListContact.
 
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder myViewHolder, final int i) {
-        final String id = list.get(i);
+        final Contact user = contacts.get(i);
         databaseReference = FirebaseDatabase.getInstance().getReference();
 
-        databaseReference.child("USER")
-                .child(id)
+        databaseReference.child(GlobalVariabel.CHILD_USER)
+                .child(user.getFriedsUid())
                 .addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -82,7 +87,7 @@ public class AdapterListContact extends RecyclerView.Adapter<AdapterListContact.
             @Override
             public void onClick(View v) {
                 context.startActivity(new Intent(context, Profil.class)
-                        .putExtra("uid", list.get(i)));
+                        .putExtra("uid", user.getFriedsUid()));
 
             }
         });
@@ -92,7 +97,7 @@ public class AdapterListContact extends RecyclerView.Adapter<AdapterListContact.
 
     @Override
     public int getItemCount() {
-        return list.size();
+        return contacts.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {

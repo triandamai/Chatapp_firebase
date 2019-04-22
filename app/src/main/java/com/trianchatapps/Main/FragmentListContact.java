@@ -21,6 +21,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.trianchatapps.AdapterRecyclerview.AdapterListContact;
 import com.trianchatapps.GlobalVariabel;
+import com.trianchatapps.Model.Contact;
 import com.trianchatapps.R;
 
 import java.util.ArrayList;
@@ -45,7 +46,7 @@ public class FragmentListContact extends Fragment {
     Context context;
     Unbinder unbinder;
     private DatabaseReference databaseReference;
-    private ArrayList<String> listkontak = new ArrayList<>();
+    private ArrayList<Contact> listkontak = new ArrayList<>();
     private AdapterListContact adapter;
     private String saya;
 
@@ -82,20 +83,18 @@ public class FragmentListContact extends Fragment {
 
         databaseReference.child(GlobalVariabel.CHILD_CONTACT)
                 .child(saya)
+                .child(GlobalVariabel.CHILD_CONTACT_FRIEND)
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         listkontak.clear();
                         if (dataSnapshot.exists()){
                             linearKosong.setVisibility(View.GONE);
-
+                            Contact contact = new Contact();
                             for (DataSnapshot data : dataSnapshot.getChildren()){
-                                    if (data.getKey().equals(saya)){
-
-                                    }else {
-                                        listkontak.add(data.getKey());
-                                    }
+                                       contact  = data.getValue(Contact.class);
                             }
+                            listkontak.add(contact);
                             adapter = new AdapterListContact(context, saya,listkontak);
                             rv.setAdapter(adapter);
 
