@@ -116,7 +116,7 @@
                     android:id="@+id/ly_input"
                     android:layout_width="350dp"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/chip_chat"
+                    android:background="@drawable/bg_input"
                     android:orientation="horizontal">
                     <de.hdodenhof.circleimageview.CircleImageView
                         android:id="@+id/attach_emoji"
@@ -138,7 +138,7 @@
                         android:layout_toStartOf="@id/activity_thread_send_fab"
                         android:hint="@string/hint_message"
                         android:singleLine="false"
-                        android:background="@drawable/chip_chat"
+                        android:background="@drawable/bg_input"
                         android:maxWidth="230dp"
                         android:inputType="textMultiLine|textCapSentences|textAutoComplete|textAutoCorrect"
                         android:padding="@dimen/simple_padding_largish"
