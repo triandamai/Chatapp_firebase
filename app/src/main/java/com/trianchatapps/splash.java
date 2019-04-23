@@ -4,12 +4,12 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.BaseTransientBottomBar;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -28,11 +28,12 @@ public class splash extends AppCompatActivity {
     @BindView(R.id.particleView)
     ParticleView particleView;
     @BindView(R.id.root)
-    FrameLayout root;
-    private FirebaseUser firebaseUser;
-    private Context context;
-    private ProgressDialog progressDialog;
-    private DatabaseReference databaseReference;
+    public FrameLayout root;
+    public FirebaseUser firebaseUser;
+    public Context context;
+    public ProgressDialog progressDialog;
+    public DatabaseReference databaseReference;
+    private FirebaseAnalytics mFirebaseAnalytics;
 
 
     @Override
@@ -41,6 +42,7 @@ public class splash extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
         ButterKnife.bind(this);
         context = splash.this;
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(context);
         final Internet internet = new Internet();
         if (internet.CekKoneksi(context)) {
             inisiasi();
@@ -63,14 +65,14 @@ public class splash extends AppCompatActivity {
         }
     }
 
-    private void inisiasi() {
+    public void inisiasi() {
 
         databaseReference = FirebaseDatabase.getInstance().getReference();
         databaseReference.keepSynced(true);
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
     }
 
-    private void cek_auth() {
+    public void cek_auth() {
 
         if (firebaseUser != null) {
             pindahActivity(1);
@@ -81,7 +83,7 @@ public class splash extends AppCompatActivity {
         }
     }
 
-    private void pindahActivity(int act) {
+    public void pindahActivity(int act) {
         switch (act) {
             case 1:
                 startActivity(new Intent(context, MainActivity.class));

@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -38,10 +39,11 @@ public class Profil extends AppCompatActivity {
     @BindView(R.id.btn_profil_chat)
     Button btnProfilChat;
 
-    private DatabaseReference databaseReference;
-    private FirebaseUser firebaseUser;
+    public DatabaseReference databaseReference;
+    public FirebaseUser firebaseUser;
     Context context;
     String UserId;
+    private FirebaseAnalytics mFirebaseAnalytics;
 
 
     @Override
@@ -50,7 +52,7 @@ public class Profil extends AppCompatActivity {
         setContentView(R.layout.activity_profil);
         ButterKnife.bind(this);
         context = Profil.this;
-
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(context);
         databaseReference = FirebaseDatabase.getInstance().getReference();
         databaseReference.keepSynced(true);
 
@@ -68,7 +70,7 @@ public class Profil extends AppCompatActivity {
         startActivity(new Intent(context, ThreadChat.class).putExtra("uid", UserId));
         finish();
     }
-    private void data_user() {
+    public void data_user() {
         databaseReference.child("USER")
                 .child(UserId)
                 .addValueEventListener(new ValueEventListener() {

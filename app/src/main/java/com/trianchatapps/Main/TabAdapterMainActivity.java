@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TabAdapterMainActivity extends FragmentStatePagerAdapter {
-    private final List<Fragment> fragmentList = new ArrayList<>();
-    private final List<String> titleFragmentList = new ArrayList<>();
+    public final List<Fragment> fragmentList = new ArrayList<>();
+    public final List<String> titleFragmentList = new ArrayList<>();
 
     public TabAdapterMainActivity(FragmentManager fm) {
         super(fm);

@@ -33,11 +33,11 @@ import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AdapterAllUser extends RecyclerView.Adapter<AdapterAllUser.myViewHolder> {
-    Context context;
-    List<UserModel> userList = new ArrayList<>();
-    DatabaseReference databaseReference;
-    FirebaseUser firebaseUser;
-    private String Uidsaya;
+    public Context context;
+    public List<UserModel> userList = new ArrayList<>();
+    public DatabaseReference databaseReference;
+    public FirebaseUser firebaseUser;
+    public String Uidsaya;
 
     public AdapterAllUser(Context context, String owner, List<UserModel> users) {
         this.context = context;
@@ -56,11 +56,11 @@ public class AdapterAllUser extends RecyclerView.Adapter<AdapterAllUser.myViewHo
 
     @Override
     public void onBindViewHolder(@NonNull final myViewHolder myViewholder, int i) {
-        final UserModel user ;
+        final UserModel user;
         user = userList.get(i);
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        final Bantuan bantuan =  new Bantuan(context);
+        final Bantuan bantuan = new Bantuan(context);
 
         Glide.with(context)
                 .load(user.getPhotoUrl())
@@ -101,7 +101,6 @@ public class AdapterAllUser extends RecyclerView.Adapter<AdapterAllUser.myViewHo
                 });
 
 
-
             }
         });
 
@@ -115,7 +114,7 @@ public class AdapterAllUser extends RecyclerView.Adapter<AdapterAllUser.myViewHo
     }
 
     public class myViewHolder extends RecyclerView.ViewHolder {
-        Context context;
+        public Context context;
         @BindView(R.id.iv_user)
         CircleImageView ivUser;
         @BindView(R.id.tv_nama)

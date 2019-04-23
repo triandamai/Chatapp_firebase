@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
 import com.google.android.gms.auth.api.Auth;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -36,15 +37,16 @@ import butterknife.OnClick;
 
 public class Register extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
-    private FirebaseAuth firebaseAuth;
-    private DatabaseReference databaseReference;
-    GoogleApiClient googleApiClient;
-    private static final int RC_SIGN_IN = 9001;
+    public FirebaseAuth firebaseAuth;
+    public DatabaseReference databaseReference;
+    public GoogleApiClient googleApiClient;
+    public static final int RC_SIGN_IN = 9001;
 
-    SweetAlertDialog dialog;
+   public SweetAlertDialog dialog;
 
-    Context context;
-    ProgressDialog progressDialog;
+    public  Context context;
+    public ProgressDialog progressDialog;
+    public  FirebaseAnalytics mFirebaseAnalytics;
 
 
     @BindView(R.id.btn_sign_google)
@@ -54,7 +56,10 @@ public class Register extends AppCompatActivity implements GoogleApiClient.OnCon
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+
         ButterKnife.bind(this);
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(Register.this);
+
         inisiasi_var();
         build_auth();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -69,7 +74,7 @@ public class Register extends AppCompatActivity implements GoogleApiClient.OnCon
     }
 
 
-    private void inisiasi_var() {
+    public void inisiasi_var() {
         context = Register.this;
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseAuth.setLanguageCode("id");
@@ -78,7 +83,7 @@ public class Register extends AppCompatActivity implements GoogleApiClient.OnCon
 
     }
 
-    private void build_auth() {
+    public void build_auth() {
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
@@ -107,8 +112,8 @@ public class Register extends AppCompatActivity implements GoogleApiClient.OnCon
         }
     }
 
-    private void authWithGogle(final GoogleSignInAccount account) {
-       new Bantuan(context).swal_loading("Tunggu ya").show();
+    public void authWithGogle(final GoogleSignInAccount account) {
+
         final AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
         firebaseAuth.signInWithCredential(credential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
@@ -118,7 +123,7 @@ public class Register extends AppCompatActivity implements GoogleApiClient.OnCon
                     startActivity(new Intent(context, MainActivity.class));
                     finish();
                 } else {
-                    new Bantuan(context).alertDialogPeringatan("Duh gagal");
+
                 }
             }
         });
@@ -126,6 +131,6 @@ public class Register extends AppCompatActivity implements GoogleApiClient.OnCon
 
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-       new Bantuan(context).alertDialogPeringatan("Kayanya jaringan kamu jelek..");
+
     }
 }

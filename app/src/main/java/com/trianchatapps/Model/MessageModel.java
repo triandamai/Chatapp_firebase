@@ -6,13 +6,13 @@ package com.trianchatapps.Model;
 
 public class MessageModel {
 
-    private long timestamp;
-    private long negatedTimestamp;
-    private long dayTimestamp;
-    private String body;
-    private String from;
-    private String to;
-    private int tick;
+    public long timestamp;
+    public long negatedTimestamp;
+    public long dayTimestamp;
+    public String body;
+    public String from;
+    public String to;
+    public int tick;
 
     public MessageModel(long timestamp, long negatedTimestamp, long dayTimestamp, String body, String from, String to, int tick) {
         this.timestamp = timestamp;

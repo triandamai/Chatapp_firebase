@@ -1,12 +1,12 @@
 package com.trianchatapps.Model;
 
 public class ReportModel {
-    String Uid;
-    String error_report;
-    String manufacturer ;
-    String model ;
-    int version ;
-    String versionRelease ;
+   public String Uid;
+   public String error_report;
+   public String manufacturer ;
+   public String model ;
+   public int version ;
+   public String versionRelease ;
 
     public ReportModel(String uid, String[] strings, String manufacturer, String model, int version, String versionRelease) {
 

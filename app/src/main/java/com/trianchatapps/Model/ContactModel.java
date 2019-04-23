@@ -1,9 +1,10 @@
 package com.trianchatapps.Model;
 
 public class ContactModel {
-    boolean isFriend;
-    long timestap;
-    String name, friedsUid ;
+   public boolean isFriend;
+   public long timestamp;
+   public String name;
+   public String friendsUid;
 
     public ContactModel() {
     }
@@ -13,9 +14,9 @@ public class ContactModel {
                         String name,
                         String friedsUid) {
         this.isFriend = isFriend;
-        this.timestap = timestap;
+        this.timestamp = timestap;
         this.name = name;
-        this.friedsUid = friedsUid;
+        this.friendsUid = friedsUid;
     }
 
     public boolean isFriend() {
@@ -26,12 +27,12 @@ public class ContactModel {
         isFriend = friend;
     }
 
-    public long getTimestap() {
-        return timestap;
+    public long getTimestamp() {
+        return timestamp;
     }
 
-    public void setTimestap(long timestap) {
-        this.timestap = timestap;
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
     }
 
     public String getName() {
@@ -42,11 +43,11 @@ public class ContactModel {
         this.name = name;
     }
 
-    public String getFriedsUid() {
-        return friedsUid;
+    public String getFriendsUid() {
+        return friendsUid;
     }
 
-    public void setFriedsUid(String friedsUid) {
-        this.friedsUid = friedsUid;
+    public void setFriendsUid(String friendsUid) {
+        this.friendsUid = friendsUid;
     }
 }

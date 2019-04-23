@@ -19,8 +19,8 @@ import butterknife.ButterKnife;
 
 public class AdapterListGroup extends RecyclerView.Adapter<AdapterListGroup.MyViewHolder> {
 
-    private ArrayList<String> list;
-    private Context context;
+    public ArrayList<String> list;
+    public Context context;
 
     public AdapterListGroup(Context context, ArrayList<String> listkontak) {
         this.context = context;

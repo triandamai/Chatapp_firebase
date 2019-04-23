@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -16,6 +17,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.trianchatapps.AdapterRecyclerview.AdapterAllUser;
+import com.trianchatapps.Auth.Register;
 import com.trianchatapps.Model.UserModel;
 import com.trianchatapps.R;
 
@@ -34,21 +36,25 @@ public class ListUser extends AppCompatActivity {
     @BindView(R.id.linear_isi)
     LinearLayout linearIsi;
 
-    private DatabaseReference databaseReference;
-            Context context;
-    private List<UserModel> userList ;
-    private AdapterAllUser adapter;
-    private String Uidsaya;
+    public DatabaseReference databaseReference;
+    private Context context;
+    public List<UserModel> userList ;
+    public AdapterAllUser adapter;
+    public String Uidsaya;
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_user);
+        context = ListUser.this;
         ButterKnife.bind(this);
+
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(context);
         inisisi();
     }
 
-    private void inisisi() {
+    public void inisisi() {
         context = ListUser.this;
         databaseReference = FirebaseDatabase.getInstance().getReference();
         databaseReference.keepSynced(true);
@@ -60,7 +66,7 @@ public class ListUser extends AppCompatActivity {
 
     }
 
-    private void loadData() {
+    public void loadData() {
         databaseReference.child("USER")
                 .addValueEventListener(new ValueEventListener() {
                     @Override

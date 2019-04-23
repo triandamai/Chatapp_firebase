@@ -32,10 +32,10 @@ public class AdapterListContact extends RecyclerView.Adapter<AdapterListContact.
 
 
 
-    private List<ContactModel> contacts;
-    private Context context;
-    private DatabaseReference databaseReference;
-    private String saya;
+    public List<ContactModel> contacts;
+    public Context context;
+    public DatabaseReference databaseReference;
+    public String saya;
 
 
     public AdapterListContact(Context context, String owner,List<ContactModel> listkontak) {
@@ -59,7 +59,7 @@ public class AdapterListContact extends RecyclerView.Adapter<AdapterListContact.
         databaseReference = FirebaseDatabase.getInstance().getReference();
 
         databaseReference.child(GlobalVariabel.CHILD_USER)
-                .child(user.getFriedsUid())
+                .child(user.getFriendsUid())
                 .addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -84,7 +84,7 @@ public class AdapterListContact extends RecyclerView.Adapter<AdapterListContact.
             @Override
             public void onClick(View v) {
                 context.startActivity(new Intent(context, Profil.class)
-                        .putExtra("uid", user.getFriedsUid()));
+                        .putExtra("uid", user.getFriendsUid()));
 
             }
         });

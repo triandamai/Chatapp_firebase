@@ -24,6 +24,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -81,19 +82,20 @@ public class ThreadChat extends AppCompatActivity {
     LinearLayout root;
 
 
-    private DatabaseReference databaseReference;
-    private FirebaseAuth firebaseAuth;
-    private UserModel user;
-    private FirebaseUser firebaseUser;
-    private String id_pengirim;
-    private String id_saya;
-    private String photoUrl;
-    private Context context;
-    private AdapterChatrv adapter;
-    int tambah_jumlah_unseen_msg;
-    int jumlah;
-    final ArrayList<MessageModel> messages = new ArrayList<>();
-    private MediaPlayer mediaPlayer;
+    public DatabaseReference databaseReference;
+    public FirebaseAuth firebaseAuth;
+    public UserModel user;
+    public FirebaseUser firebaseUser;
+    public String id_pengirim;
+    public  String id_saya;
+    public String photoUrl;
+    public Context context;
+    public AdapterChatrv adapter;
+    public int tambah_jumlah_unseen_msg;
+    public int jumlah;
+    public final ArrayList<MessageModel> messages = new ArrayList<>();
+    public MediaPlayer mediaPlayer;
+    private FirebaseAnalytics mFirebaseAnalytics;
 
 
     @Override
@@ -104,7 +106,7 @@ public class ThreadChat extends AppCompatActivity {
         ButterKnife.bind(this);
         context = ThreadChat.this;
 
-
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(context);
         databaseReference = FirebaseDatabase.getInstance().getReference();
         databaseReference.keepSynced(true);
         Intent intent = getIntent();
@@ -158,7 +160,7 @@ public class ThreadChat extends AppCompatActivity {
         EmojiCompat.init(config);
     }
 
-    private void dataUser() {
+    public void dataUser() {
         databaseReference.child(GlobalVariabel.CHILD_USER)
                 .child(id_pengirim)
                 .addValueEventListener(new ValueEventListener() {

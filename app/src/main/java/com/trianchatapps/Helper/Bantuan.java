@@ -10,7 +10,7 @@ import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
 
 public class Bantuan {
 
-    private Context context;
+    public Context context;
 
     public Bantuan(Context context) {
         this.context = context;

@@ -65,6 +65,8 @@
         <meta-data
             android:name="fontProviderRequests"
             android:value="Noto Color Emoji Compat" />
+        <meta-data android:name="firebase_crash_collection_enabled" android:value="false"/>
+        <meta-data android:name="firebase_crashlytics_collection_enabled" android:value="true"/>
     </application>
 
 </manifest>

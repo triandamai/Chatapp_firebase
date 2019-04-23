@@ -13,6 +13,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -35,15 +37,16 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AdapterListChat extends RecyclerView.Adapter<AdapterListChat.MyViewHolder> {
 
-    private List<String> UIDPengirim;
-    Context context;
-    private String owner;
-    private DatabaseReference databaseReference;
+    public List<String> UIDPengirim;
+    public Context context;
+    public String owner;
+    public DatabaseReference databaseReference;
+    public FirebaseUser firebaseUser;
 
 
     public AdapterListChat(Context context, String owner, ArrayList<String> UIDPengirim) {
         this.context = context;
-        this.owner = owner;
+
         this.UIDPengirim = UIDPengirim;
     }
 
@@ -58,18 +61,21 @@ public class AdapterListChat extends RecyclerView.Adapter<AdapterListChat.MyView
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder myViewHolder, final int i) {
         databaseReference = FirebaseDatabase.getInstance().getReference();
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (firebaseUser != null) {
 
-        myViewHolder.detail_user(UIDPengirim.get(i));
-        myViewHolder.pesan_terakhir(UIDPengirim.get(i));
-        myViewHolder.statusonline(UIDPengirim.get(i));
+            myViewHolder.detail_user(UIDPengirim.get(i));
+            myViewHolder.pesan_terakhir(UIDPengirim.get(i));
+            myViewHolder.statusonline(UIDPengirim.get(i));
 
-        myViewHolder.parentItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                context.startActivity(new Intent(context,ThreadChat.class)
-                        .putExtra(GlobalVariabel.EXTRA_UID, UIDPengirim.get(i)));
-            }
-        });
+            myViewHolder.parentItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    context.startActivity(new Intent(context, ThreadChat.class)
+                            .putExtra(GlobalVariabel.EXTRA_UID, UIDPengirim.get(i)));
+                }
+            });
+        }
     }
 
 
@@ -92,13 +98,17 @@ public class AdapterListChat extends RecyclerView.Adapter<AdapterListChat.MyView
         @BindView(R.id.txt_jumlah_unread)
         TextView txtbadge;
 
+        public FirebaseUser firebaseUser;
+
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this,itemView);
+
+            firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         }
-        private void pesan_terakhir(final String s) {
+        public void pesan_terakhir(final String s) {
             databaseReference.child(GlobalVariabel.CHILD_CHAT)
-                    .child(owner)
+                    .child(firebaseUser.getUid())
                     .child(s)
                     .orderByKey().limitToLast(1)
                     .addValueEventListener(new ValueEventListener() {
@@ -109,12 +119,12 @@ public class AdapterListChat extends RecyclerView.Adapter<AdapterListChat.MyView
                                 for (DataSnapshot data : dataSnapshot.getChildren()){
                                     message = data.getValue(MessageModel.class);
                                 }
-                                if (message.getFrom().equals(owner)) {
+                                if (message.getFrom().equals(firebaseUser.getUid())) {
                                     tvIsi.setText("Anda : "+message.getBody());
                                 }else {
                                     final MessageModel finalMessage = message;
                                     databaseReference.child(GlobalVariabel.CHILD_CHAT_BELUMDILIHAT)
-                                            .child(owner)
+                                            .child(firebaseUser.getUid())
                                             .child(s)
                                             .child(GlobalVariabel.CHILD_CHAT_UNREAD)
                                             .addValueEventListener(new ValueEventListener() {
@@ -155,7 +165,7 @@ public class AdapterListChat extends RecyclerView.Adapter<AdapterListChat.MyView
                     });
         }
 
-        private void detail_user(String s) {
+        public void detail_user(String s) {
             databaseReference.child(GlobalVariabel.CHILD_USER)
                     .child(s)
                     .addValueEventListener(new ValueEventListener() {
@@ -164,7 +174,7 @@ public class AdapterListChat extends RecyclerView.Adapter<AdapterListChat.MyView
                             UserModel user;
                             if (dataSnapshot.exists()) {
                                 user = dataSnapshot.getValue(UserModel.class);
-                                if (user.getUid().equals(owner)){
+                                if (user.getUid().equals(firebaseUser.getUid())){
                                     parentItem.setVisibility(View.GONE);
                                 }else {
                                     tvNama.setText(user.getDisplayName());

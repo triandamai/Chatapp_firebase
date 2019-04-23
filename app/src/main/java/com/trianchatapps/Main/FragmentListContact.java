@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -45,11 +46,11 @@ public class FragmentListContact extends Fragment {
 
     Context context;
     Unbinder unbinder;
-    private DatabaseReference databaseReference;
-    private ArrayList<ContactModel> listkontak = new ArrayList<>();
-    private AdapterListContact adapter;
-    private String saya;
-
+    public DatabaseReference databaseReference;
+    public ArrayList<ContactModel> listkontak = new ArrayList<>();
+    public AdapterListContact adapter;
+    public String saya;
+    private FirebaseAnalytics mFirebaseAnalytics;
 
 
     @Override
@@ -63,13 +64,14 @@ public class FragmentListContact extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_blank_contact, container, false);
         unbinder = ButterKnife.bind(this, view);
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
         inisisis();
         datacontact();
         return view;
     }
 
 
-    private void inisisis() {
+    public void inisisis() {
         context = getActivity();
         databaseReference = FirebaseDatabase.getInstance().getReference();
         databaseReference.keepSynced(true);
@@ -77,7 +79,7 @@ public class FragmentListContact extends Fragment {
         saya = FirebaseAuth.getInstance().getCurrentUser().getUid().toString();
     }
 
-    private void datacontact() {
+    public void datacontact() {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(context);
         rv.setLayoutManager(layoutManager);
 

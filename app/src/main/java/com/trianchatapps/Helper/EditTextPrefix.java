@@ -27,7 +27,7 @@ public class EditTextPrefix extends AppCompatEditText {
         calculatePrefix();
     }
 
-    private void calculatePrefix() {
+    public void calculatePrefix() {
         if (mOriginalLeftPadding == -1) {
             String prefix = (String) getTag();
             float[] widths = new float[prefix.length()];

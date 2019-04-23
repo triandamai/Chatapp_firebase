@@ -31,11 +31,11 @@ import java.util.Date;
 import java.util.List;
 
 public class AdapterFriendRequest extends RecyclerView.Adapter<AdapterFriendRequest.myViewHolder> {
-    Context context;
-    List<UserModel> userList = new ArrayList<>();
-    DatabaseReference databaseReference;
-    FirebaseUser firebaseUser;
-    private String Uidsaya;
+   public Context context;
+   public List<UserModel> userList = new ArrayList<>();
+   public DatabaseReference databaseReference;
+   public FirebaseUser firebaseUser;
+    public String Uidsaya;
 
     public AdapterFriendRequest(Context context, String owner, List<UserModel> users) {
         this.context = context;

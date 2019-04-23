@@ -2,6 +2,7 @@ package com.trianchatapps.Services;
 
 import android.util.Log;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
@@ -14,7 +15,7 @@ public class InstanceIdService extends FirebaseInstanceIdService {
     @Override
     public void onTokenRefresh() {
         super.onTokenRefresh();
-        String instanceId = FirebaseInstanceId.getInstance().getToken();
+         String instanceId = FirebaseInstanceId.getInstance().getToken();
         Log.d("@@@@", "onTokenRefresh: " + instanceId);
         try {
             FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -26,11 +27,11 @@ public class InstanceIdService extends FirebaseInstanceIdService {
                         .setValue(instanceId);
             }
         }catch (NullPointerException e){
-            new Function.send_report(e.getMessage());
+            Crashlytics.logException(e);
         }catch (Exception e){
-            new Function.send_report(e.getMessage());
+            Crashlytics.logException(e);
         }catch (Throwable e){
-            new Function.send_report(e.getMessage());
+            Crashlytics.logException(e);
         }
     }
 }

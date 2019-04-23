@@ -9,6 +9,14 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.bumptech.glide.Glide;
+import com.crashlytics.android.Crashlytics;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -39,9 +47,13 @@ public class MyProfil extends AppCompatActivity {
     @BindView(R.id.btn_myprofil_logout)
     Button btnMyprofilLogout;
 
-    private DatabaseReference databaseReference;
-    private FirebaseUser firebaseUser;
-    private Context context;
+    public DatabaseReference databaseReference;
+    public FirebaseUser firebaseUser;
+    public Context context;
+    private FirebaseAnalytics mFirebaseAnalytics;
+    private  FirebaseAuth firebaseAuth;
+    private GoogleSignInClient googleSignInClient;
+    private GoogleApiClient googleApiClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +61,7 @@ public class MyProfil extends AppCompatActivity {
         setContentView(R.layout.activity_my_profil);
         ButterKnife.bind(this);
         context = MyProfil.this;
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(context);
 
         databaseReference = FirebaseDatabase.getInstance().getReference();
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -60,38 +73,55 @@ public class MyProfil extends AppCompatActivity {
         }
     }
 
-    private void data_user() {
-        databaseReference.child(GlobalVariabel.CHILD_USER)
-                .child(firebaseUser.getUid())
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.exists()){
-                            UserModel user;
+    public void data_user() {
+        try {
 
-                            user = dataSnapshot.getValue(UserModel.class);
 
-                            Glide.with(context)
-                                    .load(user.getPhotoUrl())
-                                    .placeholder(R.drawable.undraw_jason_mask_t07o)
-                                    .into(ivProfilFoto);
-                            etProfilEmail.setText(user.getEmail());
-                            etProfilNama.setText(user.getDisplayName());
+            databaseReference.child(GlobalVariabel.CHILD_USER)
+                    .child(firebaseUser.getUid())
+                    .addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.exists()) {
+                                UserModel user;
+
+                                user = dataSnapshot.getValue(UserModel.class);
+
+                                Glide.with(context)
+                                        .load(user.getPhotoUrl())
+                                        .placeholder(R.drawable.undraw_jason_mask_t07o)
+                                        .into(ivProfilFoto);
+                                etProfilEmail.setText(user.getEmail());
+                                etProfilNama.setText(user.getDisplayName());
+                            }
                         }
-                    }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                    }
-                });
+                        }
+                    });
+        }catch (NullPointerException e){
+            Crashlytics.logException(e);
+        }catch (Exception e){
+            Crashlytics.logException(e);
+        }catch (Throwable e){
+            Crashlytics.logException(e);
+        }
     }
     @OnClick(R.id.btn_myprofil_logout)
     public  void logout(){
         if (firebaseUser != null){
             //logout
+            firebaseAuth = FirebaseAuth.getInstance();
 
-            FirebaseAuth.getInstance().signOut();
+            firebaseAuth.signOut();
+            firebaseAuth.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
+                @Override
+                public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                }
+            });
+
 
             startActivity(new Intent(context, Register.class));
             finish();

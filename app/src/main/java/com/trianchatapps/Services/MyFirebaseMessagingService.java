@@ -25,8 +25,10 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.crash.FirebaseCrash;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -100,11 +102,11 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 sendNotificationBelow(notificationTitle, notificationBody, mesfrom, userIMg);
             }
             }catch (NullPointerException e){
-                new Function.send_report(e.getMessage());
+
             }catch (Exception e){
-                new Function.send_report(e.getMessage());
+                Crashlytics.logException(e);
             }catch (Throwable e){
-                new Function.send_report(e.getMessage());
+                Crashlytics.logException(e);
             }
 
         }else if (remoteMessage.getNotification() != null){
@@ -115,7 +117,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     }
 
-    private void sendNotificationBelow(String notificationTitle, String notificationBody, String mesfrom, String userIMg) {
+    public void sendNotificationBelow(String notificationTitle, String notificationBody, String mesfrom, String userIMg) {
 
         Intent intent = new Intent(this, ThreadChat.class);
         intent.putExtra("uid", mesfrom);
@@ -161,7 +163,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         notificationManager.notify(NOTIFICATION_ID, notificationBuilder);
     }
 
-    private void sendNotificationM(String notificationTitle, String notificationBody, String mesfrom, String userIMg) {
+    public void sendNotificationM(String notificationTitle, String notificationBody, String mesfrom, String userIMg) {
         Intent intent = new Intent(this, ThreadChat.class);
         intent.putExtra("uid", mesfrom);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -208,7 +210,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         notificationManager.notify(NOTIFICATION_ID, notificationBuilder);
     }
 
-    private void sendNotificationN(String notificationTitle, String notificationBody, String mesfrom, String userIMg) {
+    public void sendNotificationN(String notificationTitle, String notificationBody, String mesfrom, String userIMg) {
         Intent intent = new Intent(this, ThreadChat.class);
         intent.putExtra("uid", mesfrom);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -263,7 +265,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.P)
-    private void sendNotification(String notificationTitle, String notificationBody, String from, String img) {
+    public void sendNotification(String notificationTitle, String notificationBody, String from, String img) {
         Intent intent = new Intent(this, ThreadChat.class);
         intent.putExtra("uid", from);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -281,9 +283,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
 
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+            Crashlytics.logException(e);
         } catch (IOException e) {
-            e.printStackTrace();
+            Crashlytics.logException(e);
         }
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -335,7 +337,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     }
 
-    private PendingIntent pendding(String from, String body) {
+    public PendingIntent pendding(String from, String body) {
         Intent intent;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             intent = new Intent(this, NotifikasiService.class);

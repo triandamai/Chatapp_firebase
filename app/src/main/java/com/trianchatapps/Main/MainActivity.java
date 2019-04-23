@@ -15,6 +15,7 @@ import butterknife.OnClick;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -27,10 +28,11 @@ import com.trianchatapps.Model.UserModel;
 import com.trianchatapps.R;
 
 public class MainActivity extends AppCompatActivity {
-    Context context;
-    FirebaseAuth firebaseAuth;
-    DatabaseReference databaseReference;
-    FirebaseAuth.AuthStateListener authStateListener;
+    public Context context;
+    public FirebaseAuth firebaseAuth;
+    public DatabaseReference databaseReference;
+    public FirebaseUser firebaseUser;
+    public FirebaseAuth.AuthStateListener authStateListener;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.menu_new_message)
@@ -44,14 +46,15 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.fab)
     FloatingActionMenu fab;
 
-    String instanceId;
+    public String instanceId;
     @BindView(R.id.txt_main_title)
     TextView txtMainTitle;
     @BindView(R.id.txt_main_subtitle)
     TextView txtMainSubtitle;
     @BindView(R.id.iv_main_notif)
     ImageView ivMainNotif;
-    private TabAdapterMainActivity adapter;
+    public TabAdapterMainActivity adapter;
+    private FirebaseAnalytics mFirebaseAnalytics;
 
 
     @Override
@@ -59,14 +62,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        context = MainActivity.this;
+        firebaseAuth = FirebaseAuth.getInstance();
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(context);
 
-        inisiasi_var();
-        FirebaseUser user = firebaseAuth.getCurrentUser();
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        if (user != null) {
-            tambahkeuser(user);
-           txtMainTitle.setText(user.getDisplayName());
-           txtMainSubtitle.setText(user.getEmail());
+        if (firebaseUser != null) {
+            tambahkeuser(firebaseUser);
+           txtMainTitle.setText(firebaseUser.getDisplayName());
+           txtMainSubtitle.setText(firebaseUser.getEmail());
         } else {
             pindahActivity(1);
         }
@@ -114,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
     public void tambah_chat() {
     }
 
-    private void pindahActivity(int i) {
+    public void pindahActivity(int i) {
         switch (i) {
             case 1:
                 startActivity(new Intent(context, Register.class));
@@ -123,37 +129,38 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void inisiasi_var() {
-        context = MainActivity.this;
-        firebaseAuth = FirebaseAuth.getInstance();
-        databaseReference = FirebaseDatabase.getInstance().getReference();
-    }
 
-    private void tambahkeuser(FirebaseUser user) {
+
+    public void tambahkeuser(FirebaseUser user) {
         // new Bantuan(context).toastLong("hmmmm");
-        final UserModel user1 = new UserModel(
+         UserModel user1 = new UserModel(
                 user.getDisplayName(),
                 user.getEmail(),
                 user.getUid(),
-                user.getPhotoUrl() == null ? "" : user.getPhotoUrl().toString(),
-                true);
+                user.getPhotoUrl() == null ? "" : user.getPhotoUrl().toString());
+         UserModel userModel = new UserModel();
+         userModel.setDisplayName(firebaseUser.getDisplayName());
+         userModel.setEmail(firebaseUser.getEmail());
+         userModel.setPhotoUrl(firebaseUser.getPhotoUrl().toString());
+         userModel.setUid(firebaseUser.getUid());
+
+
+        databaseReference.child("USER")
+                .child(user.getUid())
+                .setValue(user1);
 
         FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(new OnSuccessListener<InstanceIdResult>() {
             @Override
             public void onSuccess(InstanceIdResult instanceIdResult) {
                 instanceId = instanceIdResult.getToken();
                 databaseReference.child("USER")
-                        .child(user1.getUid())
+                        .child(firebaseUser.getUid())
                         .child("instanceId")
                         .setValue(instanceId);
             }
         });
-        if (instanceId != null) {
 
-        }
-        databaseReference.child("USER")
-                .child(user.getUid())
-                .setValue(user1);
+
     }
 
 

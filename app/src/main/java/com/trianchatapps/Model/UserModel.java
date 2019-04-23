@@ -4,36 +4,64 @@ package com.trianchatapps.Model;
  * Author Trian on 8/12/2018.
  */
 
+import android.net.Uri;
+import com.google.firebase.database.IgnoreExtraProperties;
+
+@IgnoreExtraProperties
 public class UserModel {
 
-    private String displayName;
-    private String current;
-    private String email;
-    private String uid;
-    private String photoUrl;
-    private String instanceId;
-    private boolean online;
+    public String displayName;
+    public String email;
+    public String uid;
+    public String photoUrl;
+    public String instanceId;
+
 
 
 
     public UserModel() {
     }
 
-    public UserModel(String displayName, String email, String uid, String photoUrl, boolean online) {
+    public UserModel(String displayName, String email, String uid, String photoUrl) {
         this.displayName = displayName;
         this.email = email;
         this.uid = uid;
         this.photoUrl = photoUrl;
-        this.online = online;
+
 
     }
 
-    public String getCurrent() {
-        return current;
+    public String getDisplayName() {
+        return displayName;
     }
 
-    public void setCurrent(String current) {
-        this.current = current;
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
     }
 
     public String getInstanceId() {
@@ -42,29 +70,5 @@ public class UserModel {
 
     public void setInstanceId(String instanceId) {
         this.instanceId = instanceId;
-    }
-
-    public String getDisplayName() {
-        return displayName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getUid() {
-        return uid;
-    }
-
-    public String getPhotoUrl() {
-        return photoUrl;
-    }
-
-    public boolean isOnline() {
-        return online;
-    }
-
-    public void setOnline(boolean online) {
-        this.online = online;
     }
 }

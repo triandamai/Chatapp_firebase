@@ -32,16 +32,16 @@ import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AdapterChatrv extends RecyclerView.Adapter<AdapterChatrv.MyViewHolder> {
-            Context context;
-    private final List<MessageModel> messageList;
-    private final int ME = 1;
-    private static final int VIEW_TYPE_SENT_WITH_DATE = 1;
-    private final int FROM = 2;
-    private static final int VIEW_TYPE_RECEIVED_WITH_DATE = 3;
+    public     Context context;
+    public final List<MessageModel> messageList;
+    public final int ME = 1;
+    public static final int VIEW_TYPE_SENT_WITH_DATE = 1;
+    public final int FROM = 2;
+    public static final int VIEW_TYPE_RECEIVED_WITH_DATE = 3;
 
     DatabaseReference databaseReference;
 
-    private final String owner;
+    public final String owner;
     public AdapterChatrv(Context context,  ArrayList<MessageModel> messageList){
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 

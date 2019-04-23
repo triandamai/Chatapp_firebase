@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -21,6 +22,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.trianchatapps.AdapterRecyclerview.AdapterListChat;
+import com.trianchatapps.Auth.Register;
 import com.trianchatapps.R;
 
 import java.util.ArrayList;
@@ -43,10 +45,11 @@ public class FragmentListChat extends Fragment {
     RecyclerView rv;
 
     Context context;
-    private DatabaseReference databaseReference;
-    private ArrayList<String> listchat = new ArrayList<>();
-    private AdapterListChat adapter;
-    private String owner;
+    public DatabaseReference databaseReference;
+    public ArrayList<String> listchat = new ArrayList<>();
+    public AdapterListChat adapter;
+    public String owner;
+    public FirebaseAnalytics mFirebaseAnalytics;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -59,6 +62,7 @@ public class FragmentListChat extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_blank_chat, container, false);
         unbinder = ButterKnife.bind(this, view);
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
         inisisi();
         datachat();
         return view;
@@ -83,7 +87,7 @@ public class FragmentListChat extends Fragment {
         unbinder.unbind();
     }
 
-    private void inisisi() {
+    public void inisisi() {
         context = getActivity();
         owner = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
         databaseReference = FirebaseDatabase.getInstance().getReference().child("CHAT")
@@ -91,7 +95,7 @@ public class FragmentListChat extends Fragment {
         databaseReference.keepSynced(true);
     }
 
-    private void datachat() {
+    public void datachat() {
         RecyclerView.LayoutManager layoutManager =
                 new LinearLayoutManager(context);
         rv.setLayoutManager(layoutManager);

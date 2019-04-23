@@ -4,6 +4,7 @@ import android.graphics.*;
 import android.os.AsyncTask;
 
 import android.os.Build;
+import android.support.annotation.Keep;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -18,20 +19,22 @@ import org.joda.time.Interval;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 
-public class Function {
+public class Function implements Serializable {
 
     public static class send_report extends AsyncTask<String, Void , String>{
-        private DatabaseReference databaseReference;
-        private FirebaseUser firebaseUser;
+        public DatabaseReference databaseReference;
+        public FirebaseUser firebaseUser;
 
-        String messgae;
+        public String messgae;
         public send_report(String message) {
             this.messgae = message;
         }
 
+        @Keep
         @Override
         protected String doInBackground(String... strings) {
             databaseReference = FirebaseDatabase.getInstance().getReference();
@@ -40,7 +43,7 @@ public class Function {
             String manufacturer = Build.MANUFACTURER;
             String model = Build.MODEL;
             int version = Build.VERSION.SDK_INT;
-            String versionRelease = Build.VERSION.RELEASE;
+             String versionRelease = Build.VERSION.RELEASE;
 
             ReportModel reportModel = new ReportModel(firebaseUser.getUid(),messgae,manufacturer,model,version,versionRelease);
 
@@ -53,17 +56,16 @@ public class Function {
     }
 
     public static class IsOnline extends AsyncTask<String, Void, String> {
-        private DatabaseReference databaseReference;
-        private FirebaseUser firebaseUser;
-        long timestamp = new Date().getTime();
+        public DatabaseReference databaseReference;
+        public FirebaseUser firebaseUser;
+        public long timestamp = new Date().getTime();
         public UserModel user ;
 
-
+        @Keep
         @Override
         protected String doInBackground(String... strings) {
             firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
             databaseReference = FirebaseDatabase.getInstance().getReference();
-            databaseReference.keepSynced(true);
 
             StatusAktifModel statusAktif = new StatusAktifModel(1, timestamp);
             databaseReference.child(GlobalVariabel.CHILD_USER_ONLINE)
@@ -75,16 +77,16 @@ public class Function {
 
     }
     public static class IsOffline extends AsyncTask<String, Void, String> {
-        private DatabaseReference databaseReference;
-        private FirebaseUser firebaseUser;
-        long timestamp = new Date().getTime();
+        public DatabaseReference databaseReference;
+        public FirebaseUser firebaseUser;
+        public long timestamp = new Date().getTime();
 
-
+        @Keep
         @Override
         protected String doInBackground(String... strings) {
             firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
             databaseReference = FirebaseDatabase.getInstance().getReference();
-            databaseReference.keepSynced(true);
+
 
             StatusAktifModel statusAktif = new StatusAktifModel(2, timestamp);
             databaseReference.child(GlobalVariabel.CHILD_USER_ONLINE)
@@ -98,16 +100,16 @@ public class Function {
 
 
     public static class IsTyping extends AsyncTask<String, Void, String> {
-        private DatabaseReference databaseReference;
-        private FirebaseUser firebaseUser;
-        long timestamp = new Date().getTime();
+        public DatabaseReference databaseReference;
+        public FirebaseUser firebaseUser;
+        public long timestamp = new Date().getTime();
 
 
+        @Keep
         @Override
         protected String doInBackground(String... strings) {
             firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
             databaseReference = FirebaseDatabase.getInstance().getReference();
-            databaseReference.keepSynced(true);
 
             StatusAktifModel statusAktif = new StatusAktifModel(3, timestamp);
             databaseReference.child(GlobalVariabel.CHILD_USER_ONLINE)

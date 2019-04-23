@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.RemoteInput;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -20,15 +21,19 @@ import java.util.Date;
 
 
 public class NotifikasiService extends BroadcastReceiver {
-    private DatabaseReference databaseReference;
-    private FirebaseUser firebaseUser;
+    public DatabaseReference databaseReference;
+    public FirebaseUser firebaseUser;
 
     @Override
     public void onReceive(Context context, Intent intent) {
         databaseReference = FirebaseDatabase.getInstance().getReference();
-        databaseReference.keepSynced(true);
+
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         Bundle remoteInput = RemoteInput.getResultsFromIntent(intent);
+        try {
+
+
+
         if (remoteInput != null){
         if (MyFirebaseMessagingService.REPLY_ACTION.equals(intent.getAction())) {
             CharSequence pesannya = getReplyMessage(intent);
@@ -86,6 +91,14 @@ public class NotifikasiService extends BroadcastReceiver {
         }else {
 
         }
+        }
+        }catch (NullPointerException e){
+            Crashlytics.logException(e);
+        }catch (Exception e){
+            Crashlytics.logException(e);
+        }catch (Throwable e){
+            Crashlytics.logException(e);
+        }
 
 
         }
@@ -94,9 +107,9 @@ public class NotifikasiService extends BroadcastReceiver {
 
 
 
-    }
 
-    private CharSequence getReplyMessage(Intent intent){
+
+    public CharSequence getReplyMessage(Intent intent){
         Bundle remoteInput = RemoteInput.getResultsFromIntent(intent);
         if (remoteInput != null) {
             return remoteInput.getCharSequence(MyFirebaseMessagingService.REPLY_KEY);

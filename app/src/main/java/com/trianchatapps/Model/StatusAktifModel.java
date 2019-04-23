@@ -1,8 +1,8 @@
 package com.trianchatapps.Model;
 
 public class StatusAktifModel {
-    int online;
-    long timestamp;
+   public int online;
+   public long timestamp;
 
     public StatusAktifModel(){
 

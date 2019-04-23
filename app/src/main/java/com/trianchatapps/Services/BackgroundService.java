@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -16,9 +17,9 @@ import com.trianchatapps.Model.StatusAktifModel;
 import java.util.Date;
 
 public class BackgroundService extends Service {
-    DatabaseReference databaseReference;
-    FirebaseUser firebaseUser;
-    long timestamp = new Date().getTime();
+    public DatabaseReference databaseReference;
+    public FirebaseUser firebaseUser;
+    public long timestamp = new Date().getTime();
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -51,11 +52,11 @@ public class BackgroundService extends Service {
                 stopSelf();
             }
         } catch (NullPointerException e){
-            new Function.send_report(e.getMessage());
+            Crashlytics.logException(e);
         } catch (Exception e){
-            new Function.send_report(e.getMessage());
+            Crashlytics.logException(e);
         } catch (Throwable e){
-            new Function.send_report(e.getMessage());
+            Crashlytics.logException(e);
         }
     }
 
@@ -78,11 +79,11 @@ public class BackgroundService extends Service {
                 stopSelf();
             }
         } catch (NullPointerException e){
-            new Function.send_report(e.getMessage());
+           Crashlytics.logException(e);
         } catch (Exception e){
-            new Function.send_report(e.getMessage());
+            Crashlytics.logException(e);
         } catch (Throwable e){
-            new Function.send_report(e.getMessage());
+            Crashlytics.logException(e);
         }
     }
 

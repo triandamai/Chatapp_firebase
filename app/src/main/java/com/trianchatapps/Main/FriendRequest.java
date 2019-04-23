@@ -9,10 +9,13 @@ import android.support.v7.widget.RecyclerView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.*;
 import com.trianchatapps.AdapterRecyclerview.AdapterListContact;
+import com.trianchatapps.Auth.Register;
+import com.trianchatapps.Function;
 import com.trianchatapps.GlobalVariabel;
 import com.trianchatapps.Model.ContactModel;
 import com.trianchatapps.R;
@@ -36,9 +39,10 @@ public class FriendRequest extends AppCompatActivity {
 
     AdapterListContact adapterListContact;
 
-    private Context context;
-    private DatabaseReference databaseReference;
-    private FirebaseUser firebaseUser;
+    public Context context;
+    public DatabaseReference databaseReference;
+    public FirebaseUser firebaseUser;
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +50,7 @@ public class FriendRequest extends AppCompatActivity {
         setContentView(R.layout.activity_friend_request);
         context = FriendRequest.this;
         ButterKnife.bind(this);
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(context);
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -57,7 +62,7 @@ public class FriendRequest extends AppCompatActivity {
       }
     }
 
-    private void load_request_contact() {
+    public void load_request_contact() {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(context);
         rv.setLayoutManager(layoutManager);
 
@@ -69,14 +74,25 @@ public class FriendRequest extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()){
-                            ContactModel contact = new ContactModel();
-                            for (DataSnapshot data : dataSnapshot.getChildren()){
-                                if (data.child("isfriend").getValue(boolean.class) != true) {
-                                    contact = data.getValue(ContactModel.class);
+                            try {
+
+
+                                ContactModel contact = new ContactModel();
+                                for (DataSnapshot data : dataSnapshot.getChildren()) {
+                                    if (data.child("isfriend").getValue(boolean.class) != true) {
+                                        contact = data.getValue(ContactModel.class);
+                                    }
                                 }
+                                contacts.add(contact);
+                                adapterListContact = new AdapterListContact(context,firebaseUser.getUid(),contacts);
+                            } catch (NullPointerException e){
+                                new Function.send_report(e.getMessage());
+                            } catch (Exception e){
+                                new Function.send_report(e.getMessage());
+                            } catch (Throwable e){
+                                new Function.send_report(e.getMessage());
                             }
-                            contacts.add(contact);
-                            adapterListContact = new AdapterListContact(context,firebaseUser.getUid(),contacts);
+
                         }
                     }
 
