@@ -21,8 +21,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.trianchatapps.GlobalVariabel;
 import com.trianchatapps.Helper.Bantuan;
-import com.trianchatapps.Model.Contact;
-import com.trianchatapps.Model.User;
+import com.trianchatapps.Model.ContactModel;
+import com.trianchatapps.Model.UserModel;
 import com.trianchatapps.R;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -32,12 +32,12 @@ import java.util.List;
 
 public class AdapterFriendRequest extends RecyclerView.Adapter<AdapterFriendRequest.myViewHolder> {
     Context context;
-    List<User> userList = new ArrayList<>();
+    List<UserModel> userList = new ArrayList<>();
     DatabaseReference databaseReference;
     FirebaseUser firebaseUser;
     private String Uidsaya;
 
-    public AdapterFriendRequest(Context context, String owner, List<User> users) {
+    public AdapterFriendRequest(Context context, String owner, List<UserModel> users) {
         this.context = context;
         this.userList = users;
         this.Uidsaya = owner;
@@ -54,7 +54,7 @@ public class AdapterFriendRequest extends RecyclerView.Adapter<AdapterFriendRequ
 
     @Override
     public void onBindViewHolder(@NonNull final myViewHolder myViewholder, int i) {
-        final User user ;
+        final UserModel user ;
         user = userList.get(i);
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -70,8 +70,8 @@ public class AdapterFriendRequest extends RecyclerView.Adapter<AdapterFriendRequ
             @Override
             public void onClick(View v) {
                 long timestamp = new Date().getTime();
-                Contact contact =
-                        new Contact(
+                ContactModel contact =
+                        new ContactModel(
                                 false,
                                 timestamp,
                                 firebaseUser.getDisplayName(),

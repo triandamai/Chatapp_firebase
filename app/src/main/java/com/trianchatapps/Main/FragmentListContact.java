@@ -21,7 +21,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.trianchatapps.AdapterRecyclerview.AdapterListContact;
 import com.trianchatapps.GlobalVariabel;
-import com.trianchatapps.Model.Contact;
+import com.trianchatapps.Model.ContactModel;
 import com.trianchatapps.R;
 
 import java.util.ArrayList;
@@ -46,7 +46,7 @@ public class FragmentListContact extends Fragment {
     Context context;
     Unbinder unbinder;
     private DatabaseReference databaseReference;
-    private ArrayList<Contact> listkontak = new ArrayList<>();
+    private ArrayList<ContactModel> listkontak = new ArrayList<>();
     private AdapterListContact adapter;
     private String saya;
 
@@ -90,9 +90,9 @@ public class FragmentListContact extends Fragment {
                         listkontak.clear();
                         if (dataSnapshot.exists()){
                             linearKosong.setVisibility(View.GONE);
-                            Contact contact = new Contact();
+                            ContactModel contact = new ContactModel();
                             for (DataSnapshot data : dataSnapshot.getChildren()){
-                                       contact  = data.getValue(Contact.class);
+                                       contact  = data.getValue(ContactModel.class);
                             }
                             listkontak.add(contact);
                             adapter = new AdapterListContact(context, saya,listkontak);

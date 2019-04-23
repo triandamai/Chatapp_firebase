@@ -18,7 +18,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.trianchatapps.Auth.Register;
 import com.trianchatapps.GlobalVariabel;
-import com.trianchatapps.Model.User;
+import com.trianchatapps.Model.UserModel;
 import com.trianchatapps.R;
 
 import butterknife.BindView;
@@ -67,9 +67,9 @@ public class MyProfil extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()){
-                            User user;
+                            UserModel user;
 
-                            user = dataSnapshot.getValue(User.class);
+                            user = dataSnapshot.getValue(UserModel.class);
 
                             Glide.with(context)
                                     .load(user.getPhotoUrl())
@@ -101,5 +101,7 @@ public class MyProfil extends AppCompatActivity {
             finish();
         }
     }
+
+
 
 }

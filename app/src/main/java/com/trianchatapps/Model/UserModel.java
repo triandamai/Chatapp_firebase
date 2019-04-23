@@ -4,7 +4,7 @@ package com.trianchatapps.Model;
  * Author Trian on 8/12/2018.
  */
 
-public class User {
+public class UserModel {
 
     private String displayName;
     private String current;
@@ -16,10 +16,10 @@ public class User {
 
 
 
-    public User() {
+    public UserModel() {
     }
 
-    public User(String displayName, String email, String uid, String photoUrl,boolean online) {
+    public UserModel(String displayName, String email, String uid, String photoUrl, boolean online) {
         this.displayName = displayName;
         this.email = email;
         this.uid = uid;

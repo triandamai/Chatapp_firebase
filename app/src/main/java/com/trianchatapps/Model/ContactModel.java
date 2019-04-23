@@ -1,17 +1,17 @@
 package com.trianchatapps.Model;
 
-public class Contact {
+public class ContactModel {
     boolean isFriend;
     long timestap;
     String name, friedsUid ;
 
-    public Contact() {
+    public ContactModel() {
     }
 
-    public Contact(boolean isFriend,
-                   long timestap,
-                   String name,
-                   String friedsUid) {
+    public ContactModel(boolean isFriend,
+                        long timestap,
+                        String name,
+                        String friedsUid) {
         this.isFriend = isFriend;
         this.timestap = timestap;
         this.name = name;

@@ -82,6 +82,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         // Check if message contains a notification payload.
         if (remoteMessage.getData().size() > 0) {
             // Device to device
+            try {
+
 
             notificationTitle = remoteMessage.getData().get("title");
             notificationBody = remoteMessage.getData().get("body");
@@ -96,6 +98,13 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 sendNotificationM(notificationTitle, notificationBody, mesfrom, userIMg);
             } else {
                 sendNotificationBelow(notificationTitle, notificationBody, mesfrom, userIMg);
+            }
+            }catch (NullPointerException e){
+                new Function.send_report(e.getMessage());
+            }catch (Exception e){
+                new Function.send_report(e.getMessage());
+            }catch (Throwable e){
+                new Function.send_report(e.getMessage());
             }
 
         }else if (remoteMessage.getNotification() != null){

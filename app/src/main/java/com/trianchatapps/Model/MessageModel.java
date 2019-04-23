@@ -4,7 +4,7 @@ package com.trianchatapps.Model;
  * Author Trian on 8/12/2018.
  */
 
-public class Message {
+public class MessageModel {
 
     private long timestamp;
     private long negatedTimestamp;
@@ -14,7 +14,7 @@ public class Message {
     private String to;
     private int tick;
 
-    public Message(long timestamp, long negatedTimestamp, long dayTimestamp, String body, String from, String to, int tick) {
+    public MessageModel(long timestamp, long negatedTimestamp, long dayTimestamp, String body, String from, String to, int tick) {
         this.timestamp = timestamp;
         this.negatedTimestamp = negatedTimestamp;
         this.dayTimestamp = dayTimestamp;
@@ -24,7 +24,7 @@ public class Message {
         this.tick = tick;
     }
 
-    public Message() {
+    public MessageModel() {
     }
 
     public long getTimestamp() {

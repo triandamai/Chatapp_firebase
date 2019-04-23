@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -17,7 +16,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.trianchatapps.Model.User;
+import com.trianchatapps.Model.UserModel;
 import com.trianchatapps.R;
 import com.trianchatapps.Thread.ThreadChat;
 
@@ -75,9 +74,9 @@ public class Profil extends AppCompatActivity {
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        User user;
+                        UserModel user;
                         if (dataSnapshot.exists()) {
-                            user = dataSnapshot.getValue(User.class);
+                            user = dataSnapshot.getValue(UserModel.class);
 
                             etProfilNama.setText(user.getDisplayName());
                             etProfilEmail.setText(user.getEmail());

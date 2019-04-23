@@ -11,7 +11,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.trianchatapps.Function;
 import com.trianchatapps.GlobalVariabel;
-import com.trianchatapps.Model.StatusAktif;
+import com.trianchatapps.Model.StatusAktifModel;
 
 import java.util.Date;
 
@@ -35,35 +35,54 @@ public class BackgroundService extends Service {
     @Override
     public void onDestroy() {
         Log.d("service", "ondestroy");
-        StatusAktif statusAktif = new StatusAktif(2, timestamp);
+        StatusAktifModel statusAktif = new StatusAktifModel(2, timestamp);
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (firebaseUser != null){
-            databaseReference = FirebaseDatabase.getInstance().getReference();
-            databaseReference.keepSynced(true);
-            databaseReference.child(GlobalVariabel.CHILD_USER_ONLINE)
-                    .child(firebaseUser.getUid())
-                    .setValue(statusAktif);
-        }else {
-            stopSelf();
+        try {
+
+
+            if (firebaseUser != null) {
+                databaseReference = FirebaseDatabase.getInstance().getReference();
+                databaseReference.keepSynced(true);
+                databaseReference.child(GlobalVariabel.CHILD_USER_ONLINE)
+                        .child(firebaseUser.getUid())
+                        .setValue(statusAktif);
+            } else {
+                stopSelf();
+            }
+        } catch (NullPointerException e){
+            new Function.send_report(e.getMessage());
+        } catch (Exception e){
+            new Function.send_report(e.getMessage());
+        } catch (Throwable e){
+            new Function.send_report(e.getMessage());
         }
     }
 
     @Override
     public void onTaskRemoved(Intent rootIntent) {
         Log.d("service", "ontaskremove");
-        StatusAktif statusAktif = new StatusAktif(2, timestamp);
+        StatusAktifModel statusAktif = new StatusAktifModel(2, timestamp);
+        try {
 
-        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        if (firebaseUser != null){
-            databaseReference = FirebaseDatabase.getInstance().getReference();
-            databaseReference.keepSynced(true);
-            databaseReference.child(GlobalVariabel.CHILD_USER_ONLINE)
-                    .child(firebaseUser.getUid())
-                    .setValue(statusAktif);
-        }else {
-            stopSelf();
+            firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+            if (firebaseUser != null) {
+                databaseReference = FirebaseDatabase.getInstance().getReference();
+                databaseReference.keepSynced(true);
+                databaseReference.child(GlobalVariabel.CHILD_USER_ONLINE)
+                        .child(firebaseUser.getUid())
+                        .setValue(statusAktif);
+            } else {
+                stopSelf();
+            }
+        } catch (NullPointerException e){
+            new Function.send_report(e.getMessage());
+        } catch (Exception e){
+            new Function.send_report(e.getMessage());
+        } catch (Throwable e){
+            new Function.send_report(e.getMessage());
         }
     }
 

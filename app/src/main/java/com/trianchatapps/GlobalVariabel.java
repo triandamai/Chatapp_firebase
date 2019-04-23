@@ -11,4 +11,6 @@ public class GlobalVariabel {
     public static final String CHILD_CHAT_UNREAD = "unseenMsgCount";
     public static final String CHILD_CONTACT_FRIEND = "FRIEND";
     public static final String CHILD_CONTACT_FRIEND_REQUEST = "FRIENDREQUEST ";
+    public static final String CHILD_REPORT = "REPORT";
+
 }

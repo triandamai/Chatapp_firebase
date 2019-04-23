@@ -2,38 +2,61 @@ package com.trianchatapps;
 
 import android.graphics.*;
 import android.os.AsyncTask;
-import android.support.annotation.NonNull;
 
+import android.os.Build;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.trianchatapps.Model.Contact;
-import com.trianchatapps.Model.StatusAktif;
+import com.trianchatapps.Model.ReportModel;
+import com.trianchatapps.Model.StatusAktifModel;
 
-import com.trianchatapps.Model.User;
+import com.trianchatapps.Model.UserModel;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.joda.time.Interval;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 public class Function {
-    private DatabaseReference databaseReference;
+
+    public static class send_report extends AsyncTask<String, Void , String>{
+        private DatabaseReference databaseReference;
+        private FirebaseUser firebaseUser;
+
+        String messgae;
+        public send_report(String message) {
+            this.messgae = message;
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+            databaseReference = FirebaseDatabase.getInstance().getReference();
+            firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+            String manufacturer = Build.MANUFACTURER;
+            String model = Build.MODEL;
+            int version = Build.VERSION.SDK_INT;
+            String versionRelease = Build.VERSION.RELEASE;
+
+            ReportModel reportModel = new ReportModel(firebaseUser.getUid(),messgae,manufacturer,model,version,versionRelease);
+
+            databaseReference.child(GlobalVariabel.CHILD_REPORT)
+                    .push()
+                    .setValue(reportModel);
+
+            return "report send";
+        }
+    }
 
     public static class IsOnline extends AsyncTask<String, Void, String> {
         private DatabaseReference databaseReference;
         private FirebaseUser firebaseUser;
         long timestamp = new Date().getTime();
-        public User user ;
+        public UserModel user ;
 
 
         @Override
@@ -42,7 +65,7 @@ public class Function {
             databaseReference = FirebaseDatabase.getInstance().getReference();
             databaseReference.keepSynced(true);
 
-            StatusAktif statusAktif = new StatusAktif(1, timestamp);
+            StatusAktifModel statusAktif = new StatusAktifModel(1, timestamp);
             databaseReference.child(GlobalVariabel.CHILD_USER_ONLINE)
                     .child(firebaseUser.getUid())
                     .setValue(statusAktif);
@@ -63,7 +86,7 @@ public class Function {
             databaseReference = FirebaseDatabase.getInstance().getReference();
             databaseReference.keepSynced(true);
 
-            StatusAktif statusAktif = new StatusAktif(2, timestamp);
+            StatusAktifModel statusAktif = new StatusAktifModel(2, timestamp);
             databaseReference.child(GlobalVariabel.CHILD_USER_ONLINE)
                     .child(firebaseUser.getUid())
                     .setValue(statusAktif);
@@ -86,7 +109,7 @@ public class Function {
             databaseReference = FirebaseDatabase.getInstance().getReference();
             databaseReference.keepSynced(true);
 
-            StatusAktif statusAktif = new StatusAktif(3, timestamp);
+            StatusAktifModel statusAktif = new StatusAktifModel(3, timestamp);
             databaseReference.child(GlobalVariabel.CHILD_USER_ONLINE)
                     .child(firebaseUser.getUid())
                     .setValue(statusAktif);

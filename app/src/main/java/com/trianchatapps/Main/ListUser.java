@@ -16,7 +16,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.trianchatapps.AdapterRecyclerview.AdapterAllUser;
-import com.trianchatapps.Model.User;
+import com.trianchatapps.Model.UserModel;
 import com.trianchatapps.R;
 
 import java.util.ArrayList;
@@ -36,7 +36,7 @@ public class ListUser extends AppCompatActivity {
 
     private DatabaseReference databaseReference;
             Context context;
-    private List<User> userList ;
+    private List<UserModel> userList ;
     private AdapterAllUser adapter;
     private String Uidsaya;
 
@@ -66,13 +66,13 @@ public class ListUser extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         userList = new ArrayList<>();
-                        User user = new User();
+                        UserModel user = new UserModel();
                         userList.clear();
                         if(dataSnapshot.exists()){
                             linearKosong.setVisibility(View.GONE);
                             linearIsi.setVisibility(View.VISIBLE);
                             for (DataSnapshot data : dataSnapshot.getChildren()){
-                                user = data.getValue(User.class);
+                                user = data.getValue(UserModel.class);
                                 if (user.getUid().equals(Uidsaya)){
                                     //gausah diinput
                                 }else {

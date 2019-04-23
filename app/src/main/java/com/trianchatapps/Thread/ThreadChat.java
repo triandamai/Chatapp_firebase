@@ -36,9 +36,9 @@ import com.trianchatapps.AdapterRecyclerview.AdapterChatrv;
 import com.trianchatapps.Function;
 import com.trianchatapps.GlobalVariabel;
 import com.trianchatapps.Main.Profil;
-import com.trianchatapps.Model.Message;
-import com.trianchatapps.Model.StatusAktif;
-import com.trianchatapps.Model.User;
+import com.trianchatapps.Model.MessageModel;
+import com.trianchatapps.Model.StatusAktifModel;
+import com.trianchatapps.Model.UserModel;
 import com.trianchatapps.R;
 
 import java.util.ArrayList;
@@ -83,7 +83,7 @@ public class ThreadChat extends AppCompatActivity {
 
     private DatabaseReference databaseReference;
     private FirebaseAuth firebaseAuth;
-    private User user;
+    private UserModel user;
     private FirebaseUser firebaseUser;
     private String id_pengirim;
     private String id_saya;
@@ -92,7 +92,7 @@ public class ThreadChat extends AppCompatActivity {
     private AdapterChatrv adapter;
     int tambah_jumlah_unseen_msg;
     int jumlah;
-    final ArrayList<Message> messages = new ArrayList<>();
+    final ArrayList<MessageModel> messages = new ArrayList<>();
     private MediaPlayer mediaPlayer;
 
 
@@ -164,10 +164,10 @@ public class ThreadChat extends AppCompatActivity {
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        User user;
+                        UserModel user;
                         if (dataSnapshot.exists()) {
 
-                            user = dataSnapshot.getValue(User.class);
+                            user = dataSnapshot.getValue(UserModel.class);
                             Glide.with(getApplicationContext())
                                     .load(user.getPhotoUrl())
                                     .placeholder(R.drawable.undraw_working_remotely_jh40)
@@ -187,9 +187,9 @@ public class ThreadChat extends AppCompatActivity {
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        StatusAktif statusAktif;
+                        StatusAktifModel statusAktif;
                         if (dataSnapshot.exists()) {
-                            statusAktif = dataSnapshot.getValue(StatusAktif.class);
+                            statusAktif = dataSnapshot.getValue(StatusAktifModel.class);
 
                             if (statusAktif.isOnline() == 1) {
                                 txtStatusOnlineToolbar.setText("Online");
@@ -220,8 +220,8 @@ public class ThreadChat extends AppCompatActivity {
         long timestam = new Date().getTime();
         long datTimestamp = Function.getDayTimestamp(timestam);
         String body = inputEditText.getText().toString().trim();
-        Message message =
-                new Message(timestam, -timestam, datTimestamp, body, id_saya, id_pengirim, 1);
+        MessageModel message =
+                new MessageModel(timestam, -timestam, datTimestamp, body, id_saya, id_pengirim, 1);
         final String id_saya = databaseReference.push().getKey();
         databaseReference
                 .child(GlobalVariabel.CHILD_CHAT)
@@ -330,15 +330,22 @@ public class ThreadChat extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                        Message chat;
+                        MessageModel chat;
                         if (dataSnapshot.exists()) {
                             messages.clear();
+                            try {
 
-                            for (DataSnapshot data : dataSnapshot.getChildren()) {
-                                chat = data.getValue(Message.class);
-                                String dtaa = data.getKey();
-                                messages.add(chat);
-                                key.add(dtaa);
+
+                                for (DataSnapshot data : dataSnapshot.getChildren()) {
+                                    chat = data.getValue(MessageModel.class);
+                                    String dtaa = data.getKey();
+                                    messages.add(chat);
+                                    key.add(dtaa);
+                                }
+                            }catch (Exception e){
+                                new Function.send_report(e.getMessage());
+                            }catch (Error e){
+                                new Function.send_report(e.getMessage());
                             }
                         } else {
                             //emptyView.setVisibility(View.GONE);
@@ -380,11 +387,19 @@ public class ThreadChat extends AppCompatActivity {
                     }
                 });
 
+        try {
 
-        adapter = new AdapterChatrv(context, messages);
-        recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, true));
-        recyclerView.setAdapter(adapter);
 
+            adapter = new AdapterChatrv(context, messages);
+            recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, true));
+            recyclerView.setAdapter(adapter);
+        } catch (NullPointerException e){
+            new Function.send_report(e.getMessage());
+        } catch (Exception e){
+            new Function.send_report(e.getMessage());
+        } catch (Throwable e){
+            new Function.send_report(e.getMessage());
+        }
     }
 
     @Override

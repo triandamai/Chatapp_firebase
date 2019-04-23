@@ -1,6 +1,5 @@
 package com.trianchatapps.AdapterRecyclerview;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -20,12 +19,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.trianchatapps.GlobalVariabel;
 import com.trianchatapps.Main.Profil;
-import com.trianchatapps.Model.Contact;
-import com.trianchatapps.Model.User;
+import com.trianchatapps.Model.ContactModel;
+import com.trianchatapps.Model.UserModel;
 import com.trianchatapps.R;
-import com.trianchatapps.Thread.ThreadChat;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -35,13 +32,13 @@ public class AdapterListContact extends RecyclerView.Adapter<AdapterListContact.
 
 
 
-    private List<Contact> contacts;
+    private List<ContactModel> contacts;
     private Context context;
     private DatabaseReference databaseReference;
     private String saya;
 
 
-    public AdapterListContact(Context context, String owner,List<Contact> listkontak) {
+    public AdapterListContact(Context context, String owner,List<ContactModel> listkontak) {
         this.context = context;
         this.contacts = listkontak;
         this.saya = owner;
@@ -58,7 +55,7 @@ public class AdapterListContact extends RecyclerView.Adapter<AdapterListContact.
 
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder myViewHolder, final int i) {
-        final Contact user = contacts.get(i);
+        final ContactModel user = contacts.get(i);
         databaseReference = FirebaseDatabase.getInstance().getReference();
 
         databaseReference.child(GlobalVariabel.CHILD_USER)
@@ -67,8 +64,8 @@ public class AdapterListContact extends RecyclerView.Adapter<AdapterListContact.
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
-                    User user ;
-                    user = dataSnapshot.getValue(User.class);
+                    UserModel user ;
+                    user = dataSnapshot.getValue(UserModel.class);
                     myViewHolder.tvNama.setText(user.getDisplayName());
                     Glide.with(context)
                             .load(user.getPhotoUrl())

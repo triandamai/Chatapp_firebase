@@ -1,7 +1,6 @@
 package com.trianchatapps.AdapterRecyclerview;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -21,19 +20,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.trianchatapps.Function;
 import com.trianchatapps.GlobalVariabel;
-import com.trianchatapps.Model.Message;
-import com.trianchatapps.Model.StatusAktif;
-import com.trianchatapps.Model.User;
+import com.trianchatapps.Model.MessageModel;
+import com.trianchatapps.Model.UserModel;
 import com.trianchatapps.R;
 
-import org.joda.time.DateTime;
-import org.joda.time.Days;
-import org.joda.time.Interval;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -42,7 +33,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AdapterChatrv extends RecyclerView.Adapter<AdapterChatrv.MyViewHolder> {
             Context context;
-    private final List<Message> messageList;
+    private final List<MessageModel> messageList;
     private final int ME = 1;
     private static final int VIEW_TYPE_SENT_WITH_DATE = 1;
     private final int FROM = 2;
@@ -51,7 +42,7 @@ public class AdapterChatrv extends RecyclerView.Adapter<AdapterChatrv.MyViewHold
     DatabaseReference databaseReference;
 
     private final String owner;
-    public AdapterChatrv(Context context,  ArrayList<Message> messageList){
+    public AdapterChatrv(Context context,  ArrayList<MessageModel> messageList){
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         this.context = context;
@@ -62,7 +53,7 @@ public class AdapterChatrv extends RecyclerView.Adapter<AdapterChatrv.MyViewHold
 
     @Override
     public int getItemViewType(int position) {
-        Message message = messageList.get(position);
+        MessageModel message = messageList.get(position);
         if (message.getFrom().equals(owner)){
            return ME;
 
@@ -136,7 +127,7 @@ public class AdapterChatrv extends RecyclerView.Adapter<AdapterChatrv.MyViewHold
             FirebaseUser userdetail = FirebaseAuth.getInstance().getCurrentUser();
 
 
-            Message message = messageList.get(position);
+            MessageModel message = messageList.get(position);
             itemMessageBodyTextView.setText(message.getBody());
             itemMessageDateTextView.setText(Function.getDatePretty(message.getTimestamp(),true));
             Glide.with(context)
@@ -155,7 +146,7 @@ public class AdapterChatrv extends RecyclerView.Adapter<AdapterChatrv.MyViewHold
 
         }
         void konfigurasi2(AdapterChatrv.MyViewHolder vh, int position){
-            Message message = messageList.get(position);
+            MessageModel message = messageList.get(position);
             itemMessageBodyTextView.setText(message.getBody());
             itemMessageDateTextView.setText(Function.getDatePretty(message.getTimestamp(),true));
             databaseReference = FirebaseDatabase.getInstance().getReference();
@@ -166,9 +157,9 @@ public class AdapterChatrv extends RecyclerView.Adapter<AdapterChatrv.MyViewHold
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             if (dataSnapshot.exists()){
-                                User user;
+                                UserModel user;
 
-                                user = dataSnapshot.getValue(User.class);
+                                user = dataSnapshot.getValue(UserModel.class);
                                 Glide.with(context.getApplicationContext())
                                         .load(user.getPhotoUrl())
                                         .placeholder(R.drawable.undraw_working_remotely_jh40)
@@ -189,7 +180,7 @@ public class AdapterChatrv extends RecyclerView.Adapter<AdapterChatrv.MyViewHold
         }
 
 //         void bluetick(int i) {
-//            Message message = messageList.get(i);
+//            MessageModel message = messageList.get(i);
 //            databaseReference.child(GlobalVariabel.CHILD_CHAT)
 //                    .child(message.getFrom())
 //                    .child(message.getTo())

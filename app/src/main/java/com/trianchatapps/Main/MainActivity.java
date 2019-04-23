@@ -23,7 +23,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.trianchatapps.Auth.Register;
 import com.trianchatapps.Function;
-import com.trianchatapps.Model.User;
+import com.trianchatapps.Model.UserModel;
 import com.trianchatapps.R;
 
 public class MainActivity extends AppCompatActivity {
@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
 
         adapter = new TabAdapterMainActivity(getSupportFragmentManager());
         adapter.addFragment(new FragmentListChat(), "Chat");
-        adapter.addFragment(new FragmentListContact(), "Contact");
+        adapter.addFragment(new FragmentListContact(), "ContactModel");
         //adapter.addFragment(new FragmentListGroup(), "Group");
 
 
@@ -131,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void tambahkeuser(FirebaseUser user) {
         // new Bantuan(context).toastLong("hmmmm");
-        final User user1 = new User(
+        final UserModel user1 = new UserModel(
                 user.getDisplayName(),
                 user.getEmail(),
                 user.getUid(),

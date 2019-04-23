@@ -14,7 +14,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.*;
 import com.trianchatapps.AdapterRecyclerview.AdapterListContact;
 import com.trianchatapps.GlobalVariabel;
-import com.trianchatapps.Model.Contact;
+import com.trianchatapps.Model.ContactModel;
 import com.trianchatapps.R;
 
 import butterknife.BindView;
@@ -61,7 +61,7 @@ public class FriendRequest extends AppCompatActivity {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(context);
         rv.setLayoutManager(layoutManager);
 
-        final List<Contact> contacts = new ArrayList<>();
+        final List<ContactModel> contacts = new ArrayList<>();
         databaseReference.child(GlobalVariabel.CHILD_CONTACT)
                 .child(firebaseUser.getUid())
                 .child(GlobalVariabel.CHILD_CONTACT_FRIEND_REQUEST)
@@ -69,10 +69,10 @@ public class FriendRequest extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()){
-                            Contact contact = new Contact();
+                            ContactModel contact = new ContactModel();
                             for (DataSnapshot data : dataSnapshot.getChildren()){
                                 if (data.child("isfriend").getValue(boolean.class) != true) {
-                                    contact = data.getValue(Contact.class);
+                                    contact = data.getValue(ContactModel.class);
                                 }
                             }
                             contacts.add(contact);

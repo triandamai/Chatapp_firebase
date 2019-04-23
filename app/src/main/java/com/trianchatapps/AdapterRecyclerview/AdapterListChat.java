@@ -20,9 +20,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.trianchatapps.Function;
 import com.trianchatapps.GlobalVariabel;
-import com.trianchatapps.Model.Message;
-import com.trianchatapps.Model.StatusAktif;
-import com.trianchatapps.Model.User;
+import com.trianchatapps.Model.MessageModel;
+import com.trianchatapps.Model.StatusAktifModel;
+import com.trianchatapps.Model.UserModel;
 import com.trianchatapps.R;
 import com.trianchatapps.Thread.ThreadChat;
 
@@ -105,14 +105,14 @@ public class AdapterListChat extends RecyclerView.Adapter<AdapterListChat.MyView
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             if (dataSnapshot.exists()){
-                                Message message = new Message();
+                                MessageModel message = new MessageModel();
                                 for (DataSnapshot data : dataSnapshot.getChildren()){
-                                    message = data.getValue(Message.class);
+                                    message = data.getValue(MessageModel.class);
                                 }
                                 if (message.getFrom().equals(owner)) {
                                     tvIsi.setText("Anda : "+message.getBody());
                                 }else {
-                                    final Message finalMessage = message;
+                                    final MessageModel finalMessage = message;
                                     databaseReference.child(GlobalVariabel.CHILD_CHAT_BELUMDILIHAT)
                                             .child(owner)
                                             .child(s)
@@ -161,9 +161,9 @@ public class AdapterListChat extends RecyclerView.Adapter<AdapterListChat.MyView
                     .addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            User user;
+                            UserModel user;
                             if (dataSnapshot.exists()) {
-                                user = dataSnapshot.getValue(User.class);
+                                user = dataSnapshot.getValue(UserModel.class);
                                 if (user.getUid().equals(owner)){
                                     parentItem.setVisibility(View.GONE);
                                 }else {
@@ -191,8 +191,8 @@ public class AdapterListChat extends RecyclerView.Adapter<AdapterListChat.MyView
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             if (dataSnapshot.exists()){
-                                StatusAktif statusAktif;
-                                statusAktif = dataSnapshot.getValue(StatusAktif.class);
+                                StatusAktifModel statusAktif;
+                                statusAktif = dataSnapshot.getValue(StatusAktifModel.class);
 
                                 if (statusAktif.isOnline() == 1){
                                     txtIsonline.setText("online");
