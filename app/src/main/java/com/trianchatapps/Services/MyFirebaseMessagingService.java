@@ -30,6 +30,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.trianchatapps.Function;
 import com.trianchatapps.R;
 import com.trianchatapps.Thread.ThreadChat;
 
@@ -80,9 +81,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         // Check if message contains a notification payload.
         if (remoteMessage.getData().size() > 0) {
+            // Device to device
 
-
-            // Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
             notificationTitle = remoteMessage.getData().get("title");
             notificationBody = remoteMessage.getData().get("body");
             mesfrom = remoteMessage.getData().get("user_id");
@@ -97,6 +97,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             } else {
                 sendNotificationBelow(notificationTitle, notificationBody, mesfrom, userIMg);
             }
+
+        }else if (remoteMessage.getNotification() != null){
+            //FCM
+        }else {
 
         }
 
@@ -138,7 +142,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                         .bigText(notificationBody))
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setLargeIcon(getRoundbmp(bmp))
+                .setLargeIcon(new Function().getRoundbmp(bmp))
                 .setContentIntent(pendingIntent)
                 .setSound(defaultSoundUri)
                 .setAutoCancel(true)
@@ -185,7 +189,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                         .bigText(notificationBody))
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setLargeIcon(getRoundbmp(bmp))
+                .setLargeIcon(new Function().getRoundbmp(bmp))
                 .setContentIntent(pendingIntent)
                 .setSound(defaultSoundUri)
                 .setAutoCancel(true)
@@ -220,9 +224,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-
-        long time = new Date().getTime();
-
         RemoteInput remoteInput = new RemoteInput.Builder(REPLY_KEY)
                 .setLabel("Enter untuk membalas")
                 .build();
@@ -241,7 +242,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                         .addLine(notificationBody))
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setLargeIcon(getRoundbmp(bmp))
+                .setLargeIcon(new Function().getRoundbmp(bmp))
                 .setContentIntent(pendingIntent)
                 .setSound(defaultSoundUri)
                 .setAutoCancel(true)
@@ -313,7 +314,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 .setStyle(style)
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setLargeIcon(getRoundbmp(bmp))
+                .setLargeIcon(new Function().getRoundbmp(bmp))
                 .setContentIntent(pendingIntent)
                 .setSound(defaultSoundUri)
                 .setAutoCancel(true)
@@ -347,26 +348,5 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     }
 
-    private Bitmap getRoundbmp(Bitmap bitmap) {
-        final Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
-                bitmap.getHeight(), Bitmap.Config.ARGB_8888);
-        final Canvas canvas = new Canvas(output);
 
-        final int color = Color.RED;
-        final Paint paint = new Paint();
-        final Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
-        final RectF rectF = new RectF(rect);
-
-        paint.setAntiAlias(true);
-        canvas.drawARGB(0, 0, 0, 0);
-        paint.setColor(color);
-        canvas.drawOval(rectF, paint);
-
-        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
-        canvas.drawBitmap(bitmap, rect, rect, paint);
-
-        bitmap.recycle();
-
-        return output;
-    }
 }
