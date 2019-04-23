@@ -95,11 +95,57 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 sendNotificationM(notificationTitle, notificationBody, mesfrom, userIMg);
             } else {
-                //dibawah m
+                sendNotificationBelow(notificationTitle, notificationBody, mesfrom, userIMg);
             }
 
         }
 
+    }
+
+    private void sendNotificationBelow(String notificationTitle, String notificationBody, String mesfrom, String userIMg) {
+
+        Intent intent = new Intent(this, ThreadChat.class);
+        intent.putExtra("uid", mesfrom);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
+
+        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        //load image
+        Bitmap bmp = null;
+        try {
+            InputStream inputStream = new URL(userIMg).openStream();
+            bmp = BitmapFactory.decodeStream(inputStream);
+
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+
+        Notification notificationBuilder = new NotificationCompat
+                .Builder(this, NOTIFICATION_CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_chat_black_24dp)
+                .setContentTitle(notificationTitle)
+                .setContentText(notificationBody)
+                .setStyle(new NotificationCompat.BigTextStyle()
+                        .bigText(notificationBody))
+                .setDefaults(Notification.DEFAULT_ALL)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setLargeIcon(getRoundbmp(bmp))
+                .setContentIntent(pendingIntent)
+                .setSound(defaultSoundUri)
+                .setAutoCancel(true)
+                .build();
+
+
+        notificationManager.notify(NOTIFICATION_ID, notificationBuilder);
     }
 
     private void sendNotificationM(String notificationTitle, String notificationBody, String mesfrom, String userIMg) {
