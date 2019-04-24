@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 
 import android.os.Build;
 import android.support.annotation.Keep;
+import com.crashlytics.android.Crashlytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -25,35 +26,7 @@ import java.util.Date;
 
 public class Function implements Serializable {
 
-    public static class send_report extends AsyncTask<String, Void , String>{
-        public DatabaseReference databaseReference;
-        public FirebaseUser firebaseUser;
 
-        public String messgae;
-        public send_report(String message) {
-            this.messgae = message;
-        }
-
-        @Keep
-        @Override
-        protected String doInBackground(String... strings) {
-            databaseReference = FirebaseDatabase.getInstance().getReference();
-            firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-
-            String manufacturer = Build.MANUFACTURER;
-            String model = Build.MODEL;
-            int version = Build.VERSION.SDK_INT;
-             String versionRelease = Build.VERSION.RELEASE;
-
-            ReportModel reportModel = new ReportModel(firebaseUser.getUid(),messgae,manufacturer,model,version,versionRelease);
-
-            databaseReference.child(GlobalVariabel.CHILD_REPORT)
-                    .push()
-                    .setValue(reportModel);
-
-            return "report send";
-        }
-    }
 
     public static class IsOnline extends AsyncTask<String, Void, String> {
         public DatabaseReference databaseReference;
@@ -64,13 +37,19 @@ public class Function implements Serializable {
         @Keep
         @Override
         protected String doInBackground(String... strings) {
-            firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-            databaseReference = FirebaseDatabase.getInstance().getReference();
 
-            StatusAktifModel statusAktif = new StatusAktifModel(1, timestamp);
-            databaseReference.child(GlobalVariabel.CHILD_USER_ONLINE)
-                    .child(firebaseUser.getUid())
-                    .setValue(statusAktif);
+
+                firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+                databaseReference = FirebaseDatabase.getInstance().getReference();
+
+                StatusAktifModel statusAktif = new StatusAktifModel(1, timestamp);
+                if (firebaseUser != null) {
+                    databaseReference.child(GlobalVariabel.CHILD_USER_ONLINE)
+                            .child(firebaseUser.getUid())
+                            .setValue(statusAktif);
+                } else {
+
+                }
 
             return "anda off";
         }
@@ -89,10 +68,13 @@ public class Function implements Serializable {
 
 
             StatusAktifModel statusAktif = new StatusAktifModel(2, timestamp);
-            databaseReference.child(GlobalVariabel.CHILD_USER_ONLINE)
-                    .child(firebaseUser.getUid())
-                    .setValue(statusAktif);
+            if (firebaseUser !=null) {
+                databaseReference.child(GlobalVariabel.CHILD_USER_ONLINE)
+                        .child(firebaseUser.getUid())
+                        .setValue(statusAktif);
+            }else {
 
+            }
             return "anda off";
         }
 

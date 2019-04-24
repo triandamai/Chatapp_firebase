@@ -17,6 +17,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.trianchatapps.Function;
+import com.trianchatapps.GlobalVariabel;
 import com.trianchatapps.Model.UserModel;
 import com.trianchatapps.R;
 import com.trianchatapps.Thread.ThreadChat;
@@ -60,18 +62,18 @@ public class Profil extends AppCompatActivity {
 
         Intent intent = getIntent();
 
-        UserId = intent.getStringExtra("uid");
+        UserId = intent.getStringExtra(GlobalVariabel.EXTRA_UID);
         data_user();
 
 
     }
     @OnClick(R.id.btn_profil_chat)
     public void chat(){
-        startActivity(new Intent(context, ThreadChat.class).putExtra("uid", UserId));
+        startActivity(new Intent(context, ThreadChat.class).putExtra(GlobalVariabel.EXTRA_UID, UserId));
         finish();
     }
     public void data_user() {
-        databaseReference.child("USER")
+        databaseReference.child(GlobalVariabel.CHILD_USER)
                 .child(UserId)
                 .addValueEventListener(new ValueEventListener() {
                     @Override
@@ -93,5 +95,20 @@ public class Profil extends AppCompatActivity {
 
                     }
                 });
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (firebaseUser != null) {
+            new Function.IsOffline().execute();
+        }
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        if (firebaseUser != null) {
+            new Function.IsOnline().execute();
+        }
     }
 }

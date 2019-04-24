@@ -23,6 +23,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
@@ -345,9 +346,9 @@ public class ThreadChat extends AppCompatActivity {
                                     key.add(dtaa);
                                 }
                             }catch (Exception e){
-                                new Function.send_report(e.getMessage());
+                                Crashlytics.logException(e);
                             }catch (Error e){
-                                new Function.send_report(e.getMessage());
+                                Crashlytics.logException(e);
                             }
                         } else {
                             //emptyView.setVisibility(View.GONE);
@@ -396,24 +397,27 @@ public class ThreadChat extends AppCompatActivity {
             recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, true));
             recyclerView.setAdapter(adapter);
         } catch (NullPointerException e){
-            new Function.send_report(e.getMessage());
+            Crashlytics.logException(e);
         } catch (Exception e){
-            new Function.send_report(e.getMessage());
+            Crashlytics.logException(e);
         } catch (Throwable e){
-            new Function.send_report(e.getMessage());
+            Crashlytics.logException(e);
         }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        new Function.IsOffline().execute();
+        if (firebaseUser != null) {
+            new Function.IsOffline().execute();
+        }
     }
-
 
     @Override
     protected void onPostResume() {
         super.onPostResume();
-        new Function.IsOnline().execute();
+        if (firebaseUser != null) {
+            new Function.IsOnline().execute();
+        }
     }
 }

@@ -8,6 +8,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -54,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.iv_main_notif)
     ImageView ivMainNotif;
     public TabAdapterMainActivity adapter;
+    @BindView(R.id.ly_name_toolbar)
+    LinearLayout lyNameToolbar;
     private FirebaseAnalytics mFirebaseAnalytics;
 
 
@@ -71,8 +74,8 @@ public class MainActivity extends AppCompatActivity {
 
         if (firebaseUser != null) {
             tambahkeuser(firebaseUser);
-           txtMainTitle.setText(firebaseUser.getDisplayName());
-           txtMainSubtitle.setText(firebaseUser.getEmail());
+            txtMainTitle.setText(firebaseUser.getDisplayName());
+            txtMainSubtitle.setText(firebaseUser.getEmail());
         } else {
             pindahActivity(1);
         }
@@ -89,23 +92,27 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @OnClick(R.id.iv_main_notif)
-    public void main_notification(){
+    public void main_notification() {
         startActivity(new Intent(context, FriendRequest.class));
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        new Function.IsOffline().execute();
+        if (firebaseUser != null) {
+            new Function.IsOffline().execute();
+        }
     }
 
     @Override
     protected void onPostResume() {
         super.onPostResume();
-        new Function.IsOnline().execute();
+        if (firebaseUser != null) {
+            new Function.IsOnline().execute();
+        }
     }
 
-    @OnClick(R.id.toolbar)
+    @OnClick(R.id.ly_name_toolbar)
     public void ke_profil() {
         startActivity(new Intent(context, MyProfil.class));
 
@@ -130,19 +137,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     public void tambahkeuser(FirebaseUser user) {
         // new Bantuan(context).toastLong("hmmmm");
-         UserModel user1 = new UserModel(
+        UserModel user1 = new UserModel(
                 user.getDisplayName(),
                 user.getEmail(),
                 user.getUid(),
                 user.getPhotoUrl() == null ? "" : user.getPhotoUrl().toString());
-         UserModel userModel = new UserModel();
-         userModel.setDisplayName(firebaseUser.getDisplayName());
-         userModel.setEmail(firebaseUser.getEmail());
-         userModel.setPhotoUrl(firebaseUser.getPhotoUrl().toString());
-         userModel.setUid(firebaseUser.getUid());
+        UserModel userModel = new UserModel();
+        userModel.setDisplayName(firebaseUser.getDisplayName());
+        userModel.setEmail(firebaseUser.getEmail());
+        userModel.setPhotoUrl(firebaseUser.getPhotoUrl().toString());
+        userModel.setUid(firebaseUser.getUid());
 
 
         databaseReference.child("USER")

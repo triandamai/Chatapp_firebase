@@ -10,13 +10,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import com.bumptech.glide.Glide;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.*;
 import com.trianchatapps.GlobalVariabel;
 import com.trianchatapps.Main.Profil;
 import com.trianchatapps.Model.ContactModel;
@@ -25,10 +22,7 @@ import com.trianchatapps.R;
 
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
-public class AdapterListContact extends RecyclerView.Adapter<AdapterListContact.MyViewHolder> {
+public class AdapterListRequestContact extends RecyclerView.Adapter<AdapterListRequestContact.MyViewHolder> {
 
 
 
@@ -38,7 +32,7 @@ public class AdapterListContact extends RecyclerView.Adapter<AdapterListContact.
     public String saya;
 
 
-    public AdapterListContact(Context context, String owner,List<ContactModel> listkontak) {
+    public AdapterListRequestContact(Context context, String owner, List<ContactModel> listkontak) {
         this.context = context;
         this.contacts = listkontak;
         this.saya = owner;
@@ -57,32 +51,19 @@ public class AdapterListContact extends RecyclerView.Adapter<AdapterListContact.
     public void onBindViewHolder(@NonNull final MyViewHolder myViewHolder, final int i) {
         final ContactModel user = contacts.get(i);
         databaseReference = FirebaseDatabase.getInstance().getReference();
+        if (user.isFriend != true){
+            myViewHolder.tvNama.setText(user.getName());
 
-        myViewHolder.tvNama.setText(user.getName());
-
-
-        databaseReference.child(GlobalVariabel.CHILD_USER)
-                .child(user.getFriendsUid())
-                .addValueEventListener(new ValueEventListener() {
+        }else {
+            myViewHolder.parentItem.setVisibility(View.GONE);
+        }
+        myViewHolder.parentItem.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    UserModel user ;
-                    user = dataSnapshot.getValue(UserModel.class);
-
-                    Glide.with(context)
-                            .load(user.getPhotoUrl())
-                            .placeholder(R.drawable.undraw_working_remotely_jh40)
-                            .into(myViewHolder.ivUser);
-
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
+            public void onClick(View v) {
+                context.startActivity(new Intent(context, Profil.class).putExtra(GlobalVariabel.EXTRA_UID, user.getFriendsUid()));
             }
         });
+
 
 
     }

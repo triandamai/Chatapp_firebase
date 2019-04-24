@@ -9,11 +9,13 @@ import android.support.v7.widget.RecyclerView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.*;
 import com.trianchatapps.AdapterRecyclerview.AdapterListContact;
+import com.trianchatapps.AdapterRecyclerview.AdapterListRequestContact;
 import com.trianchatapps.Auth.Register;
 import com.trianchatapps.Function;
 import com.trianchatapps.GlobalVariabel;
@@ -37,7 +39,7 @@ public class FriendRequest extends AppCompatActivity {
     @BindView(R.id.linear_isi)
     LinearLayout linearIsi;
 
-    AdapterListContact adapterListContact;
+   AdapterListRequestContact adapterListRequestContact;
 
     public Context context;
     public DatabaseReference databaseReference;
@@ -57,9 +59,9 @@ public class FriendRequest extends AppCompatActivity {
         databaseReference = FirebaseDatabase.getInstance().getReference();
 
 
-      if (firebaseUser != null){
+
         load_request_contact();
-      }
+
     }
 
     public void load_request_contact() {
@@ -79,18 +81,19 @@ public class FriendRequest extends AppCompatActivity {
 
                                 ContactModel contact = new ContactModel();
                                 for (DataSnapshot data : dataSnapshot.getChildren()) {
-                                    if (data.child("isfriend").getValue(boolean.class) != true) {
+
                                         contact = data.getValue(ContactModel.class);
                                     }
-                                }
+
                                 contacts.add(contact);
-                                adapterListContact = new AdapterListContact(context,firebaseUser.getUid(),contacts);
+                                adapterListRequestContact = new AdapterListRequestContact(context,firebaseUser.getUid(),contacts);
+                                rv.setAdapter(adapterListRequestContact);
                             } catch (NullPointerException e){
-                                new Function.send_report(e.getMessage());
+                                Crashlytics.logException(e);
                             } catch (Exception e){
-                                new Function.send_report(e.getMessage());
+                                Crashlytics.logException(e);
                             } catch (Throwable e){
-                                new Function.send_report(e.getMessage());
+                                Crashlytics.logException(e);
                             }
 
                         }
@@ -103,6 +106,21 @@ public class FriendRequest extends AppCompatActivity {
                 });
 
 
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (firebaseUser != null) {
+            new Function.IsOffline().execute();
+        }
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        if (firebaseUser != null) {
+            new Function.IsOnline().execute();
+        }
     }
 
 

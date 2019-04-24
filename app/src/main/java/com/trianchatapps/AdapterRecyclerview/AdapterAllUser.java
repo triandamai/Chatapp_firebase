@@ -83,7 +83,6 @@ public class AdapterAllUser extends RecyclerView.Adapter<AdapterAllUser.myViewHo
                 databaseReference.child(GlobalVariabel.CHILD_CONTACT)
                         .child(user.getUid())
                         .child(GlobalVariabel.CHILD_CONTACT_FRIEND_REQUEST)
-                        .push()
                         .setValue(contact).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
