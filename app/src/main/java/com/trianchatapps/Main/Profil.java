@@ -19,6 +19,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.trianchatapps.Function;
 import com.trianchatapps.GlobalVariabel;
+import com.trianchatapps.Helper.Bantuan;
+import com.trianchatapps.Model.ContactModel;
 import com.trianchatapps.Model.UserModel;
 import com.trianchatapps.R;
 import com.trianchatapps.Thread.ThreadChat;
@@ -27,6 +29,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
+
+import java.util.Date;
 
 public class Profil extends AppCompatActivity {
 
@@ -45,6 +49,7 @@ public class Profil extends AppCompatActivity {
     public FirebaseUser firebaseUser;
     Context context;
     String UserId;
+    Intent intent;
     private FirebaseAnalytics mFirebaseAnalytics;
 
 
@@ -60,18 +65,89 @@ public class Profil extends AppCompatActivity {
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        Intent intent = getIntent();
+        intent = getIntent();
 
-        UserId = intent.getStringExtra(GlobalVariabel.EXTRA_UID);
-        data_user();
+        if (intent != null){
+            UserId = intent.getStringExtra(GlobalVariabel.EXTRA_UID);
+            data_user();
+
+            if (intent.getStringExtra(GlobalVariabel.EXTRA_REQUEST).equals(GlobalVariabel.EXTRA_REQUEST)){
+                btnProfilChat.setText("Terima");
+            }else  if (intent.getStringExtra(GlobalVariabel.EXTRA_REQUEST) == null){
+
+                btnProfilChat.setText("Kirim pesan");
+            }
+            else {
+                btnProfilChat.setText("Kirim pesan");
+            }
+        }else {
+            new Bantuan(context).swal_basic("Tidak dapat memuat detail ");
+            finish();
+        }
+
+
 
 
     }
     @OnClick(R.id.btn_profil_chat)
     public void chat(){
-        startActivity(new Intent(context, ThreadChat.class).putExtra(GlobalVariabel.EXTRA_UID, UserId));
-        finish();
+        if (intent.getStringExtra(GlobalVariabel.EXTRA_REQUEST).equals(GlobalVariabel.EXTRA_REQUEST)){
+            tambah_kontak(intent.getStringExtra(GlobalVariabel.EXTRA_UID));
+        }else {
+            startActivity(new Intent(context, ThreadChat.class).putExtra(GlobalVariabel.EXTRA_UID, UserId));
+            finish();
+        }
+
     }
+
+    private void tambah_kontak(final String stringExtra) {
+        long timestamp = new Date().getTime();
+
+        final ContactModel contactModel1 = new ContactModel();
+        final ContactModel contactModel2 = new ContactModel();
+
+        contactModel1.setFriend(true);
+        contactModel1.setFriendsUid(firebaseUser.getUid());
+        contactModel1.setName(".");
+        contactModel1.setTimestamp(timestamp);
+
+        contactModel2.setFriend(true);
+        contactModel2.setFriendsUid(stringExtra);
+        contactModel2.setName(".");
+        contactModel2.setTimestamp(timestamp);
+
+        databaseReference.child(GlobalVariabel.CHILD_CONTACT)
+                .child(stringExtra)
+                .child(GlobalVariabel.CHILD_CONTACT_FRIEND)
+                .child(firebaseUser.getUid())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()){
+                            new Bantuan(context).swal_basic("Permintaan pertemanan sudah dikirim");
+                        }else {
+                            databaseReference.child(GlobalVariabel.CHILD_CONTACT)
+                                    .child(firebaseUser.getUid())
+                                    .child(GlobalVariabel.CHILD_CONTACT_FRIEND)
+                                    .child(stringExtra)
+                                    .setValue(contactModel2);
+                            databaseReference.child(GlobalVariabel.CHILD_CONTACT)
+                                    .child(stringExtra)
+                                    .child(GlobalVariabel.CHILD_CONTACT_FRIEND)
+                                    .child(firebaseUser.getUid())
+                                    .setValue(contactModel1);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+
+    }
+
     public void data_user() {
         databaseReference.child(GlobalVariabel.CHILD_USER)
                 .child(UserId)

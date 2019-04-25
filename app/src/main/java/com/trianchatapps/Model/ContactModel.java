@@ -1,30 +1,28 @@
 package com.trianchatapps.Model;
 
 public class ContactModel {
-   public boolean isFriend;
-   public long timestamp;
-   public String name;
-   public String friendsUid;
+    public boolean friend;
+    public long timestamp;
+    public String name;
+    public String friendsUid;
 
     public ContactModel() {
+
     }
 
-    public ContactModel(boolean isFriend,
-                        long timestap,
-                        String name,
-                        String friedsUid) {
-        this.isFriend = isFriend;
-        this.timestamp = timestap;
+    public ContactModel(boolean friend, long timestamp, String name, String friendsUid) {
+        this.friend = friend;
+        this.timestamp = timestamp;
         this.name = name;
-        this.friendsUid = friedsUid;
+        this.friendsUid = friendsUid;
     }
 
     public boolean isFriend() {
-        return isFriend;
+        return friend;
     }
 
     public void setFriend(boolean friend) {
-        isFriend = friend;
+        this.friend = friend;
     }
 
     public long getTimestamp() {

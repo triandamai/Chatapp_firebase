@@ -72,7 +72,8 @@ public class AdapterListChat extends RecyclerView.Adapter<AdapterListChat.MyView
                 @Override
                 public void onClick(View v) {
                     context.startActivity(new Intent(context, ThreadChat.class)
-                            .putExtra(GlobalVariabel.EXTRA_UID, UIDPengirim.get(i)));
+                            .putExtra(GlobalVariabel.EXTRA_UID, UIDPengirim.get(i))
+                    .putExtra(GlobalVariabel.EXTRA_REQUEST,"tidak"));
                 }
             });
         }

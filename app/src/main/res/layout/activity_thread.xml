@@ -44,6 +44,8 @@
                 android:id="@+id/rl_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:clickable="true"
+                android:background="?selectableItemBackground"
                 android:paddingLeft="20dp">
                 <TextView
                     android:id="@+id/txt_nama_thread_toolbar"

@@ -37,6 +37,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.trianchatapps.AdapterRecyclerview.AdapterChatrv;
 import com.trianchatapps.Function;
 import com.trianchatapps.GlobalVariabel;
+import com.trianchatapps.Helper.Bantuan;
 import com.trianchatapps.Main.Profil;
 import com.trianchatapps.Model.MessageModel;
 import com.trianchatapps.Model.StatusAktifModel;
@@ -112,11 +113,17 @@ public class ThreadChat extends AppCompatActivity {
         databaseReference.keepSynced(true);
         Intent intent = getIntent();
 
+        if (intent != null){
+
         sendFab.requestFocus();
         id_pengirim = intent.getStringExtra("uid");
         id_saya = FirebaseAuth.getInstance().getCurrentUser().getUid();
         dataUser();
         inisisi_recycler();
+    }else {
+            new Bantuan(context).swal_basic("tidak dapat memuat..");
+            finish();
+        }
 
         new Function.IsOnline().execute();
 

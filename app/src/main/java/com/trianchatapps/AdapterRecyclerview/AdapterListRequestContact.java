@@ -15,6 +15,7 @@ import butterknife.ButterKnife;
 import com.bumptech.glide.Glide;
 import com.google.firebase.database.*;
 import com.trianchatapps.GlobalVariabel;
+import com.trianchatapps.Helper.Bantuan;
 import com.trianchatapps.Main.Profil;
 import com.trianchatapps.Model.ContactModel;
 import com.trianchatapps.Model.UserModel;
@@ -51,18 +52,21 @@ public class AdapterListRequestContact extends RecyclerView.Adapter<AdapterListR
     public void onBindViewHolder(@NonNull final MyViewHolder myViewHolder, final int i) {
         final ContactModel user = contacts.get(i);
         databaseReference = FirebaseDatabase.getInstance().getReference();
-        if (user.isFriend != true){
+      //  if (user.isFriend != true){
             myViewHolder.tvNama.setText(user.getName());
+            myViewHolder.parentItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    context.startActivity(new Intent(context, Profil.class)
+                            .putExtra(GlobalVariabel.EXTRA_UID, user.getFriendsUid())
+                            .putExtra(GlobalVariabel.EXTRA_REQUEST, GlobalVariabel.EXTRA_REQUEST));
+                }
+            });
 
-        }else {
-            myViewHolder.parentItem.setVisibility(View.GONE);
-        }
-        myViewHolder.parentItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                context.startActivity(new Intent(context, Profil.class).putExtra(GlobalVariabel.EXTRA_UID, user.getFriendsUid()));
-            }
-        });
+//        }else {
+//            myViewHolder.parentItem.setVisibility(View.GONE);
+//        }
+
 
 
 

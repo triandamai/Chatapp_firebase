@@ -27,6 +27,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import com.trianchatapps.Thread.ThreadChat;
 
 public class AdapterListContact extends RecyclerView.Adapter<AdapterListContact.MyViewHolder> {
 
@@ -58,7 +59,7 @@ public class AdapterListContact extends RecyclerView.Adapter<AdapterListContact.
         final ContactModel user = contacts.get(i);
         databaseReference = FirebaseDatabase.getInstance().getReference();
 
-        myViewHolder.tvNama.setText(user.getName());
+
 
 
         databaseReference.child(GlobalVariabel.CHILD_USER)
@@ -69,7 +70,7 @@ public class AdapterListContact extends RecyclerView.Adapter<AdapterListContact.
                 if (dataSnapshot.exists()) {
                     UserModel user ;
                     user = dataSnapshot.getValue(UserModel.class);
-
+                    myViewHolder.tvNama.setText(user.displayName);
                     Glide.with(context)
                             .load(user.getPhotoUrl())
                             .placeholder(R.drawable.undraw_working_remotely_jh40)
@@ -81,6 +82,14 @@ public class AdapterListContact extends RecyclerView.Adapter<AdapterListContact.
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
+            }
+        });
+        myViewHolder.parentItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                context.startActivity(new Intent(context, Profil.class)
+                .putExtra(GlobalVariabel.EXTRA_UID, user.getFriendsUid())
+                .putExtra(GlobalVariabel.EXTRA_REQUEST,"noo"));
             }
         });
 

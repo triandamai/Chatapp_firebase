@@ -72,6 +72,9 @@ public class AdapterAllUser extends RecyclerView.Adapter<AdapterAllUser.myViewHo
             @Override
             public void onClick(View v) {
                 long timestamp = new Date().getTime();
+                final Bantuan bantuan = new Bantuan(context);
+                bantuan.swal_loading("Tunggu ya");
+
                 ContactModel contact =
                         new ContactModel(
                                 false,
@@ -83,21 +86,14 @@ public class AdapterAllUser extends RecyclerView.Adapter<AdapterAllUser.myViewHo
                 databaseReference.child(GlobalVariabel.CHILD_CONTACT)
                         .child(user.getUid())
                         .child(GlobalVariabel.CHILD_CONTACT_FRIEND_REQUEST)
-                        .setValue(contact).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-
-                        new Bantuan(context).swal_sukses("Berhasil Menambahkan");
-
-
-                    }
-
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        new Bantuan(context).swal_error("Gagal Mnambahkan");
-                    }
-                });
+                        .child(firebaseUser.getUid())
+                        .setValue(contact)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                bantuan.swal_loading("").dismiss();
+                            }
+                        });
 
 
             }

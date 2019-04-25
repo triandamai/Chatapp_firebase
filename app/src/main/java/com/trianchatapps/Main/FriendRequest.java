@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -13,12 +14,14 @@ import com.crashlytics.android.Crashlytics;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.crash.FirebaseCrash;
 import com.google.firebase.database.*;
 import com.trianchatapps.AdapterRecyclerview.AdapterListContact;
 import com.trianchatapps.AdapterRecyclerview.AdapterListRequestContact;
 import com.trianchatapps.Auth.Register;
 import com.trianchatapps.Function;
 import com.trianchatapps.GlobalVariabel;
+import com.trianchatapps.Helper.Bantuan;
 import com.trianchatapps.Model.ContactModel;
 import com.trianchatapps.R;
 
@@ -45,6 +48,7 @@ public class FriendRequest extends AppCompatActivity {
     public DatabaseReference databaseReference;
     public FirebaseUser firebaseUser;
     private FirebaseAnalytics mFirebaseAnalytics;
+   public  List<ContactModel> contacts = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,18 +61,12 @@ public class FriendRequest extends AppCompatActivity {
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
         databaseReference = FirebaseDatabase.getInstance().getReference();
-
-
-
         load_request_contact();
 
     }
 
     public void load_request_contact() {
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(context);
-        rv.setLayoutManager(layoutManager);
 
-        final List<ContactModel> contacts = new ArrayList<>();
         databaseReference.child(GlobalVariabel.CHILD_CONTACT)
                 .child(firebaseUser.getUid())
                 .child(GlobalVariabel.CHILD_CONTACT_FRIEND_REQUEST)
@@ -77,7 +75,7 @@ public class FriendRequest extends AppCompatActivity {
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()){
                             try {
-
+                                linearKosong.setVisibility(View.GONE);
 
                                 ContactModel contact = new ContactModel();
                                 for (DataSnapshot data : dataSnapshot.getChildren()) {
@@ -85,17 +83,24 @@ public class FriendRequest extends AppCompatActivity {
                                         contact = data.getValue(ContactModel.class);
                                     }
 
+                                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(context);
+                                rv.setLayoutManager(layoutManager);
                                 contacts.add(contact);
                                 adapterListRequestContact = new AdapterListRequestContact(context,firebaseUser.getUid(),contacts);
                                 rv.setAdapter(adapterListRequestContact);
                             } catch (NullPointerException e){
                                 Crashlytics.logException(e);
+                                FirebaseCrash.report(e);
                             } catch (Exception e){
                                 Crashlytics.logException(e);
+                                FirebaseCrash.report(e);
                             } catch (Throwable e){
                                 Crashlytics.logException(e);
+                                FirebaseCrash.report(e);
                             }
 
+                        }else {
+                            new Bantuan(context).swal_error("ga dapet data");
                         }
                     }
 

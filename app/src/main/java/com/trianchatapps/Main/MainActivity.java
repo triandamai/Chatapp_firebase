@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
 
         adapter = new TabAdapterMainActivity(getSupportFragmentManager());
         adapter.addFragment(new FragmentListChat(), "Chat");
-        adapter.addFragment(new FragmentListContact(), "ContactModel");
+        adapter.addFragment(new FragmentListContact(), "Contact");
         //adapter.addFragment(new FragmentListGroup(), "Group");
 
 
