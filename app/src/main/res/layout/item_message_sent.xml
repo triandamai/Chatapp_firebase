@@ -13,6 +13,7 @@
 		 android:layout_width="wrap_content"
 		 android:layout_height="wrap_content"
 		 android:background="@drawable/message_sent_chip"
+		 android:clickable="true"
 		 android:orientation="vertical">
 		<TextView
 			 android:id="@+id/item_message_date_text_view"

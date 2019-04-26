@@ -311,7 +311,7 @@ public class ThreadChat extends AppCompatActivity {
     @OnClick(R.id.rl_toolbar)
     public void clickrl() {
         startActivity(new Intent(ThreadChat.this, Profil.class)
-                .putExtra(GlobalVariabel.EXTRA_UID, id_pengirim));
+                .putExtra(GlobalVariabel.EXTRA_UID, id_pengirim).putExtra(GlobalVariabel.EXTRA_REQUEST,"tidak"));
     }
 
     @OnClick(R.id.attach_emoji)

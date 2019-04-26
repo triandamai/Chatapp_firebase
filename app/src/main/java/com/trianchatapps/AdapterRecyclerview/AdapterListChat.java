@@ -1,5 +1,6 @@
 package com.trianchatapps.AdapterRecyclerview;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -9,6 +10,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -106,6 +109,8 @@ public class AdapterListChat extends RecyclerView.Adapter<AdapterListChat.MyView
             ButterKnife.bind(this,itemView);
 
             firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+
         }
         public void pesan_terakhir(final String s) {
             databaseReference.child(GlobalVariabel.CHILD_CHAT)
@@ -167,12 +172,13 @@ public class AdapterListChat extends RecyclerView.Adapter<AdapterListChat.MyView
         }
 
         public void detail_user(String s) {
+
             databaseReference.child(GlobalVariabel.CHILD_USER)
                     .child(s)
                     .addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            UserModel user;
+                            final UserModel user;
                             if (dataSnapshot.exists()) {
                                 user = dataSnapshot.getValue(UserModel.class);
                                 if (user.getUid().equals(firebaseUser.getUid())){
@@ -183,7 +189,26 @@ public class AdapterListChat extends RecyclerView.Adapter<AdapterListChat.MyView
                                             .load(user.getPhotoUrl())
                                             .placeholder(R.drawable.undraw_online_friends_x73e)
                                             .into(ivUser);
+                                    final Dialog dialog = new Dialog(context);
+                                    dialog.setContentView(R.layout.dialog_layout_show_user);
+
+                                    ImageView imageView = dialog.findViewById(R.id.iv_user_dialog);
+                                    TextView nama  = dialog.findViewById(R.id.txt_nama_custom_dialog);
+
+                                    Glide.with(context)
+                                            .load(user.photoUrl)
+                                            .placeholder(R.drawable.undraw_jason_mask_t07o)
+                                            .into(imageView);
+                                    nama.setText(user.displayName);
+
+                                    ivUser.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            dialog.show();
+                                        }
+                                    });
                                 }
+
 
                             }
                         }
@@ -193,6 +218,11 @@ public class AdapterListChat extends RecyclerView.Adapter<AdapterListChat.MyView
 
                         }
                     });
+
+
+
+
+
         }
 
         public void statusonline(String s) {
