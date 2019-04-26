@@ -144,7 +144,7 @@ public class AdapterChatrv extends RecyclerView.Adapter<AdapterChatrv.MyViewHold
                             if (dataSnapshot.exists()){
                                 int jumlah = dataSnapshot.child(GlobalVariabel.CHILD_CHAT_UNREAD).getValue(Integer.class);
                                 if (jumlah == 0){
-                                    iv_tick.setImageResource(R.drawable.ic_chech_2);
+                                    iv_tick.setImageResource(R.drawable.ic_send_read );
                                 }else if (message.getTick() == 2){
                                     iv_tick.setImageResource(R.drawable.ic_check_1);
                                 }else if (message.getTick() == 1){
@@ -152,6 +152,8 @@ public class AdapterChatrv extends RecyclerView.Adapter<AdapterChatrv.MyViewHold
                                 }
                             }
                         }
+
+
 
                         @Override
                         public void onCancelled(@NonNull DatabaseError databaseError) {
