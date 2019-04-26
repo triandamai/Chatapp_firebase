@@ -83,8 +83,8 @@ public class MainActivity extends AppCompatActivity {
 
         adapter = new TabAdapterMainActivity(getSupportFragmentManager());
         adapter.addFragment(new FragmentListChat(), "Chat");
-        adapter.addFragment(new FragmentListContact(), "Contact");
-        //adapter.addFragment(new FragmentListGroup(), "Group");
+       // adapter.addFragment(new FragmentListContact(), "Contact");
+        adapter.addFragment(new FragmentListStory(), "Status");
 
 
         viewpager.setAdapter(adapter);
@@ -95,6 +95,12 @@ public class MainActivity extends AppCompatActivity {
     public void main_notification() {
         startActivity(new Intent(context, FriendRequest.class));
     }
+
+    @OnClick(R.id.menu_new_message)
+    public void new_message(){
+        startActivity(new Intent(context, ContactActivity.class));
+    }
+
 
     @Override
     protected void onPause() {

@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
 import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -26,9 +27,12 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
 import com.trianchatapps.Helper.Bantuan;
 import com.trianchatapps.Main.MainActivity;
+import com.trianchatapps.Model.UserModel;
 import com.trianchatapps.R;
 
 import butterknife.BindView;
@@ -120,6 +124,8 @@ public class Register extends AppCompatActivity implements GoogleApiClient.OnCon
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     new Bantuan(context).swal_loading("").dismiss();
+                    FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+                    tambahkeuser(firebaseUser);
                     startActivity(new Intent(context, MainActivity.class));
                     finish();
                 } else {
@@ -129,8 +135,40 @@ public class Register extends AppCompatActivity implements GoogleApiClient.OnCon
         });
     }
 
+    public void tambahkeuser(final FirebaseUser user) {
+        // new Bantuan(context).toastLong("hmmmm");
+        UserModel user1 = new UserModel(
+                user.getDisplayName(),
+                user.getEmail(),
+                user.getUid(),
+                user.getPhotoUrl() == null ? "" : user.getPhotoUrl().toString());
+
+        UserModel userModel = new UserModel();
+        userModel.setDisplayName(user.getDisplayName());
+        userModel.setEmail(user.getEmail());
+        userModel.setPhotoUrl(user.getPhotoUrl().toString());
+        userModel.setUid(user.getUid());
+
+
+        databaseReference.child("USER")
+                .child(user.getUid())
+                .setValue(user1);
+
+        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(new OnSuccessListener<InstanceIdResult>() {
+            @Override
+            public void onSuccess(InstanceIdResult instanceIdResult) {
+                String instanceId = instanceIdResult.getToken();
+                databaseReference.child("USER")
+                        .child(user.getUid())
+                        .child("instanceId")
+                        .setValue(instanceId);
+            }
+        });
+    }
+
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
 }
+

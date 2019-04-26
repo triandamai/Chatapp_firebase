@@ -17,12 +17,12 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class AdapterListGroup extends RecyclerView.Adapter<AdapterListGroup.MyViewHolder> {
+public class AdapterStory extends RecyclerView.Adapter<AdapterStory.MyViewHolder> {
 
     public ArrayList<String> list;
     public Context context;
 
-    public AdapterListGroup(Context context, ArrayList<String> listkontak) {
+    public AdapterStory(Context context, ArrayList<String> listkontak) {
         this.context = context;
         this.list = listkontak;
     }

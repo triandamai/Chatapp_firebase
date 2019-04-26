@@ -3,7 +3,7 @@ package com.trianchatapps.Main;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -21,6 +21,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.trianchatapps.AdapterRecyclerview.AdapterListContact;
+import com.trianchatapps.Function;
 import com.trianchatapps.GlobalVariabel;
 import com.trianchatapps.Model.ContactModel;
 import com.trianchatapps.R;
@@ -32,7 +33,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 
-public class FragmentListContact extends Fragment {
+public class ContactActivity extends AppCompatActivity {
 
     @BindView(R.id.iv_kosong)
     ImageView ivKosong;
@@ -51,31 +52,28 @@ public class FragmentListContact extends Fragment {
     public AdapterListContact adapter;
     public String saya;
     private FirebaseAnalytics mFirebaseAnalytics;
+    private FirebaseUser firebaseUser;
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_blank_contact, container, false);
-        unbinder = ButterKnife.bind(this, view);
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
+        setContentView(R.layout.activity_all_contact);
+        ButterKnife.bind(this);
+        context = ContactActivity.this;
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         inisisis();
         datacontact();
-        return view;
     }
+
+
 
 
     public void inisisis() {
-        context = getActivity();
+
         databaseReference = FirebaseDatabase.getInstance().getReference();
         databaseReference.keepSynced(true);
-        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         saya = FirebaseAuth.getInstance().getCurrentUser().getUid().toString();
     }
 
@@ -116,22 +114,21 @@ public class FragmentListContact extends Fragment {
 
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (firebaseUser != null) {
+            new Function.IsOffline().execute();
+        }
     }
 
     @Override
-    public void onDetach() {
-        super.onDetach();
-
+    protected void onPostResume() {
+        super.onPostResume();
+        if (firebaseUser != null) {
+            new Function.IsOnline().execute();
+        }
     }
 
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
-    }
 }
