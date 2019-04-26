@@ -127,24 +127,42 @@ public class AdapterChatrv extends RecyclerView.Adapter<AdapterChatrv.MyViewHold
             FirebaseUser userdetail = FirebaseAuth.getInstance().getCurrentUser();
 
 
-            MessageModel message = messageList.get(position);
+            final MessageModel message = messageList.get(position);
             itemMessageBodyTextView.setText(message.getBody());
             itemMessageDateTextView.setText(Function.getDatePretty(message.getTimestamp(),true));
             Glide.with(context)
                     .load(userdetail.getPhotoUrl())
                     .into(iv_user_bubble);
 
-            if (message.getTick() == 1){
-                iv_tick.setImageResource(R.drawable.ic_check_1);
-            }else if (message.getTick() == 2){
-                iv_tick.setImageResource(R.drawable.ic_chech_2);
-            }else if (message.getTick() == 3){
+            databaseReference
+                    .child(GlobalVariabel.CHILD_CHAT_BELUMDILIHAT)
+                    .child(message.to)
+                    .child(message.from)
+                    .addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.exists()){
+                                int jumlah = dataSnapshot.child(GlobalVariabel.CHILD_CHAT_UNREAD).getValue(Integer.class);
+                                if (jumlah == 0){
+                                    iv_tick.setImageResource(R.drawable.ic_chech_2);
+                                }else if (message.getTick() == 2){
+                                    iv_tick.setImageResource(R.drawable.ic_check_1);
+                                }else if (message.getTick() == 1){
+                                    iv_tick.setImageResource(R.drawable.ic_chech_2);
+                                }
+                            }
+                        }
 
-            }else {
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            }
+                        }
+                    });
+
+
 
         }
+
         void konfigurasi2(AdapterChatrv.MyViewHolder vh, int position){
             MessageModel message = messageList.get(position);
             itemMessageBodyTextView.setText(message.getBody());

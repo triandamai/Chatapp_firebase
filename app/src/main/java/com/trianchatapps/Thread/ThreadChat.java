@@ -24,6 +24,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.crashlytics.android.Crashlytics;
+import com.google.android.gms.common.internal.GmsLogger;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
@@ -221,8 +222,29 @@ public class ThreadChat extends AppCompatActivity {
                 .child(GlobalVariabel.CHILD_CHAT_BELUMDILIHAT)
                 .child(id_saya)
                 .child(id_pengirim)
-                .child(GlobalVariabel.CHILD_CHAT_UNREAD)
-                .setValue(0);
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()){
+                            int jumlah = dataSnapshot.child(GlobalVariabel.CHILD_CHAT_UNREAD).getValue(Integer.class);
+                            if (jumlah > 0){
+                                databaseReference
+                                        .child(GlobalVariabel.CHILD_CHAT_BELUMDILIHAT)
+                                        .child(id_saya)
+                                        .child(id_pengirim)
+                                        .child(GlobalVariabel.CHILD_CHAT_UNREAD)
+                                        .setValue(0);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+
     }
 
     @OnClick(R.id.activity_thread_send_fab)
