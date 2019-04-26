@@ -18,9 +18,12 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:icon">
-        <activity android:name=".Main.FriendRequest"></activity>
-        <activity android:name=".Main.MyProfil" />
-        <activity android:name=".Main.Profil" />
+        <activity android:name=".Main.FriendRequest"
+             android:theme="@style/Theme.AppCompat.Light.DarkActionBar"/>
+        <activity android:name=".Main.MyProfil"
+             android:theme="@style/Theme.AppCompat.Light.DarkActionBar"/>
+        <activity android:name=".Main.Profil"
+             android:theme="@style/Theme.AppCompat.Light.DarkActionBar"/>
         <activity android:name=".splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,8 +31,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Auth.Register" />
-        <activity android:name=".Main.MainActivity" />
+        <activity android:name=".Auth.Register"
+             android:theme="@style/Theme.AppCompat.Light.DarkActionBar"/>
+        <activity android:name=".Main.MainActivity"/>
         <activity android:name=".Thread.ThreadChat" />
         <activity
             android:name=".Main.ListUser"

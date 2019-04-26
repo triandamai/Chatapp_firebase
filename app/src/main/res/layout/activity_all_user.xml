@@ -20,7 +20,7 @@
 				 android:layout_gravity="center"
 				 android:layout_width="100dp"
 				 android:layout_height="100dp"
-				 android:src="@drawable/contact"/>
+				 android:src="@drawable/bg_auth_register"/>
 			<TextView
 				 android:layout_width="match_parent"
 				 android:layout_height="wrap_content"

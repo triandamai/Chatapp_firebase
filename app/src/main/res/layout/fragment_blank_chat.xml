@@ -19,7 +19,7 @@
              android:layout_height="400dp"
              android:layout_gravity="center"
              android:visibility="visible"
-             android:src="@drawable/undraw_chatting_2yvo" />
+             android:src="@drawable/bg_main_chat" />
         <TextView
              android:layout_width="match_parent"
              android:layout_height="wrap_content"

@@ -6,20 +6,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:theme="@style/Theme.Design.Light.NoActionBar"
-    tools:context=".Main.MainActivity">
+   tools:context=".Main.MainActivity">
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+         android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
+            android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/colorPrimary"
             app:layout_scrollFlags="scroll|enterAlways"
-            app:popupTheme="@style/AppTheme.PopupOverlay" >
+             >
             <LinearLayout
                  android:layout_width="match_parent"
                  android:layout_height="match_parent"
@@ -68,7 +67,6 @@
             app:tabGravity="fill"
             app:tabMode="fixed"
             app:tabTextColor="@color/colorWhite"
-            app:tabBackground="@color/colorPrimary"
             app:tabIndicatorColor="@color/colorWhite"
             android:theme="@style/Base.Theme.AppCompat.Light.DarkActionBar">
 
@@ -93,6 +91,9 @@
                 android:id="@+id/fab"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                app:menu_colorNormal="#673AB7"
+                app:menu_colorPressed="#673AB7"
+                app:menu_colorRipple="#ffff"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentBottom="true"
                 android:layout_margin="20dp"
@@ -102,6 +103,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="#ffff"
+                    app:fab_colorNormal="#673AB7"
+                    app:fab_colorPressed="#673AB7"
+                    app:fab_colorRipple="#ffff"
                     app:fab_label="Pesan Baru"
                     android:src="@drawable/ic_chevron_left_black_24dp" />
                 <com.github.clans.fab.FloatingActionButton
@@ -109,6 +113,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="#ffff"
+                    app:fab_colorNormal="#673AB7"
+                    app:fab_colorPressed="#673AB7"
+                    app:fab_colorRipple="#ffff"
                     app:fab_label="Tambah Teman"
                     android:src="@drawable/ic_chevron_left_black_24dp" />
             </com.github.clans.fab.FloatingActionMenu>

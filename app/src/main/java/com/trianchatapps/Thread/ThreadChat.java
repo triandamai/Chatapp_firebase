@@ -254,37 +254,37 @@ public class ThreadChat extends AppCompatActivity {
         String body = inputEditText.getText().toString().trim();
         MessageModel message =
                 new MessageModel(timestam, -timestam, datTimestamp, body, id_saya, id_pengirim, 1);
-        final String id_saya = databaseReference.push().getKey();
+        final String id_key1 = databaseReference.push().getKey();
         databaseReference
                 .child(GlobalVariabel.CHILD_CHAT)
                 .child(id_pengirim)
-                .child(this.id_saya)
                 .child(id_saya)
+                .child(id_key1)
                 .setValue(message).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 databaseReference.child(GlobalVariabel.CHILD_CHAT)
                         .child(id_pengirim)
-                        .child(ThreadChat.this.id_saya)
                         .child(id_saya)
+                        .child(id_key1)
                         .child("tick")
                         .setValue(2);
             }
         });
         if (!this.id_saya.equals(id_pengirim)) {
-            final String id_to = databaseReference.push().getKey();
+            final String id_key2 = databaseReference.push().getKey();
             databaseReference
                     .child(GlobalVariabel.CHILD_CHAT)
-                    .child(this.id_saya)
+                    .child(id_saya)
                     .child(id_pengirim)
-                    .child(id_to)
+                    .child(id_key2)
                     .setValue(message).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
                     databaseReference.child(GlobalVariabel.CHILD_CHAT)
-                            .child(ThreadChat.this.id_saya)
+                            .child(id_saya)
                             .child(id_pengirim)
-                            .child(id_to)
+                            .child(id_key2)
                             .child("tick")
                             .setValue(2);
                 }
@@ -306,7 +306,7 @@ public class ThreadChat extends AppCompatActivity {
                             databaseReference
                                     .child(GlobalVariabel.CHILD_CHAT_BELUMDILIHAT)
                                     .child(id_pengirim)
-                                    .child(ThreadChat.this.id_saya)
+                                    .child(id_saya)
                                     .child(GlobalVariabel.CHILD_CHAT_UNREAD)
                                     .setValue(jumlah + 1);
                         }
@@ -354,7 +354,9 @@ public class ThreadChat extends AppCompatActivity {
 //
 //        messagesRecycler.setAdapter(adapterChat);
 
-        databaseReference.child("CHAT")
+
+
+        databaseReference.child(GlobalVariabel.CHILD_CHAT)
                 .child(id_saya)
                 .child(id_pengirim)
                 .orderByChild("negatedTimestamp")
@@ -373,6 +375,8 @@ public class ThreadChat extends AppCompatActivity {
                                     String dtaa = data.getKey();
                                     messages.add(chat);
                                     key.add(dtaa);
+
+
                                 }
                             }catch (Exception e){
                                 Crashlytics.logException(e);
@@ -381,6 +385,25 @@ public class ThreadChat extends AppCompatActivity {
                             }
                         } else {
                             //emptyView.setVisibility(View.GONE);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+        databaseReference.child(GlobalVariabel.CHILD_CHAT)
+                .child(id_pengirim)
+                .child(id_saya)
+                .orderByChild("negatedTimestamp")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()){
+                            for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()){
+                                dataSnapshot1.child("tick").getRef().setValue(3);
+                            }
                         }
                     }
 
@@ -422,7 +445,7 @@ public class ThreadChat extends AppCompatActivity {
         try {
 
 
-            adapter = new AdapterChatrv(context, messages);
+            adapter = new AdapterChatrv(context, messages,id_saya,id_pengirim);
             recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, true));
             recyclerView.setAdapter(adapter);
         } catch (NullPointerException e){

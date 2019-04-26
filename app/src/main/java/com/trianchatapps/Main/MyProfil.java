@@ -63,6 +63,8 @@ public class MyProfil extends AppCompatActivity {
         setContentView(R.layout.activity_my_profil);
         ButterKnife.bind(this);
         context = MyProfil.this;
+        getSupportActionBar().setTitle("Profil");
+
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(context);
 
         databaseReference = FirebaseDatabase.getInstance().getReference();

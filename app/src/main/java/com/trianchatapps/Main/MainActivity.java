@@ -28,7 +28,9 @@ import com.trianchatapps.Function;
 import com.trianchatapps.Model.UserModel;
 import com.trianchatapps.R;
 
-public class MainActivity extends AppCompatActivity {
+import java.io.Serializable;
+
+public class MainActivity extends AppCompatActivity implements Serializable {
     public Context context;
     public FirebaseAuth firebaseAuth;
     public DatabaseReference databaseReference;
@@ -94,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
     @OnClick(R.id.iv_main_notif)
     public void main_notification() {
         startActivity(new Intent(context, FriendRequest.class));
+        finish();
     }
 
     @OnClick(R.id.menu_new_message)
@@ -160,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
 
         databaseReference.child("USER")
                 .child(user.getUid())
-                .setValue(user1);
+                .setValue(userModel);
 
         FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(new OnSuccessListener<InstanceIdResult>() {
             @Override

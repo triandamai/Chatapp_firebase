@@ -40,21 +40,23 @@ public class AdapterChatrv extends RecyclerView.Adapter<AdapterChatrv.MyViewHold
     public static final int VIEW_TYPE_RECEIVED_WITH_DATE = 3;
 
     DatabaseReference databaseReference;
+    public String id_pengirim;
 
-    public final String owner;
-    public AdapterChatrv(Context context,  ArrayList<MessageModel> messageList){
+    public final String saya;
+    public AdapterChatrv(Context context, ArrayList<MessageModel> messageList, String uid, String id_pengirim){
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         this.context = context;
         this.messageList = messageList;
-        this.owner = user.getUid();
+        this.saya = user.getUid();
+        this.id_pengirim =id_pengirim;
 
     }
 
     @Override
     public int getItemViewType(int position) {
         MessageModel message = messageList.get(position);
-        if (message.getFrom().equals(owner)){
+        if (message.getFrom().equals(saya)){
            return ME;
 
         }else {
@@ -134,32 +136,19 @@ public class AdapterChatrv extends RecyclerView.Adapter<AdapterChatrv.MyViewHold
                     .load(userdetail.getPhotoUrl())
                     .into(iv_user_bubble);
 
-            databaseReference
-                    .child(GlobalVariabel.CHILD_CHAT_BELUMDILIHAT)
-                    .child(message.to)
-                    .child(message.from)
-                    .addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            if (dataSnapshot.exists()){
-                                int jumlah = dataSnapshot.child(GlobalVariabel.CHILD_CHAT_UNREAD).getValue(Integer.class);
-                                if (jumlah == 0){
+
+                                if (message.getTick() == 3){
                                     iv_tick.setImageResource(R.drawable.ic_send_read );
                                 }else if (message.getTick() == 2){
                                     iv_tick.setImageResource(R.drawable.ic_check_1);
                                 }else if (message.getTick() == 1){
                                     iv_tick.setImageResource(R.drawable.ic_chech_2);
                                 }
-                            }
-                        }
 
 
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                        }
-                    });
+
 
 
 

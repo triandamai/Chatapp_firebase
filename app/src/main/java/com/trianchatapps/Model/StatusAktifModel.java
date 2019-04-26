@@ -1,5 +1,8 @@
 package com.trianchatapps.Model;
 
+import com.google.firebase.database.IgnoreExtraProperties;
+
+@IgnoreExtraProperties
 public class StatusAktifModel {
    public int online;
    public long timestamp;

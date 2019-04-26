@@ -1,5 +1,8 @@
 package com.trianchatapps.Model;
 
+import com.google.firebase.database.IgnoreExtraProperties;
+
+@IgnoreExtraProperties
 public class ContactModel {
     public boolean friend;
     public long timestamp;

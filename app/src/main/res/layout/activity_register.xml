@@ -3,28 +3,68 @@
      xmlns:android="http://schemas.android.com/apk/res/android"
      xmlns:app="http://schemas.android.com/apk/res-auto"
      xmlns:tools="http://schemas.android.com/tools"
+     xmlns:fancy="http://schemas.android.com/apk/res-auto"
      android:layout_width="match_parent"
      android:layout_height="match_parent"
      android:background="#ffff"
+     android:theme="@style/Theme.AppCompat.Light.DarkActionBar"
      tools:context=".Auth.Register">
     <ImageView
          android:layout_width="match_parent"
          android:layout_height="match_parent"
-         android:src="@drawable/undraw_group_chat_v059"
+         android:src="@drawable/bg_auth_register"
          />
     <LinearLayout
          android:layout_width="match_parent"
          android:layout_height="wrap_content"
          android:layout_alignParentBottom="true"
-         android:layout_marginBottom="40dp">
+         android:paddingEnd="20dp"
+         android:paddingStart="20dp"
+         android:orientation="horizontal"
+         android:layout_marginBottom="80dp">
         <com.google.android.gms.common.SignInButton
-             android:layout_alignParentBottom="true"
              android:id="@+id/btn_sign_google"
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-             android:layout_margin="10dp"
+             android:layout_width="wrap_content"
+             android:layout_height="45dp"
+             android:layout_weight="2"
+             android:layout_marginEnd="10dp"
              />
+        <TextView
+             android:layout_width="wrap_content"
+             android:layout_height="match_parent"
+             android:text="Atau"
+             android:layout_margin="4dp"
+             android:gravity="center"/>
+
+        <mehdi.sakout.fancybuttons.FancyButton
+             android:layout_width="wrap_content"
+             android:layout_height="40dp"
+             android:layout_marginTop="2dp"
+             android:layout_marginStart="10dp"
+             android:layout_weight="2"
+             android:paddingTop="2dp"
+             android:paddingBottom="4dp"
+             app:fb_radius="2dp"
+             app:fb_iconPosition="left"
+             app:fb_fontIconSize="20sp"
+             app:fb_iconPaddingRight="10dp"
+             app:fb_textSize="16sp"
+             app:fb_text="Facebook"
+             app:fb_textColor="#ffffff"
+             app:fb_defaultColor="#39579B"
+             app:fb_focusColor="#6183d2"
+             app:fb_fontIconResource="&#xf230;"
+             android:elevation="5dp"/>
 
     </LinearLayout>
+    <TextView
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:gravity="center"
+         android:layout_alignParentBottom="true"
+         android:layout_marginBottom="20dp"
+         android:typeface="normal"
+         android:textStyle="italic"
+         android:text="Silahkan Login menggunakan akun \nFacebook atau Google anda"/>
 
 </RelativeLayout>

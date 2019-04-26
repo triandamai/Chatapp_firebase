@@ -1,61 +1,1 @@
-<resources>
-    <string name="app_name">chatapps</string>
-    <string name="username">Username</string>
-    <string name="password">Password</string>
-    <string name="login">Login</string>
-    <string name="register">Register</string>
-    <string name="input_phone">No hp</string>
-    <string name="dashboard">Dashboard</string>
-    <string name="welcome">Selamat Datang</string>
-    <string name="masukan_nomer_hp">Masukan Nomer Hp</string>
-    <string name="masukan_kode_verifikasi">Masukan Kode Verifikasi</string>
-    <string name="kirim_kode">Kirim Kode</string>
-    <string name="register_login">Register / Login</string>
-    <string name="nomer_salah">Nomer Salah</string>
-    <string name="nomer_salahh">Nomer Salah ?</string>
-    <string name="ini_splash_screen_nya">ini splash screen nya</string>
-    <string name="title_activity_dashboard_penjual2">dashboard_penjual2</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
-    <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Settings</string>
-    <string name="nomer_hp_salah">Nomer HP Salah !</string>
-    <string name="masukan_kode">Masukan Kode Verifikasi</string>
-    <string name="isi_data_dulu">Silahkan Lengkapi Data Diri terlebih Dahulu</string>
-    <string name="masukan_kode_yang_benar">Masukan Kode Yang Benar</string>
-    <string name="logout">Logout</string>
-    <string name="transaksi">Transaksi</string>
-    <string name="data_ikan">Data Ikan</string>
-    <string name="daftar_pesanan">Daftar Pesanan</string>
-    <string name="laporan">Laporan</string>
-    <string name="lain_lain">Lain lain</string>
-    <string name="sign_out">Sign Out</string>
-    <string name="tambah_ikan">Tambah Ikan</string>
-    <string name="pastikan">Pastikan Nomer Rekening yang anda masukan benar, jika ragu anda dapat menghubungi kami dengan cara klik nomer telephone di atas.</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-
-
-    <string name="error_google_sign_in">Can\'t sign in using Google</string>
-    <string name="placeholder">Placeholder</string>
-    <string name="empty_view_home">Hmmm ! Kayanya Baru kamu sendirian deh</string>
-    <string name="button_invite">Invite</string>
-    <string name="hint_message">Ketik Pesanmu..</string>
-    <string name="error_loading_user">Oops tidak dapat membuaka user</string>
-    <string name="today">Hari ini</string>
-    <string name="yesterday">Kemarin</string>
-    <string name="empty_view_thread">Kirim pesan pertamamu !</string>
-    <string name="error_sending_messages">Gagal.., Coba deh diulang</string>
-    <string name="message_message_copied">Di copy</string>
-    <string name="clipboard_title_copied_message">Copied message</string>
-
-    <string name="child_waktu">time</string>
-    <string name="child_neg_waktu">neg_time</string>
-    <string name="child_day_waktu">day_time</string>
-    <string name="child_isi">isi</string>
-    <string name="child_dari">dari</string>
-    <string name="child_ke">ke</string>
-</resources>
+<resources>	<string name="app_name">chatapps</string>	<string name="username">Username</string>	<string name="password">Password</string>	<string name="login">Login</string>	<string name="register">Register</string>	<string name="input_phone">No hp</string>	<string name="dashboard">Dashboard</string>	<string name="welcome">Selamat Datang</string>	<string name="masukan_nomer_hp">Masukan Nomer Hp</string>	<string name="masukan_kode_verifikasi">Masukan Kode Verifikasi</string>	<string name="kirim_kode">Kirim Kode</string>	<string name="register_login">Register / Login</string>	<string name="nomer_salah">Nomer Salah</string>	<string name="nomer_salahh">Nomer Salah ?</string>	<string name="ini_splash_screen_nya">ini splash screen nya</string>	<string name="title_activity_dashboard_penjual2">dashboard_penjual2</string>	<string name="navigation_drawer_open">Open navigation drawer</string>	<string name="navigation_drawer_close">Close navigation drawer</string>	<string name="nav_header_title">Android Studio</string>	<string name="nav_header_subtitle">android.studio@android.com</string>	<string name="nav_header_desc">Navigation header</string>	<string name="action_settings">Settings</string>	<string name="nomer_hp_salah">Nomer HP Salah !</string>	<string name="masukan_kode">Masukan Kode Verifikasi</string>	<string name="isi_data_dulu">Silahkan Lengkapi Data Diri terlebih Dahulu</string>	<string name="masukan_kode_yang_benar">Masukan Kode Yang Benar</string>	<string name="logout">Logout</string>	<string name="transaksi">Transaksi</string>	<string name="data_ikan">Data Ikan</string>	<string name="daftar_pesanan">Daftar Pesanan</string>	<string name="laporan">Laporan</string>	<string name="lain_lain">Lain lain</string>	<string name="sign_out">Sign Out</string>	<string name="tambah_ikan">Tambah Ikan</string>	<string name="pastikan">Pastikan Nomer Rekening yang anda masukan benar, jika ragu anda dapat menghubungi kami dengan cara klik nomer telephone di atas.</string>	<!-- TODO: Remove or change this placeholder text -->	<string name="hello_blank_fragment">Hello blank fragment</string>	<string name="error_google_sign_in">Can\'t sign in using Google</string>	<string name="placeholder">Placeholder</string>	<string name="empty_view_home">Hmmm ! Kayanya Baru kamu sendirian deh</string>	<string name="button_invite">Invite</string>	<string name="hint_message">Ketik Pesanmu..</string>	<string name="error_loading_user">Oops tidak dapat membuaka user</string>	<string name="today">Hari ini</string>	<string name="yesterday">Kemarin</string>	<string name="empty_view_thread">Kirim pesan pertamamu !</string>	<string name="error_sending_messages">Gagal.., Coba deh diulang</string>	<string name="message_message_copied">Di copy</string>	<string name="clipboard_title_copied_message">Copied message</string>	<string name="child_waktu">time</string>	<string name="child_neg_waktu">neg_time</string>	<string name="child_day_waktu">day_time</string>	<string name="child_isi">isi</string>	<string name="child_dari">dari</string>	<string name="child_ke">ke</string></resources>

@@ -126,7 +126,7 @@ public class AdapterListChat extends RecyclerView.Adapter<AdapterListChat.MyView
                                     message = data.getValue(MessageModel.class);
                                 }
                                 if (message.getFrom().equals(firebaseUser.getUid())) {
-                                    tvIsi.setText("Anda : "+message.getBody());
+                                    tvIsi.setText("Anda : "+ message.getBody());
                                 }else {
                                     final MessageModel finalMessage = message;
                                     databaseReference.child(GlobalVariabel.CHILD_CHAT_BELUMDILIHAT)

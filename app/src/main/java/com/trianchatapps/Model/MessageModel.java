@@ -1,9 +1,11 @@
 package com.trianchatapps.Model;
 
+import com.google.firebase.database.IgnoreExtraProperties;
+
 /*
  * Author Trian on 8/12/2018.
  */
-
+@IgnoreExtraProperties
 public class MessageModel {
 
     public long timestamp;

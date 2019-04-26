@@ -1,6 +1,9 @@
 package com.trianchatapps.Main;
 
+import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -128,5 +131,11 @@ public class FriendRequest extends AppCompatActivity {
         }
     }
 
-
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(context,MainActivity.class);
+        startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+        finish();
+    }
 }
