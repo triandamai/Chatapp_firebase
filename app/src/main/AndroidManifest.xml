@@ -34,6 +34,7 @@
         <activity
             android:name=".Main.ListUser"
             android:parentActivityName=".Main.MainActivity" />
+        <activity android:name=".Main.ContactActivity"/>
 
         <service
             android:name=".Services.MyFirebaseMessagingService"

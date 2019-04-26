@@ -87,7 +87,7 @@ public class AdapterListContact extends RecyclerView.Adapter<AdapterListContact.
         myViewHolder.parentItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                context.startActivity(new Intent(context, Profil.class)
+                context.startActivity(new Intent(context, ThreadChat.class)
                 .putExtra(GlobalVariabel.EXTRA_UID, user.getFriendsUid())
                 .putExtra(GlobalVariabel.EXTRA_REQUEST,"noo"));
             }

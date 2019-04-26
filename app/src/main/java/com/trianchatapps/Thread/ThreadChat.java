@@ -140,7 +140,7 @@ public class ThreadChat extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                new Function.IsTyping().execute();
+                new Function.IsOnline().execute();
             }
         });
 

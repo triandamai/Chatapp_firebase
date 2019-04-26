@@ -131,6 +131,7 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.menu_new_message)
     public void tambah_chat() {
+        startActivity(new Intent(context, ContactActivity.class));
     }
 
     public void pindahActivity(int i) {

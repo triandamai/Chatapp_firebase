@@ -33,6 +33,7 @@
          android:layout_width="match_parent"
          android:layout_height="wrap_content"
          android:layout_margin="10dp"
+         android:layout_gravity="center"
          android:orientation="vertical">
 
       <TextView
@@ -40,6 +41,7 @@
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
            android:maxLength="30"
+
            android:textSize="18sp"
            android:layout_marginBottom="2dp"
            android:maxLines="1"
@@ -49,6 +51,7 @@
            android:layout_height="wrap_content"
            android:textSize="12sp"
            android:text="statusnya gan"
+           android:visibility="gone"
            android:layout_marginBottom="10dp"/>
 
 
