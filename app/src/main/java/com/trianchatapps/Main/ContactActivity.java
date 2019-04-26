@@ -60,6 +60,7 @@ public class ContactActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_contact);
         ButterKnife.bind(this);
+        getSupportActionBar().setTitle("Kontak Saya");
         context = ContactActivity.this;
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         inisisis();
@@ -131,4 +132,9 @@ public class ContactActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        this.finish();
+    }
 }

@@ -59,6 +59,8 @@ public class FriendRequest extends AppCompatActivity {
         setContentView(R.layout.activity_friend_request);
         context = FriendRequest.this;
         ButterKnife.bind(this);
+        getSupportActionBar().setTitle("Permintaan Pertemanan");
+
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(context);
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -134,8 +136,6 @@ public class FriendRequest extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent intent = new Intent(context,MainActivity.class);
-        startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
-        finish();
+    finish();
     }
 }

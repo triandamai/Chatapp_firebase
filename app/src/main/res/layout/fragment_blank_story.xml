@@ -4,7 +4,7 @@
              android:layout_width="match_parent"
              android:layout_height="match_parent"
              android:background="#ffff"
-             tools:context=".Main.FragmentListGroup">
+             tools:context=".Main.FragmentListStory">
 
 	<LinearLayout
 		 android:id="@+id/linear_kosong"
@@ -24,7 +24,7 @@
 			 android:layout_width="match_parent"
 			 android:layout_height="wrap_content"
 			 android:fontFamily="monospace"
-			 android:text=""
+			 android:text="Coming soon..."
 			 android:textAlignment="center"
 			 android:layout_marginTop="30dp"
 			 android:textSize="15sp"/>

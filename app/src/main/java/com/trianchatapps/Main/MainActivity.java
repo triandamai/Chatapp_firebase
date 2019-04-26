@@ -3,6 +3,7 @@ package com.trianchatapps.Main;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -19,12 +20,12 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.*;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.trianchatapps.Auth.Register;
 import com.trianchatapps.Function;
+import com.trianchatapps.GlobalVariabel;
 import com.trianchatapps.Model.UserModel;
 import com.trianchatapps.R;
 
@@ -91,12 +92,29 @@ public class MainActivity extends AppCompatActivity implements Serializable {
 
         viewpager.setAdapter(adapter);
         tab.setupWithViewPager(viewpager);
+
+        databaseReference.child(GlobalVariabel.CHILD_CONTACT)
+                .child(firebaseUser.getUid())
+                .child(GlobalVariabel.CHILD_CONTACT_FRIEND_REQUEST)
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()){
+                            ivMainNotif.setImageResource(R.drawable.ic_notifications_active);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
     }
 
     @OnClick(R.id.iv_main_notif)
     public void main_notification() {
         startActivity(new Intent(context, FriendRequest.class));
-        finish();
+
     }
 
     @OnClick(R.id.menu_new_message)

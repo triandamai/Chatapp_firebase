@@ -52,6 +52,7 @@ public class ListUser extends AppCompatActivity {
         setContentView(R.layout.activity_all_user);
         context = ListUser.this;
         ButterKnife.bind(this);
+        getSupportActionBar().setTitle("Daftar User ");
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(context);
         inisisi();
@@ -119,4 +120,9 @@ public class ListUser extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
 }

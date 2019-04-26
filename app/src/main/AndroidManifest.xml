@@ -37,8 +37,9 @@
         <activity android:name=".Thread.ThreadChat" />
         <activity
             android:name=".Main.ListUser"
-            android:parentActivityName=".Main.MainActivity" />
-        <activity android:name=".Main.ContactActivity"/>
+             android:theme="@style/Theme.AppCompat.Light.DarkActionBar"/>
+        <activity android:name=".Main.ContactActivity"
+             android:theme="@style/Theme.AppCompat.Light.DarkActionBar"/>
 
         <service
             android:name=".Services.MyFirebaseMessagingService"
