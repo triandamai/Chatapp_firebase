@@ -20,6 +20,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.trianchatapps.AdapterRecyclerview.AdapterAllUser;
 import com.trianchatapps.Auth.Register;
 import com.trianchatapps.Function;
+import com.trianchatapps.GlobalVariabel;
 import com.trianchatapps.Model.UserModel;
 import com.trianchatapps.R;
 
@@ -70,12 +71,12 @@ public class ListUser extends AppCompatActivity {
     }
 
     public void loadData() {
-        databaseReference.child("USER")
+        databaseReference.child(GlobalVariabel.CHILD_USER)
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         userList = new ArrayList<>();
-                        UserModel user = new UserModel();
+                        UserModel user ;
                         userList.clear();
                         if(dataSnapshot.exists()){
                             linearKosong.setVisibility(View.GONE);
@@ -83,7 +84,7 @@ public class ListUser extends AppCompatActivity {
                             for (DataSnapshot data : dataSnapshot.getChildren()){
                                 user = data.getValue(UserModel.class);
                                 if (user.getUid().equals(Uidsaya)){
-                                    //gausah diinput
+
                                 }else {
                                     userList.add(user);
                                 }

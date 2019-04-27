@@ -29,7 +29,6 @@ public class BackgroundService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d("service", "onstart");
-
         return START_NOT_STICKY;
     }
 
@@ -51,11 +50,11 @@ public class BackgroundService extends Service {
             } else {
                 stopSelf();
             }
-        } catch (NullPointerException e){
+        } catch (NullPointerException e) {
             Crashlytics.logException(e);
-        } catch (Exception e){
+        } catch (Exception e) {
             Crashlytics.logException(e);
-        } catch (Throwable e){
+        } catch (Throwable e) {
             Crashlytics.logException(e);
         }
     }
@@ -78,11 +77,11 @@ public class BackgroundService extends Service {
             } else {
                 stopSelf();
             }
-        } catch (NullPointerException e){
-           Crashlytics.logException(e);
-        } catch (Exception e){
+        } catch (NullPointerException e) {
             Crashlytics.logException(e);
-        } catch (Throwable e){
+        } catch (Exception e) {
+            Crashlytics.logException(e);
+        } catch (Throwable e) {
             Crashlytics.logException(e);
         }
     }

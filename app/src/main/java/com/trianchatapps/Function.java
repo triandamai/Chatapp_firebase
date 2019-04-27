@@ -27,34 +27,34 @@ import java.util.Date;
 public class Function implements Serializable {
 
 
-
     public static class IsOnline extends AsyncTask<String, Void, String> {
         public DatabaseReference databaseReference;
         public FirebaseUser firebaseUser;
         public long timestamp = new Date().getTime();
-        public UserModel user ;
+        public UserModel user;
 
         @Keep
         @Override
         protected String doInBackground(String... strings) {
 
 
-                firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-                databaseReference = FirebaseDatabase.getInstance().getReference();
+            firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+            databaseReference = FirebaseDatabase.getInstance().getReference();
 
-                StatusAktifModel statusAktif = new StatusAktifModel(1, timestamp);
-                if (firebaseUser != null) {
-                    databaseReference.child(GlobalVariabel.CHILD_USER_ONLINE)
-                            .child(firebaseUser.getUid())
-                            .setValue(statusAktif);
-                } else {
+            StatusAktifModel statusAktif = new StatusAktifModel(1, timestamp);
+            if (firebaseUser != null) {
+                databaseReference.child(GlobalVariabel.CHILD_USER_ONLINE)
+                        .child(firebaseUser.getUid())
+                        .setValue(statusAktif);
+            } else {
 
-                }
+            }
 
             return "anda off";
         }
 
     }
+
     public static class IsOffline extends AsyncTask<String, Void, String> {
         public DatabaseReference databaseReference;
         public FirebaseUser firebaseUser;
@@ -68,11 +68,11 @@ public class Function implements Serializable {
 
 
             StatusAktifModel statusAktif = new StatusAktifModel(2, timestamp);
-            if (firebaseUser !=null) {
+            if (firebaseUser != null) {
                 databaseReference.child(GlobalVariabel.CHILD_USER_ONLINE)
                         .child(firebaseUser.getUid())
                         .setValue(statusAktif);
-            }else {
+            } else {
 
             }
             return "anda off";
@@ -173,8 +173,6 @@ public class Function implements Serializable {
 
         return output;
     }
-
-
 
 
 }

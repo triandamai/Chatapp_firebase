@@ -86,16 +86,12 @@ public class ThreadChat extends AppCompatActivity {
 
 
     public DatabaseReference databaseReference;
-    public FirebaseAuth firebaseAuth;
     public UserModel user;
     public FirebaseUser firebaseUser;
     public String id_pengirim;
-    public  String id_saya;
-    public String photoUrl;
+    public String id_saya;
     public Context context;
     public AdapterChatrv adapter;
-    public int tambah_jumlah_unseen_msg;
-    public int jumlah;
     public final ArrayList<MessageModel> messages = new ArrayList<>();
     public MediaPlayer mediaPlayer;
     private FirebaseAnalytics mFirebaseAnalytics;
@@ -114,14 +110,14 @@ public class ThreadChat extends AppCompatActivity {
         databaseReference.keepSynced(true);
         Intent intent = getIntent();
 
-        if (intent != null){
+        if (intent != null) {
 
-        sendFab.requestFocus();
-        id_pengirim = intent.getStringExtra("uid");
-        id_saya = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        dataUser();
-        inisisi_recycler();
-    }else {
+            sendFab.requestFocus();
+            id_pengirim = intent.getStringExtra("uid");
+            id_saya = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            dataUser();
+            inisisi_recycler();
+        } else {
             new Bantuan(context).swal_basic("tidak dapat memuat..");
             finish();
         }
@@ -225,9 +221,9 @@ public class ThreadChat extends AppCompatActivity {
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.exists()){
+                        if (dataSnapshot.exists()) {
                             int jumlah = dataSnapshot.child(GlobalVariabel.CHILD_CHAT_UNREAD).getValue(Integer.class);
-                            if (jumlah > 0){
+                            if (jumlah > 0) {
                                 databaseReference
                                         .child(GlobalVariabel.CHILD_CHAT_BELUMDILIHAT)
                                         .child(id_saya)
@@ -302,7 +298,7 @@ public class ThreadChat extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()) {
-                            jumlah = dataSnapshot.getValue(Integer.class);
+                            int jumlah = dataSnapshot.getValue(Integer.class);
                             databaseReference
                                     .child(GlobalVariabel.CHILD_CHAT_BELUMDILIHAT)
                                     .child(id_pengirim)
@@ -333,7 +329,7 @@ public class ThreadChat extends AppCompatActivity {
     @OnClick(R.id.rl_toolbar)
     public void clickrl() {
         startActivity(new Intent(ThreadChat.this, Profil.class)
-                .putExtra(GlobalVariabel.EXTRA_UID, id_pengirim).putExtra(GlobalVariabel.EXTRA_REQUEST,"tidak"));
+                .putExtra(GlobalVariabel.EXTRA_UID, id_pengirim).putExtra(GlobalVariabel.EXTRA_REQUEST, "tidak"));
     }
 
     @OnClick(R.id.attach_emoji)
@@ -344,17 +340,6 @@ public class ThreadChat extends AppCompatActivity {
 
     public void inisisi_recycler() {
         final List<String> key = new ArrayList<>();
-
-//        Query messageQuery = databaseReference
-//                .child(id_saya)
-//                .child(id_pengirim)
-//                .orderByChild("negatedTimestamp");
-//        AdapterChat adapterChat = new AdapterChat(id_saya,context,messageQuery);
-//        messagesRecycler.setLayoutManager(new LinearLayoutManager(context,LinearLayoutManager.VERTICAL,true));
-//
-//        messagesRecycler.setAdapter(adapterChat);
-
-
 
         databaseReference.child(GlobalVariabel.CHILD_CHAT)
                 .child(id_saya)
@@ -378,9 +363,9 @@ public class ThreadChat extends AppCompatActivity {
 
 
                                 }
-                            }catch (Exception e){
+                            } catch (Exception e) {
                                 Crashlytics.logException(e);
-                            }catch (Error e){
+                            } catch (Error e) {
                                 Crashlytics.logException(e);
                             }
                         } else {
@@ -400,8 +385,8 @@ public class ThreadChat extends AppCompatActivity {
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.exists()){
-                            for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()){
+                        if (dataSnapshot.exists()) {
+                            for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
                                 dataSnapshot1.child("tick").getRef().setValue(3);
                             }
                         }
@@ -448,11 +433,11 @@ public class ThreadChat extends AppCompatActivity {
             adapter = new AdapterChatrv(context, messages);
             recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, true));
             recyclerView.setAdapter(adapter);
-        } catch (NullPointerException e){
+        } catch (NullPointerException e) {
             Crashlytics.logException(e);
-        } catch (Exception e){
+        } catch (Exception e) {
             Crashlytics.logException(e);
-        } catch (Throwable e){
+        } catch (Throwable e) {
             Crashlytics.logException(e);
         }
     }

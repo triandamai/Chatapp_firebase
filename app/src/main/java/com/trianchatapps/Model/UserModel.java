@@ -17,8 +17,6 @@ public class UserModel {
     public String instanceId;
 
 
-
-
     public UserModel() {
     }
 

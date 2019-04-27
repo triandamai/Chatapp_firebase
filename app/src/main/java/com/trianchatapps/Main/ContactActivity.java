@@ -45,8 +45,7 @@ public class ContactActivity extends AppCompatActivity {
     LinearLayout linearIsi;
 
 
-    Context context;
-    Unbinder unbinder;
+    public Context context;
     public DatabaseReference databaseReference;
     public ArrayList<ContactModel> listkontak = new ArrayList<>();
     public AdapterListContact adapter;

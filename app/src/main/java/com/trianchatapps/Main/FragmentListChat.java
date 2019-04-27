@@ -44,7 +44,7 @@ public class FragmentListChat extends Fragment {
     @BindView(R.id.rv)
     RecyclerView rv;
 
-    Context context;
+    public Context context;
     public DatabaseReference databaseReference;
     public ArrayList<String> listchat = new ArrayList<>();
     public AdapterListChat adapter;
@@ -116,7 +116,7 @@ public class FragmentListChat extends Fragment {
                     linearKosong.setVisibility(View.VISIBLE);
                     linearIsi.setVisibility(View.GONE);
                 }
-                adapter = new AdapterListChat(context, owner, listchat);
+                adapter = new AdapterListChat(context, listchat);
                 rv.setAdapter(adapter);
             }
 

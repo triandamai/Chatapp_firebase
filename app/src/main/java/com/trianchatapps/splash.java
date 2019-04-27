@@ -46,7 +46,7 @@ public class splash extends AppCompatActivity {
         final Internet internet = new Internet();
         if (internet.CekKoneksi(context)) {
             inisiasi();
-              cek_auth();
+            cek_auth();
 
             FirebaseMessaging.getInstance().subscribeToTopic("pushNotifications");
             startService(new Intent(getBaseContext(), BackgroundService.class));

@@ -16,7 +16,7 @@ public class TabAdapterMainActivity extends FragmentStatePagerAdapter {
         super(fm);
     }
 
-    public void addFragment(Fragment fragment, String tittle){
+    public void addFragment(Fragment fragment, String tittle) {
         fragmentList.add(fragment);
         titleFragmentList.add(tittle);
     }

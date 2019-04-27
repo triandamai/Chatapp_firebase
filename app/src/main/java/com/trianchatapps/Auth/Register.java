@@ -44,8 +44,8 @@ public class Register extends AppCompatActivity implements GoogleApiClient.OnCon
     public DatabaseReference databaseReference;
     public GoogleApiClient googleApiClient;
     public static final int RC_SIGN_IN = 9001;
-    public  Context context;
-    public  FirebaseAnalytics mFirebaseAnalytics;
+    public Context context;
+    public FirebaseAnalytics mFirebaseAnalytics;
 
 
     @BindView(R.id.btn_sign_google)

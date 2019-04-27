@@ -4,13 +4,14 @@ import com.google.firebase.database.IgnoreExtraProperties;
 
 @IgnoreExtraProperties
 public class StatusAktifModel {
-   public int online;
-   public long timestamp;
+    public int online;
+    public long timestamp;
 
-    public StatusAktifModel(){
+    public StatusAktifModel() {
 
     }
-    public StatusAktifModel(int online, long timestamp){
+
+    public StatusAktifModel(int online, long timestamp) {
         this.online = online;
         this.timestamp = timestamp;
     }

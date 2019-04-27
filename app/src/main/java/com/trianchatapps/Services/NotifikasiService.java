@@ -19,7 +19,6 @@ import com.trianchatapps.Model.MessageModel;
 import java.util.Date;
 
 
-
 public class NotifikasiService extends BroadcastReceiver {
     public DatabaseReference databaseReference;
     public FirebaseUser firebaseUser;
@@ -33,83 +32,76 @@ public class NotifikasiService extends BroadcastReceiver {
         try {
 
 
+            if (remoteInput != null) {
+                if (MyFirebaseMessagingService.REPLY_ACTION.equals(intent.getAction())) {
+                    CharSequence pesannya = getReplyMessage(intent);
+                    final String from = intent.getStringExtra(MyFirebaseMessagingService.KEY_NOTIFICATION_ID);
 
-        if (remoteInput != null){
-        if (MyFirebaseMessagingService.REPLY_ACTION.equals(intent.getAction())) {
-            CharSequence pesannya = getReplyMessage(intent);
-            final String from = intent.getStringExtra(MyFirebaseMessagingService.KEY_NOTIFICATION_ID);
 
+                    long timestam = new Date().getTime();
+                    long datTimestamp = Function.getDayTimestamp(timestam);
+                    MessageModel message =
+                            new MessageModel(timestam, -timestam, datTimestamp, pesannya.toString(), user.getUid(), from, 1);
 
-            long timestam = new Date().getTime();
-            long datTimestamp = Function.getDayTimestamp(timestam);
-            MessageModel message =
-                    new MessageModel(timestam, -timestam, datTimestamp, pesannya.toString(), user.getUid(), from, 1);
-
-            if (user != null) {
-                final String id_saya = databaseReference.getKey();
-                databaseReference
-                        .child(GlobalVariabel.CHILD_CHAT)
-                        .child(from)
-                        .child(user.getUid())
-                        .child(id_saya)
-                        .setValue(message).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
+                    if (user != null) {
+                        final String id_saya = databaseReference.getKey();
                         databaseReference
                                 .child(GlobalVariabel.CHILD_CHAT)
                                 .child(from)
                                 .child(user.getUid())
                                 .child(id_saya)
-                                .child("tick")
-                                .setValue(2);
-                    }
-                });
-                if (!user.getUid().equals(from)) {
-                    final String id_ke = databaseReference.push().getKey();
-                    databaseReference
-                            .child(GlobalVariabel.CHILD_CHAT)
-                            .child(user.getUid())
-                            .child(from)
-                            .child(id_ke)
-                            .setValue(message).addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            databaseReference.child(GlobalVariabel.CHILD_CHAT)
+                                .setValue(message).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                databaseReference
+                                        .child(GlobalVariabel.CHILD_CHAT)
+                                        .child(from)
+                                        .child(user.getUid())
+                                        .child(id_saya)
+                                        .child("tick")
+                                        .setValue(2);
+                            }
+                        });
+                        if (!user.getUid().equals(from)) {
+                            final String id_ke = databaseReference.push().getKey();
+                            databaseReference
+                                    .child(GlobalVariabel.CHILD_CHAT)
                                     .child(user.getUid())
                                     .child(from)
                                     .child(id_ke)
-                                    .child("tick")
-                                    .setValue(2);
+                                    .setValue(message).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    databaseReference.child(GlobalVariabel.CHILD_CHAT)
+                                            .child(user.getUid())
+                                            .child(from)
+                                            .child(id_ke)
+                                            .child("tick")
+                                            .setValue(2);
+                                }
+                            });
                         }
-                    });
+                        databaseReference.child(GlobalVariabel.CHILD_NOTIF)
+                                .push()
+                                .setValue(message);
+
+                    }
+                } else {
+
                 }
-                databaseReference.child(GlobalVariabel.CHILD_NOTIF)
-                        .push()
-                        .setValue(message);
-
             }
-        }else {
-
-        }
-        }
-        }catch (NullPointerException e){
+        } catch (NullPointerException e) {
             Crashlytics.logException(e);
-        }catch (Exception e){
+        } catch (Exception e) {
             Crashlytics.logException(e);
-        }catch (Throwable e){
+        } catch (Throwable e) {
             Crashlytics.logException(e);
         }
 
 
-        }
+    }
 
-
-
-
-
-
-
-    public CharSequence getReplyMessage(Intent intent){
+    public CharSequence getReplyMessage(Intent intent) {
         Bundle remoteInput = RemoteInput.getResultsFromIntent(intent);
         if (remoteInput != null) {
             return remoteInput.getCharSequence(MyFirebaseMessagingService.REPLY_KEY);

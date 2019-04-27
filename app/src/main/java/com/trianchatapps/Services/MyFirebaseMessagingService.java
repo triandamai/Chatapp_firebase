@@ -62,12 +62,20 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         Log.d("@@@@", "onTokenRefresh: " + instanceId);
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (firebaseUser != null) {
-            FirebaseDatabase.getInstance().getReference()
-                    .child("USER")
-                    .child(firebaseUser.getUid())
-                    .child("instanceId")
-                    .setValue(instanceId);
+        try {
+            if (firebaseUser != null) {
+                FirebaseDatabase.getInstance().getReference()
+                        .child("USER")
+                        .child(firebaseUser.getUid())
+                        .child("instanceId")
+                        .setValue(instanceId);
+            }
+        } catch (NullPointerException e) {
+            Crashlytics.logException(e);
+        } catch (Exception e) {
+            Crashlytics.logException(e);
+        } catch (Throwable e) {
+            Crashlytics.logException(e);
         }
     }
 
@@ -87,31 +95,37 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             try {
 
 
-            notificationTitle = remoteMessage.getData().get("title");
-            notificationBody = remoteMessage.getData().get("body");
-            mesfrom = remoteMessage.getData().get("user_id");
-            userIMg = remoteMessage.getData().get("icon");
+                notificationTitle = remoteMessage.getData().get("title");
+                notificationBody = remoteMessage.getData().get("body");
+                mesfrom = remoteMessage.getData().get("user_id");
+                userIMg = remoteMessage.getData().get("icon");
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                sendNotification(notificationTitle, notificationBody, mesfrom, userIMg);
-            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                sendNotificationN(notificationTitle, notificationBody, mesfrom, userIMg);
-            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                sendNotificationM(notificationTitle, notificationBody, mesfrom, userIMg);
-            } else {
-                sendNotificationBelow(notificationTitle, notificationBody, mesfrom, userIMg);
-            }
-            }catch (NullPointerException e){
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                    //TODO :: Notifikasi android 0 keatas
+                    sendNotificationP(notificationTitle, notificationBody, mesfrom, userIMg);
+                } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    sendNotificationO(notificationTitle, notificationBody, mesfrom, userIMg);
+                } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    //TODO :: Notifikasi android N keatas
+                    sendNotificationN(notificationTitle, notificationBody, mesfrom, userIMg);
+                } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    //TODO :: Notifikasi android M keatas
+                    sendNotificationM(notificationTitle, notificationBody, mesfrom, userIMg);
+                } else {
+                    //TODO :: Notifikasi android selain M,N,P
+                    sendNotificationBelow(notificationTitle, notificationBody, mesfrom, userIMg);
+                }
+            } catch (NullPointerException e) {
 
-            }catch (Exception e){
+            } catch (Exception e) {
                 Crashlytics.logException(e);
-            }catch (Throwable e){
+            } catch (Throwable e) {
                 Crashlytics.logException(e);
             }
 
-        }else if (remoteMessage.getNotification() != null){
+        } else if (remoteMessage.getNotification() != null) {
             //FCM
-        }else {
+        } else {
 
         }
 
@@ -210,6 +224,62 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         notificationManager.notify(NOTIFICATION_ID, notificationBuilder);
     }
 
+    public void sendNotificationO(String notificationTitle, String notificationBody, String mesfrom, String userIMg) {
+        Intent intent = new Intent(this, ThreadChat.class);
+        intent.putExtra("uid", mesfrom);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
+
+        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        //load image
+        Bitmap bmp = null;
+        try {
+            InputStream inputStream = new URL(userIMg).openStream();
+            bmp = BitmapFactory.decodeStream(inputStream);
+
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        RemoteInput remoteInput = new RemoteInput.Builder(REPLY_KEY)
+                .setLabel("Enter untuk membalas")
+                .build();
+        NotificationCompat.Action action = new NotificationCompat.Action.Builder(android.R.drawable.ic_menu_send,
+                "Balas Sekarang", pendding(mesfrom, notificationBody))
+                .addRemoteInput(remoteInput)
+                .setAllowGeneratedReplies(true)
+                .build();
+
+        Notification notificationBuilder = new NotificationCompat
+                .Builder(this, NOTIFICATION_CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_chat_black_24dp)
+                .setContentTitle(notificationTitle)
+                .setContentText(notificationBody)
+                .setStyle(new NotificationCompat.InboxStyle()
+                        .addLine(notificationBody))
+                .setDefaults(Notification.DEFAULT_ALL)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setLargeIcon(new Function().getRoundbmp(bmp))
+                .setContentIntent(pendingIntent)
+                .setSound(defaultSoundUri)
+                .setAutoCancel(true)
+                .addAction(action)
+                .build();
+
+
+        notificationManager.notify(NOTIFICATION_ID, notificationBuilder);
+    }
+
+
+    //TODO :: android Nougat
     public void sendNotificationN(String notificationTitle, String notificationBody, String mesfrom, String userIMg) {
         Intent intent = new Intent(this, ThreadChat.class);
         intent.putExtra("uid", mesfrom);
@@ -265,7 +335,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.P)
-    public void sendNotification(String notificationTitle, String notificationBody, String from, String img) {
+    public void sendNotificationP(String notificationTitle, String notificationBody, String from, String img) {
         Intent intent = new Intent(this, ThreadChat.class);
         intent.putExtra("uid", from);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

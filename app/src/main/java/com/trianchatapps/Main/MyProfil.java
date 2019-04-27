@@ -53,7 +53,7 @@ public class MyProfil extends AppCompatActivity {
     public FirebaseUser firebaseUser;
     public Context context;
     private FirebaseAnalytics mFirebaseAnalytics;
-    private  FirebaseAuth firebaseAuth;
+    private FirebaseAuth firebaseAuth;
     private GoogleSignInClient googleSignInClient;
     private GoogleApiClient googleApiClient;
 
@@ -71,7 +71,7 @@ public class MyProfil extends AppCompatActivity {
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         if (firebaseUser != null) {
             data_user();
-        }else {
+        } else {
             startActivity(new Intent(context, Register.class));
             finish();
         }
@@ -105,18 +105,19 @@ public class MyProfil extends AppCompatActivity {
 
                         }
                     });
-        }catch (NullPointerException e){
+        } catch (NullPointerException e) {
             Crashlytics.logException(e);
             FirebaseCrash.report(e);
-        }catch (Exception e){
+        } catch (Exception e) {
             Crashlytics.logException(e);
-        }catch (Throwable e){
+        } catch (Throwable e) {
             Crashlytics.logException(e);
         }
     }
+
     @OnClick(R.id.btn_myprofil_logout)
-    public  void logout(){
-        if (firebaseUser != null){
+    public void logout() {
+        if (firebaseUser != null) {
             //logout
             firebaseAuth = FirebaseAuth.getInstance();
 
@@ -130,12 +131,13 @@ public class MyProfil extends AppCompatActivity {
 
             startActivity(new Intent(context, Register.class));
             finish();
-        }else {
-            // langsing ke resgister
+        } else {
+            // langsung ke resgister
             startActivity(new Intent(context, Register.class));
             finish();
         }
     }
+
     @Override
     protected void onPause() {
         super.onPause();
@@ -151,8 +153,6 @@ public class MyProfil extends AppCompatActivity {
             new Function.IsOnline().execute();
         }
     }
-
-
 
 
 }

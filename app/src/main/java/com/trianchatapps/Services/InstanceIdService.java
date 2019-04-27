@@ -15,7 +15,7 @@ public class InstanceIdService extends FirebaseInstanceIdService {
     @Override
     public void onTokenRefresh() {
         super.onTokenRefresh();
-         String instanceId = FirebaseInstanceId.getInstance().getToken();
+        String instanceId = FirebaseInstanceId.getInstance().getToken();
         Log.d("@@@@", "onTokenRefresh: " + instanceId);
         try {
             FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
@@ -26,11 +26,11 @@ public class InstanceIdService extends FirebaseInstanceIdService {
                         .child("instanceId")
                         .setValue(instanceId);
             }
-        }catch (NullPointerException e){
+        } catch (NullPointerException e) {
             Crashlytics.logException(e);
-        }catch (Exception e){
+        } catch (Exception e) {
             Crashlytics.logException(e);
-        }catch (Throwable e){
+        } catch (Throwable e) {
             Crashlytics.logException(e);
         }
     }

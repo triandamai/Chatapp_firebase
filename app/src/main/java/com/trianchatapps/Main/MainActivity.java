@@ -32,11 +32,7 @@ import com.trianchatapps.R;
 import java.io.Serializable;
 
 public class MainActivity extends AppCompatActivity implements Serializable {
-    public Context context;
-    public FirebaseAuth firebaseAuth;
-    public DatabaseReference databaseReference;
-    public FirebaseUser firebaseUser;
-    public FirebaseAuth.AuthStateListener authStateListener;
+
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.menu_new_message)
@@ -60,7 +56,14 @@ public class MainActivity extends AppCompatActivity implements Serializable {
     public TabAdapterMainActivity adapter;
     @BindView(R.id.ly_name_toolbar)
     LinearLayout lyNameToolbar;
+
+
     private FirebaseAnalytics mFirebaseAnalytics;
+    public Context context;
+    public FirebaseAuth firebaseAuth;
+    public DatabaseReference databaseReference;
+    public FirebaseUser firebaseUser;
+    public FirebaseAuth.AuthStateListener authStateListener;
 
 
     @Override
@@ -86,7 +89,6 @@ public class MainActivity extends AppCompatActivity implements Serializable {
 
         adapter = new TabAdapterMainActivity(getSupportFragmentManager());
         adapter.addFragment(new FragmentListChat(), "Chat");
-       // adapter.addFragment(new FragmentListContact(), "Contact");
         adapter.addFragment(new FragmentListStory(), "Status");
 
 
@@ -166,12 +168,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
 
 
     public void tambahkeuser(FirebaseUser user) {
-        // new Bantuan(context).toastLong("hmmmm");
-        UserModel user1 = new UserModel(
-                user.getDisplayName(),
-                user.getEmail(),
-                user.getUid(),
-                user.getPhotoUrl() == null ? "" : user.getPhotoUrl().toString());
+
         UserModel userModel = new UserModel();
         userModel.setDisplayName(firebaseUser.getDisplayName());
         userModel.setEmail(firebaseUser.getEmail());
@@ -179,7 +176,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         userModel.setUid(firebaseUser.getUid());
 
 
-        databaseReference.child("USER")
+        databaseReference.child(GlobalVariabel.CHILD_USER)
                 .child(user.getUid())
                 .setValue(userModel);
 
@@ -187,7 +184,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
             @Override
             public void onSuccess(InstanceIdResult instanceIdResult) {
                 instanceId = instanceIdResult.getToken();
-                databaseReference.child("USER")
+                databaseReference.child(GlobalVariabel.CHILD_USER)
                         .child(firebaseUser.getUid())
                         .child("instanceId")
                         .setValue(instanceId);

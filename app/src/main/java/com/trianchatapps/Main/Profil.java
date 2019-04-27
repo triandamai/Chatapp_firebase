@@ -47,9 +47,9 @@ public class Profil extends AppCompatActivity {
 
     public DatabaseReference databaseReference;
     public FirebaseUser firebaseUser;
-    Context context;
-    String UserId;
-    Intent intent;
+    private Context context;
+    private String UserId;
+    private Intent intent;
     private FirebaseAnalytics mFirebaseAnalytics;
 
 
@@ -67,33 +67,31 @@ public class Profil extends AppCompatActivity {
 
         intent = getIntent();
 
-        if (intent != null){
+        if (intent != null) {
             UserId = intent.getStringExtra(GlobalVariabel.EXTRA_UID);
             data_user();
 
-            if (intent.getStringExtra(GlobalVariabel.EXTRA_REQUEST).equals(GlobalVariabel.EXTRA_REQUEST)){
+            if (intent.getStringExtra(GlobalVariabel.EXTRA_REQUEST).equals(GlobalVariabel.EXTRA_REQUEST)) {
                 btnProfilChat.setText("Terima");
-            }else  if (intent.getStringExtra(GlobalVariabel.EXTRA_REQUEST) == null){
+            } else if (intent.getStringExtra(GlobalVariabel.EXTRA_REQUEST) == null) {
 
                 btnProfilChat.setText("Kirim pesan");
-            }
-            else {
+            } else {
                 btnProfilChat.setText("Kirim pesan");
             }
-        }else {
+        } else {
             new Bantuan(context).swal_basic("Tidak dapat memuat detail ");
             finish();
         }
 
 
-
-
     }
+
     @OnClick(R.id.btn_profil_chat)
-    public void chat(){
-        if (intent.getStringExtra(GlobalVariabel.EXTRA_REQUEST).equals(GlobalVariabel.EXTRA_REQUEST)){
+    public void chat() {
+        if (intent.getStringExtra(GlobalVariabel.EXTRA_REQUEST).equals(GlobalVariabel.EXTRA_REQUEST)) {
             tambah_kontak(intent.getStringExtra(GlobalVariabel.EXTRA_UID));
-        }else {
+        } else {
             startActivity(new Intent(context, ThreadChat.class).putExtra(GlobalVariabel.EXTRA_UID, UserId));
             finish();
         }
@@ -123,9 +121,9 @@ public class Profil extends AppCompatActivity {
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.exists()){
+                        if (dataSnapshot.exists()) {
                             new Bantuan(context).swal_basic("Permintaan pertemanan sudah dikirim");
-                        }else {
+                        } else {
                             databaseReference.child(GlobalVariabel.CHILD_CONTACT)
                                     .child(firebaseUser.getUid())
                                     .child(GlobalVariabel.CHILD_CONTACT_FRIEND)
@@ -172,6 +170,7 @@ public class Profil extends AppCompatActivity {
                     }
                 });
     }
+
     @Override
     protected void onPause() {
         super.onPause();
