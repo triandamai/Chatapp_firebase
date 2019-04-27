@@ -30,6 +30,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
+import com.trianchatapps.GlobalVariabel;
 import com.trianchatapps.Helper.Bantuan;
 import com.trianchatapps.Main.MainActivity;
 import com.trianchatapps.Model.UserModel;
@@ -150,7 +151,7 @@ public class Register extends AppCompatActivity implements GoogleApiClient.OnCon
         userModel.setUid(user.getUid());
 
 
-        databaseReference.child("USER")
+        databaseReference.child(GlobalVariabel.CHILD_USER)
                 .child(user.getUid())
                 .setValue(user1);
 
@@ -158,7 +159,7 @@ public class Register extends AppCompatActivity implements GoogleApiClient.OnCon
             @Override
             public void onSuccess(InstanceIdResult instanceIdResult) {
                 String instanceId = instanceIdResult.getToken();
-                databaseReference.child("USER")
+                databaseReference.child(GlobalVariabel.CHILD_USER)
                         .child(user.getUid())
                         .child("instanceId")
                         .setValue(instanceId);
