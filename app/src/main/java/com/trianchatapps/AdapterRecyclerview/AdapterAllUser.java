@@ -12,7 +12,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -34,7 +33,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AdapterAllUser extends RecyclerView.Adapter<AdapterAllUser.myViewHolder> {
     public Context context;
-    public List<UserModel> userList = new ArrayList<>();
+    public List<UserModel> userList ;
     public DatabaseReference databaseReference;
     public FirebaseUser firebaseUser;
     public String Uidsaya;
@@ -60,7 +59,7 @@ public class AdapterAllUser extends RecyclerView.Adapter<AdapterAllUser.myViewHo
         user = userList.get(i);
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        final Bantuan bantuan = new Bantuan(context);
+
 
         Glide.with(context)
                 .load(user.getPhotoUrl())

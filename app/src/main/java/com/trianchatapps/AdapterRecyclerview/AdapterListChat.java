@@ -42,20 +42,19 @@ public class AdapterListChat extends RecyclerView.Adapter<AdapterListChat.MyView
 
     public List<String> UIDPengirim;
     public Context context;
-    public String owner;
     public DatabaseReference databaseReference;
     public FirebaseUser firebaseUser;
 
 
-    public AdapterListChat(Context context, String owner, ArrayList<String> UIDPengirim) {
+    public AdapterListChat(Context context, ArrayList<String> UIDPengirim) {
         this.context = context;
-
         this.UIDPengirim = UIDPengirim;
     }
 
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_list_chat, viewGroup, false);
+        View view = LayoutInflater.from(context)
+                .inflate(R.layout.item_list_chat, viewGroup, false);
 
 
         return new MyViewHolder(view);
@@ -63,14 +62,19 @@ public class AdapterListChat extends RecyclerView.Adapter<AdapterListChat.MyView
 
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder myViewHolder, final int i) {
+
+
         databaseReference = FirebaseDatabase.getInstance().getReference();
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         if (firebaseUser != null) {
-
+            //TODO:: load detail user
             myViewHolder.detail_user(UIDPengirim.get(i));
+            //TODO:: pesan terakhir dari percakapan
             myViewHolder.pesan_terakhir(UIDPengirim.get(i));
+            //TODO:: cek online/offline/...
             myViewHolder.statusonline(UIDPengirim.get(i));
 
+            //TODO:: aksi onclick
             myViewHolder.parentItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -110,12 +114,12 @@ public class AdapterListChat extends RecyclerView.Adapter<AdapterListChat.MyView
 
             firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
-
         }
-        public void pesan_terakhir(final String s) {
+        //TODO::
+        void pesan_terakhir(final String UID_pengirim) {
             databaseReference.child(GlobalVariabel.CHILD_CHAT)
                     .child(firebaseUser.getUid())
-                    .child(s)
+                    .child(UID_pengirim)
                     .orderByKey().limitToLast(1)
                     .addValueEventListener(new ValueEventListener() {
                         @Override
@@ -125,13 +129,15 @@ public class AdapterListChat extends RecyclerView.Adapter<AdapterListChat.MyView
                                 for (DataSnapshot data : dataSnapshot.getChildren()){
                                     message = data.getValue(MessageModel.class);
                                 }
+
+                                //TODO:: cek apakah pesan sudah dibaca atua belum jika belum huruf jadi bold dan ada count message unread
                                 if (message.getFrom().equals(firebaseUser.getUid())) {
                                     tvIsi.setText("Anda : "+ message.getBody());
                                 }else {
                                     final MessageModel finalMessage = message;
                                     databaseReference.child(GlobalVariabel.CHILD_CHAT_BELUMDILIHAT)
                                             .child(firebaseUser.getUid())
-                                            .child(s)
+                                            .child(UID_pengirim)
                                             .child(GlobalVariabel.CHILD_CHAT_UNREAD)
                                             .addValueEventListener(new ValueEventListener() {
                                                 @Override
@@ -157,10 +163,7 @@ public class AdapterListChat extends RecyclerView.Adapter<AdapterListChat.MyView
 
                                                 }
                                             });
-
                                 }
-                            }else {
-
                             }
                         }
 
@@ -171,10 +174,10 @@ public class AdapterListChat extends RecyclerView.Adapter<AdapterListChat.MyView
                     });
         }
 
-        public void detail_user(String s) {
+        public void detail_user(String UID_pengirirm) {
 
             databaseReference.child(GlobalVariabel.CHILD_USER)
-                    .child(s)
+                    .child(UID_pengirirm)
                     .addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -219,10 +222,6 @@ public class AdapterListChat extends RecyclerView.Adapter<AdapterListChat.MyView
                         }
                     });
 
-
-
-
-
         }
 
         public void statusonline(String s) {
@@ -243,7 +242,6 @@ public class AdapterListChat extends RecyclerView.Adapter<AdapterListChat.MyView
                                 }else if (statusAktif.isOnline() == 3){
                                     txtIsonline.setTextColor(Color.GRAY);
                                     txtIsonline.setText("Mengetik... ");
-
                                 }else {
                                     txtIsonline.setTextColor(Color.GRAY);
                                     txtIsonline.setText("Terakhir dilihat "+Function.getDatePretty(statusAktif.getTimestamp(),true));

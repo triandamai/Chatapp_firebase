@@ -59,31 +59,30 @@ public class AdapterListContact extends RecyclerView.Adapter<AdapterListContact.
         final ContactModel user = contacts.get(i);
         databaseReference = FirebaseDatabase.getInstance().getReference();
 
-
-
-
         databaseReference.child(GlobalVariabel.CHILD_USER)
                 .child(user.getFriendsUid())
                 .addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    UserModel user ;
-                    user = dataSnapshot.getValue(UserModel.class);
-                    myViewHolder.tvNama.setText(user.displayName);
-                    Glide.with(context)
-                            .load(user.getPhotoUrl())
-                            .placeholder(R.drawable.undraw_working_remotely_jh40)
-                            .into(myViewHolder.ivUser);
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                             UserModel user ;
+                             user = dataSnapshot.getValue(UserModel.class);
+                             myViewHolder.tvNama.setText(user.displayName);
+                             Glide.with(context)
+                                .load(user.getPhotoUrl())
+                                .placeholder(R.drawable.undraw_working_remotely_jh40)
+                                .into(myViewHolder.ivUser);
 
-                }
-            }
+                            }
+                    }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            }
+                    }
         });
+
+        //TODO:: aksi onklik
         myViewHolder.parentItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -102,8 +101,6 @@ public class AdapterListContact extends RecyclerView.Adapter<AdapterListContact.
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-
-        Context context;
         @BindView(R.id.iv_user)
         ImageView ivUser;
         @BindView(R.id.tv_nama)

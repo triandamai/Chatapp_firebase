@@ -52,7 +52,7 @@ public class AdapterListRequestContact extends RecyclerView.Adapter<AdapterListR
     public void onBindViewHolder(@NonNull final MyViewHolder myViewHolder, final int i) {
         final ContactModel user = contacts.get(i);
         databaseReference = FirebaseDatabase.getInstance().getReference();
-      //  if (user.isFriend != true){
+
             myViewHolder.tvNama.setText(user.getName());
             myViewHolder.parentItem.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -63,9 +63,6 @@ public class AdapterListRequestContact extends RecyclerView.Adapter<AdapterListR
                 }
             });
 
-//        }else {
-//            myViewHolder.parentItem.setVisibility(View.GONE);
-//        }
 
 
 
@@ -79,7 +76,6 @@ public class AdapterListRequestContact extends RecyclerView.Adapter<AdapterListR
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        Context context;
         @BindView(R.id.iv_user)
         ImageView ivUser;
         @BindView(R.id.tv_nama)

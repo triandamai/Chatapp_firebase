@@ -41,9 +41,9 @@ public class AdapterChatrv extends RecyclerView.Adapter<AdapterChatrv.MyViewHold
 
     DatabaseReference databaseReference;
     public String id_pengirim;
-
     public final String saya;
-    public AdapterChatrv(Context context, ArrayList<MessageModel> messageList, String uid, String id_pengirim){
+
+    public AdapterChatrv(Context context, ArrayList<MessageModel> messageList){
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         this.context = context;
@@ -89,11 +89,13 @@ public class AdapterChatrv extends RecyclerView.Adapter<AdapterChatrv.MyViewHold
         switch (myViewHolder.getItemViewType()){
             case ME:
                 MyViewHolder myViewHolder1 = (MyViewHolder) myViewHolder;
-                myViewHolder.konfigurasi1(myViewHolder1,i);
+                //TODO:: bubble dari saya
+                myViewHolder.konfigurasi1(i);
                 break;
             case FROM:
                 MyViewHolder myViewHolder2 = (MyViewHolder) myViewHolder;
-                myViewHolder.konfigurasi2(myViewHolder2,i);
+                //TODO:: bubble dari pengirim
+                myViewHolder.konfigurasi2(i);
 
                 break;
         }
@@ -125,37 +127,32 @@ public class AdapterChatrv extends RecyclerView.Adapter<AdapterChatrv.MyViewHold
 
         }
 
-        void konfigurasi1(AdapterChatrv.MyViewHolder vh, int position ) {
-            FirebaseUser userdetail = FirebaseAuth.getInstance().getCurrentUser();
+        //TODO:: bubble saya
+        void konfigurasi1( int position ) {
+            FirebaseUser detail_saya = FirebaseAuth.getInstance().getCurrentUser();
 
 
             final MessageModel message = messageList.get(position);
             itemMessageBodyTextView.setText(message.getBody());
             itemMessageDateTextView.setText(Function.getDatePretty(message.getTimestamp(),true));
             Glide.with(context)
-                    .load(userdetail.getPhotoUrl())
+                    .load(detail_saya.getPhotoUrl())
                     .into(iv_user_bubble);
 
-
-                                if (message.getTick() == 3){
-                                    iv_tick.setImageResource(R.drawable.ic_send_read );
-                                }else if (message.getTick() == 2){
-                                    iv_tick.setImageResource(R.drawable.ic_check_1);
-                                }else if (message.getTick() == 1){
-                                    iv_tick.setImageResource(R.drawable.ic_chech_2);
-                                }
-
-
-
-
-
-
-
+            if (message.getTick() == 3){
+                iv_tick.setImageResource(R.drawable.ic_send_read );
+            }else if (message.getTick() == 2){
+                iv_tick.setImageResource(R.drawable.ic_chech_2);
+            }else if (message.getTick() == 1){
+                iv_tick.setImageResource(R.drawable.ic_check_1);
+            }
 
         }
 
-        void konfigurasi2(AdapterChatrv.MyViewHolder vh, int position){
-            MessageModel message = messageList.get(position);
+        //TODO:: bubble pengirim
+        void konfigurasi2( int position){
+
+            final MessageModel message = messageList.get(position);
             itemMessageBodyTextView.setText(message.getBody());
             itemMessageDateTextView.setText(Function.getDatePretty(message.getTimestamp(),true));
             databaseReference = FirebaseDatabase.getInstance().getReference();
@@ -182,21 +179,8 @@ public class AdapterChatrv extends RecyclerView.Adapter<AdapterChatrv.MyViewHold
                         }
                     });
 
-
-
-
-
         }
 
-//         void bluetick(int i) {
-//            MessageModel message = messageList.get(i);
-//            databaseReference.child(GlobalVariabel.CHILD_CHAT)
-//                    .child(message.getFrom())
-//                    .child(message.getTo())
-//                    .child(key.get(i))
-//                    .child("tick")
-//                    .setValue(3);
-//        }
     }
 
 }

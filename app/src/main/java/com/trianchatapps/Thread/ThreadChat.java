@@ -445,7 +445,7 @@ public class ThreadChat extends AppCompatActivity {
         try {
 
 
-            adapter = new AdapterChatrv(context, messages,id_saya,id_pengirim);
+            adapter = new AdapterChatrv(context, messages);
             recyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, true));
             recyclerView.setAdapter(adapter);
         } catch (NullPointerException e){

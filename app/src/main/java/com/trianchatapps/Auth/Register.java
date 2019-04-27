@@ -1,9 +1,8 @@
 package com.trianchatapps.Auth;
 
-import android.app.ProgressDialog;
+
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -29,7 +28,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
-import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
 import com.trianchatapps.GlobalVariabel;
 import com.trianchatapps.Helper.Bantuan;
 import com.trianchatapps.Main.MainActivity;
@@ -46,11 +44,7 @@ public class Register extends AppCompatActivity implements GoogleApiClient.OnCon
     public DatabaseReference databaseReference;
     public GoogleApiClient googleApiClient;
     public static final int RC_SIGN_IN = 9001;
-
-   public SweetAlertDialog dialog;
-
     public  Context context;
-    public ProgressDialog progressDialog;
     public  FirebaseAnalytics mFirebaseAnalytics;
 
 
@@ -64,15 +58,12 @@ public class Register extends AppCompatActivity implements GoogleApiClient.OnCon
 
         ButterKnife.bind(this);
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(Register.this);
-
         inisiasi_var();
         build_auth();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             startActivity(new Intent(context, MainActivity.class));
             finish();
-        } else {
-
         }
 
 
@@ -129,15 +120,12 @@ public class Register extends AppCompatActivity implements GoogleApiClient.OnCon
                     tambahkeuser(firebaseUser);
                     startActivity(new Intent(context, MainActivity.class));
                     finish();
-                } else {
-
                 }
             }
         });
     }
 
     public void tambahkeuser(final FirebaseUser user) {
-        // new Bantuan(context).toastLong("hmmmm");
         UserModel user1 = new UserModel(
                 user.getDisplayName(),
                 user.getEmail(),
