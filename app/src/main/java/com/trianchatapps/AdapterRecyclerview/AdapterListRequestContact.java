@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -84,6 +85,9 @@ public class AdapterListRequestContact extends RecyclerView.Adapter<AdapterListR
                     contactModel2.setFriendsUid(user.friendsUid);
                     contactModel2.setName(".");
                     contactModel2.setTimestamp(timestamp);
+                    myViewHolder.progressAccept.setVisibility(View.VISIBLE);
+                    myViewHolder.txtAcceptprog.setVisibility(View.VISIBLE);
+                    myViewHolder.txtAcceptprog.setText("Menambahkan..");
 
                     databaseReference.child(GlobalVariabel.CHILD_CONTACT)
                             .child(user.friendsUid)
@@ -94,17 +98,34 @@ public class AdapterListRequestContact extends RecyclerView.Adapter<AdapterListR
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                     if (dataSnapshot.exists()) {
                                         new Bantuan(context).swal_basic("Permintaan pertemanan sudah dikirim");
+                                        myViewHolder.progressAccept.setVisibility(View.GONE);
+                                        myViewHolder.txtAcceptprog.setVisibility(View.GONE);
+
                                     } else {
-                                        databaseReference.child(GlobalVariabel.CHILD_CONTACT)
+
+                                        DatabaseReference contactsayaref =  databaseReference.child(GlobalVariabel.CHILD_CONTACT)
                                                 .child(firebaseUser.getUid())
-                                                .child(GlobalVariabel.CHILD_CONTACT_FRIEND)
-                                                .child(user.friendsUid)
+                                                .child(GlobalVariabel.CHILD_CONTACT_FRIEND);
+
+                                                //punya dia
+                                                contactsayaref.child(user.friendsUid)
                                                 .setValue(contactModel2);
-                                        databaseReference.child(GlobalVariabel.CHILD_CONTACT)
-                                                .child(user.friendsUid)
-                                                .child(GlobalVariabel.CHILD_CONTACT_FRIEND)
-                                                .child(firebaseUser.getUid())
+
+                                                //punya saya
+                                                contactsayaref.child(firebaseUser.getUid())
                                                 .setValue(contactModel1);
+
+                                                //punya saya
+                                        databaseReference.child(GlobalVariabel.CHILD_CONTACT)
+                                                .child(firebaseUser.getUid())
+                                                .child(GlobalVariabel.CHILD_CONTACT_FRIEND_REQUEST)
+                                                .child(user.friendsUid)
+                                                .child("friend")
+                                                .setValue(true);
+
+                                        myViewHolder.progressAccept.setVisibility(View.GONE);
+                                        myViewHolder.txtAcceptprog.setVisibility(View.GONE);
+
                                     }
                                 }
 
@@ -137,6 +158,10 @@ public class AdapterListRequestContact extends RecyclerView.Adapter<AdapterListR
         LinearLayout parentItem;
         @BindView(R.id.btn_request_accept)
         ImageView btnAccept;
+        @BindView(R.id.txt_progress_accept)
+        TextView txtAcceptprog;
+        @BindView(R.id.progress_accept)
+        ProgressBar progressAccept;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);

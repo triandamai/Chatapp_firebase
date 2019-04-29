@@ -67,7 +67,6 @@ public class AdapterAllUser extends RecyclerView.Adapter<AdapterAllUser.myViewHo
             public void onClick(View v) {
                 long timestamp = new Date().getTime();
                 final Bantuan bantuan = new Bantuan(context);
-                bantuan.swal_loading("Tunggu ya");
 
                 final ContactModel contact =
                         new ContactModel(
@@ -84,6 +83,7 @@ public class AdapterAllUser extends RecyclerView.Adapter<AdapterAllUser.myViewHo
                         .child(user.getUid())
                         .child(GlobalVariabel.CHILD_CONTACT_FRIEND_REQUEST)
                         .child(firebaseUser.getUid());
+
                 myViewholder.progressBar.setVisibility(View.VISIBLE);
                 myViewholder.detail.setVisibility(View.VISIBLE);
                 myViewholder.detail.setText("Mengirim Permintaan");
@@ -91,6 +91,11 @@ public class AdapterAllUser extends RecyclerView.Adapter<AdapterAllUser.myViewHo
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()){
+                            new Bantuan(context).swal_warning("Kamu sudah mengirim pertemanan");
+                            myViewholder.detail.setVisibility(View.GONE);
+                            myViewholder.progressBar.setVisibility(View.GONE);
+
+                        }else {
                             refAdd.setValue(contact)
                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
@@ -99,10 +104,6 @@ public class AdapterAllUser extends RecyclerView.Adapter<AdapterAllUser.myViewHo
                                             myViewholder.progressBar.setVisibility(View.GONE);
                                         }
                                     });
-                        }else {
-                            new Bantuan(context).swal_warning("Kamu sudah mengirim pertemanan");
-                            myViewholder.detail.setVisibility(View.GONE);
-                            myViewholder.progressBar.setVisibility(View.GONE);
                         }
                     }
 
