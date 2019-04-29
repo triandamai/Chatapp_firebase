@@ -98,11 +98,16 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         databaseReference.child(GlobalVariabel.CHILD_CONTACT)
                 .child(firebaseUser.getUid())
                 .child(GlobalVariabel.CHILD_CONTACT_FRIEND_REQUEST)
+                .orderByChild("friend")
+                .startAt(false)
+                .endAt(false)
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()){
                             ivMainNotif.setImageResource(R.drawable.ic_notifications_active);
+                        }else{
+                            ivMainNotif.setImageResource(R.drawable.ic_notifications_nonactive);
                         }
                     }
 
