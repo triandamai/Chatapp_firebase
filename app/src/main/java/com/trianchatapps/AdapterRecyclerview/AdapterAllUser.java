@@ -4,19 +4,14 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.view.*;
+import android.widget.*;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.*;
 import com.trianchatapps.GlobalVariabel;
 import com.trianchatapps.Helper.Bantuan;
 import com.trianchatapps.Model.ContactModel;
@@ -74,29 +69,70 @@ public class AdapterAllUser extends RecyclerView.Adapter<AdapterAllUser.myViewHo
                 final Bantuan bantuan = new Bantuan(context);
                 bantuan.swal_loading("Tunggu ya");
 
-                ContactModel contact =
+                final ContactModel contact =
                         new ContactModel(
                                 false,
                                 timestamp,
                                 firebaseUser.getDisplayName(),
                                 firebaseUser.getUid());
 
+
+
                 databaseReference = FirebaseDatabase.getInstance().getReference();
-                databaseReference.child(GlobalVariabel.CHILD_CONTACT)
+                //cek sudah da belum
+                final DatabaseReference refAdd =  databaseReference.child(GlobalVariabel.CHILD_CONTACT)
                         .child(user.getUid())
                         .child(GlobalVariabel.CHILD_CONTACT_FRIEND_REQUEST)
-                        .child(firebaseUser.getUid())
-                        .setValue(contact)
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                bantuan.swal_loading("").dismiss();
-                            }
-                        });
+                        .child(firebaseUser.getUid());
+                myViewholder.progressBar.setVisibility(View.VISIBLE);
+                myViewholder.detail.setVisibility(View.VISIBLE);
+                myViewholder.detail.setText("Mengirim Permintaan");
+                refAdd.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.exists()){
+                            refAdd.setValue(contact)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            myViewholder.detail.setText("Meminta Pertemanan...");
+                                            myViewholder.progressBar.setVisibility(View.GONE);
+                                        }
+                                    });
+                        }else {
+                            new Bantuan(context).swal_warning("Kamu sudah mengirim pertemanan");
+                            myViewholder.detail.setVisibility(View.GONE);
+                            myViewholder.progressBar.setVisibility(View.GONE);
+                        }
+                    }
 
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
 
             }
         });
+        final PopupMenu popupMenu =  new PopupMenu(context, myViewholder.btnMenu);
+
+        popupMenu.inflate(R.menu.menu_item_person_add);
+
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                return false;
+            }
+        });
+        myViewholder.btnMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            popupMenu.show();
+
+            }
+        });
+
 
 
     }
@@ -118,7 +154,13 @@ public class AdapterAllUser extends RecyclerView.Adapter<AdapterAllUser.myViewHo
         @BindView(R.id.parent_item_parent)
         CardView item_parent;
         @BindView(R.id.btn_add)
-        Button btnAdd;
+        ImageView btnAdd;
+        @BindView(R.id.txt_detail_progress)
+        TextView detail;
+        @BindView(R.id.progress_add)
+        ProgressBar progressBar;
+        @BindView(R.id.btn_menu)
+        ImageView btnMenu;
 
         public myViewHolder(@NonNull View itemView) {
             super(itemView);
