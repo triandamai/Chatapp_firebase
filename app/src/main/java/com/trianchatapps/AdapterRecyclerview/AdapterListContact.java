@@ -86,9 +86,15 @@ public class AdapterListContact extends RecyclerView.Adapter<AdapterListContact.
         myViewHolder.parentItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+            }
+        });
+        myViewHolder.btnMsg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 context.startActivity(new Intent(context, ThreadChat.class)
-                .putExtra(GlobalVariabel.EXTRA_UID, user.getFriendsUid())
-                .putExtra(GlobalVariabel.EXTRA_REQUEST,"noo"));
+                        .putExtra(GlobalVariabel.EXTRA_UID, user.getFriendsUid())
+                        .putExtra(GlobalVariabel.EXTRA_REQUEST,"noo"));
             }
         });
 
@@ -107,6 +113,10 @@ public class AdapterListContact extends RecyclerView.Adapter<AdapterListContact.
         TextView tvNama;
         @BindView(R.id.parent_item)
         LinearLayout parentItem;
+        @BindView(R.id.btn_call_voice)
+        ImageView btnCall;
+        @BindView(R.id.btn_contact_send_msg)
+        ImageView btnMsg;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);

@@ -30,9 +30,10 @@
          />
 
     <LinearLayout
-         android:layout_width="match_parent"
+         android:layout_width="wrap_content"
          android:layout_height="wrap_content"
          android:layout_margin="10dp"
+         android:layout_weight="1"
          android:layout_gravity="center"
          android:orientation="vertical">
 
@@ -40,12 +41,12 @@
            android:id="@+id/tv_nama"
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
-           android:maxLength="30"
-
+           android:maxLength="19"
+           android:padding="3dp"
            android:textSize="18sp"
            android:layout_marginBottom="2dp"
            android:maxLines="1"
-           android:text="Nama Users" />
+           android:text="" />
       <TextView
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
@@ -55,6 +56,29 @@
            android:layout_marginBottom="10dp"/>
 
 
+
+
     </LinearLayout>
+    <ImageView
+         android:id="@+id/btn_contact_send_msg"
+         android:layout_width="40dp"
+         android:layout_height="40dp"
+         android:layout_gravity="center"
+         android:src="@drawable/ic_btn_chat"
+         android:scaleType="center"
+         android:clickable="true"
+         android:background="?selectableItemBackground"
+         android:layout_marginEnd="10dp"/>
+    <ImageView
+         android:scaleType="center"
+         android:id="@+id/btn_call_voice"
+         android:layout_width="40dp"
+         android:layout_height="40dp"
+         android:layout_gravity="center"
+         android:layout_marginEnd="10dp"
+         android:clickable="true"
+         android:background="?selectableItemBackground"
+         android:src="@drawable/ic_btn_call"/>
+
   </LinearLayout>
 </android.support.v7.widget.CardView>
