@@ -34,6 +34,7 @@ import com.trianchatapps.Main.MainActivity;
 import com.trianchatapps.Model.UserModel;
 import com.trianchatapps.R;
 
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;

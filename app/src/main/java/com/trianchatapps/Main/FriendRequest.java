@@ -75,6 +75,9 @@ public class FriendRequest extends AppCompatActivity {
         databaseReference.child(GlobalVariabel.CHILD_CONTACT)
                 .child(firebaseUser.getUid())
                 .child(GlobalVariabel.CHILD_CONTACT_FRIEND_REQUEST)
+                .orderByChild("friend")
+                .startAt(false)
+                .endAt(false)
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -105,7 +108,7 @@ public class FriendRequest extends AppCompatActivity {
                             }
 
                         }else {
-                            new Bantuan(context).swal_error("ga dapet data");
+
                         }
                     }
 
