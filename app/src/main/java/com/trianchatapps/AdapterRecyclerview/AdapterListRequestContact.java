@@ -103,20 +103,25 @@ public class AdapterListRequestContact extends RecyclerView.Adapter<AdapterListR
 
                                     } else {
 
-                                        DatabaseReference contactsayaref =  databaseReference.child(GlobalVariabel.CHILD_CONTACT)
-                                                .child(firebaseUser.getUid())
-                                                .child(GlobalVariabel.CHILD_CONTACT_FRIEND);
+                                        DatabaseReference contactsayaref =  databaseReference.child(GlobalVariabel.CHILD_CONTACT);
 
                                                 //punya dia
-                                                contactsayaref.child(user.friendsUid)
-                                                .setValue(contactModel2);
+
+                                                contactsayaref
+                                                        .child(firebaseUser.getUid())
+                                                        .child(GlobalVariabel.CHILD_CONTACT_FRIEND)
+                                                        .child(user.friendsUid)
+                                                        .setValue(contactModel2);
 
                                                 //punya saya
-                                                contactsayaref.child(firebaseUser.getUid())
+                                                contactsayaref
+                                                        .child(user.friendsUid)
+                                                        .child(GlobalVariabel.CHILD_CONTACT_FRIEND)
+                                                        .child(firebaseUser.getUid())
                                                 .setValue(contactModel1);
 
                                                 //punya saya
-                                        databaseReference.child(GlobalVariabel.CHILD_CONTACT)
+                                        contactsayaref
                                                 .child(firebaseUser.getUid())
                                                 .child(GlobalVariabel.CHILD_CONTACT_FRIEND_REQUEST)
                                                 .child(user.friendsUid)
