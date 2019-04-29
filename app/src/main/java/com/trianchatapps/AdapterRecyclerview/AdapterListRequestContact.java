@@ -13,6 +13,8 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.bumptech.glide.Glide;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.*;
 import com.trianchatapps.GlobalVariabel;
 import com.trianchatapps.Helper.Bantuan;
@@ -21,6 +23,7 @@ import com.trianchatapps.Model.ContactModel;
 import com.trianchatapps.Model.UserModel;
 import com.trianchatapps.R;
 
+import java.util.Date;
 import java.util.List;
 
 public class AdapterListRequestContact extends RecyclerView.Adapter<AdapterListRequestContact.MyViewHolder> {
@@ -31,6 +34,7 @@ public class AdapterListRequestContact extends RecyclerView.Adapter<AdapterListR
     public Context context;
     public DatabaseReference databaseReference;
     public String saya;
+    public FirebaseUser firebaseUser;
 
 
     public AdapterListRequestContact(Context context, String owner, List<ContactModel> listkontak) {
@@ -52,7 +56,7 @@ public class AdapterListRequestContact extends RecyclerView.Adapter<AdapterListR
     public void onBindViewHolder(@NonNull final MyViewHolder myViewHolder, final int i) {
         final ContactModel user = contacts.get(i);
         databaseReference = FirebaseDatabase.getInstance().getReference();
-
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
             myViewHolder.tvNama.setText(user.getName());
             myViewHolder.parentItem.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -60,6 +64,55 @@ public class AdapterListRequestContact extends RecyclerView.Adapter<AdapterListR
                     context.startActivity(new Intent(context, Profil.class)
                             .putExtra(GlobalVariabel.EXTRA_UID, user.getFriendsUid())
                             .putExtra(GlobalVariabel.EXTRA_REQUEST, GlobalVariabel.EXTRA_REQUEST));
+                }
+            });
+
+            myViewHolder.btnAccept.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    long timestamp = new Date().getTime();
+
+                    final ContactModel contactModel1 = new ContactModel();
+                    final ContactModel contactModel2 = new ContactModel();
+
+                    contactModel1.setFriend(true);
+                    contactModel1.setFriendsUid(firebaseUser.getUid());
+                    contactModel1.setName(".");
+                    contactModel1.setTimestamp(timestamp);
+
+                    contactModel2.setFriend(true);
+                    contactModel2.setFriendsUid(user.friendsUid);
+                    contactModel2.setName(".");
+                    contactModel2.setTimestamp(timestamp);
+
+                    databaseReference.child(GlobalVariabel.CHILD_CONTACT)
+                            .child(user.friendsUid)
+                            .child(GlobalVariabel.CHILD_CONTACT_FRIEND)
+                            .child(firebaseUser.getUid())
+                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    if (dataSnapshot.exists()) {
+                                        new Bantuan(context).swal_basic("Permintaan pertemanan sudah dikirim");
+                                    } else {
+                                        databaseReference.child(GlobalVariabel.CHILD_CONTACT)
+                                                .child(firebaseUser.getUid())
+                                                .child(GlobalVariabel.CHILD_CONTACT_FRIEND)
+                                                .child(user.friendsUid)
+                                                .setValue(contactModel2);
+                                        databaseReference.child(GlobalVariabel.CHILD_CONTACT)
+                                                .child(user.friendsUid)
+                                                .child(GlobalVariabel.CHILD_CONTACT_FRIEND)
+                                                .child(firebaseUser.getUid())
+                                                .setValue(contactModel1);
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            });
                 }
             });
 
@@ -82,6 +135,8 @@ public class AdapterListRequestContact extends RecyclerView.Adapter<AdapterListR
         TextView tvNama;
         @BindView(R.id.parent_item)
         LinearLayout parentItem;
+        @BindView(R.id.btn_request_accept)
+        ImageView btnAccept;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
