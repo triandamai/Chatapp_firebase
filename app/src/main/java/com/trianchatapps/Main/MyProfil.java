@@ -118,7 +118,7 @@ public class MyProfil extends AppCompatActivity {
     @OnClick(R.id.btn_myprofil_logout)
     public void logout() {
         if (firebaseUser != null) {
-            //logout
+
             firebaseAuth = FirebaseAuth.getInstance();
 
             firebaseAuth.signOut();

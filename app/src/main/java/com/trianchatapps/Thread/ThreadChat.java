@@ -24,7 +24,6 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.crashlytics.android.Crashlytics;
-import com.google.android.gms.common.internal.GmsLogger;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
@@ -93,7 +92,7 @@ public class ThreadChat extends AppCompatActivity {
     public Context context;
     public AdapterChatrv adapter;
     public final ArrayList<MessageModel> messages = new ArrayList<>();
-    public MediaPlayer mediaPlayer;
+    public MediaPlayer mediaPlayer_new_msg;
     private FirebaseAnalytics mFirebaseAnalytics;
 
 
@@ -104,6 +103,7 @@ public class ThreadChat extends AppCompatActivity {
 
         ButterKnife.bind(this);
         context = ThreadChat.this;
+        mediaPlayer_new_msg =  MediaPlayer.create(context,R.raw.new_message);
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(context);
         databaseReference = FirebaseDatabase.getInstance().getReference();
@@ -404,21 +404,25 @@ public class ThreadChat extends AppCompatActivity {
                     @Override
                     public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                         adapter.notifyDataSetChanged();
+                        mediaPlayer_new_msg.start();
                     }
 
                     @Override
                     public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                         adapter.notifyDataSetChanged();
+                        mediaPlayer_new_msg.start();
                     }
 
                     @Override
                     public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
                         adapter.notifyDataSetChanged();
+                        mediaPlayer_new_msg.start();
                     }
 
                     @Override
                     public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                         adapter.notifyDataSetChanged();
+                        mediaPlayer_new_msg.start();
                     }
 
                     @Override
@@ -447,6 +451,7 @@ public class ThreadChat extends AppCompatActivity {
         super.onPause();
         if (firebaseUser != null) {
             new Function.IsOffline().execute();
+
         }
     }
 
@@ -456,5 +461,17 @@ public class ThreadChat extends AppCompatActivity {
         if (firebaseUser != null) {
             new Function.IsOnline().execute();
         }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mediaPlayer_new_msg.release();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mediaPlayer_new_msg.release();
     }
 }
