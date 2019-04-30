@@ -45,13 +45,12 @@ public class FriendRequest extends AppCompatActivity {
     @BindView(R.id.linear_isi)
     LinearLayout linearIsi;
 
-   AdapterListRequestContact adapterListRequestContact;
-
+    public AdapterListRequestContact adapterListRequestContact;
     public Context context;
     public DatabaseReference databaseReference;
     public FirebaseUser firebaseUser;
     private FirebaseAnalytics mFirebaseAnalytics;
-   public  List<ContactModel> contacts = new ArrayList<>();
+    public List<ContactModel> contacts = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,33 +80,28 @@ public class FriendRequest extends AppCompatActivity {
                 .addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.exists()){
+                        if (dataSnapshot.exists()) {
                             try {
                                 linearKosong.setVisibility(View.GONE);
 
                                 ContactModel contact = new ContactModel();
                                 for (DataSnapshot data : dataSnapshot.getChildren()) {
 
-                                        contact = data.getValue(ContactModel.class);
-                                    }
+                                    contact = data.getValue(ContactModel.class);
+                                }
 
                                 RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(context);
                                 rv.setLayoutManager(layoutManager);
                                 contacts.add(contact);
-                                adapterListRequestContact = new AdapterListRequestContact(context,firebaseUser.getUid(),contacts);
+                                adapterListRequestContact = new AdapterListRequestContact(context, firebaseUser.getUid(), contacts);
                                 rv.setAdapter(adapterListRequestContact);
-                            } catch (NullPointerException e){
+                            } catch (NullPointerException e) {
                                 Crashlytics.logException(e);
-                                FirebaseCrash.report(e);
-                            } catch (Exception e){
+                            } catch (Exception e) {
                                 Crashlytics.logException(e);
-                                FirebaseCrash.report(e);
-                            } catch (Throwable e){
+                            } catch (Throwable e) {
                                 Crashlytics.logException(e);
-                                FirebaseCrash.report(e);
                             }
-
-                        }else {
 
                         }
                     }
@@ -120,6 +114,7 @@ public class FriendRequest extends AppCompatActivity {
 
 
     }
+
     @Override
     protected void onPause() {
         super.onPause();
@@ -139,6 +134,6 @@ public class FriendRequest extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-    finish();
+        finish();
     }
 }

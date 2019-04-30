@@ -11,8 +11,10 @@ import android.widget.EditText;
 import com.bumptech.glide.Glide;
 import com.crashlytics.android.Crashlytics;
 import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -64,12 +66,12 @@ public class MyProfil extends AppCompatActivity {
         ButterKnife.bind(this);
         context = MyProfil.this;
         getSupportActionBar().setTitle("Profil");
-
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(context);
-
-        databaseReference = FirebaseDatabase.getInstance().getReference();
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         if (firebaseUser != null) {
+            mFirebaseAnalytics = FirebaseAnalytics.getInstance(context);
+
+            databaseReference = FirebaseDatabase.getInstance().getReference();
+
             data_user();
         } else {
             startActivity(new Intent(context, Register.class));
@@ -88,7 +90,6 @@ public class MyProfil extends AppCompatActivity {
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             if (dataSnapshot.exists()) {
                                 UserModel user;
-
                                 user = dataSnapshot.getValue(UserModel.class);
 
                                 Glide.with(context)
@@ -107,7 +108,6 @@ public class MyProfil extends AppCompatActivity {
                     });
         } catch (NullPointerException e) {
             Crashlytics.logException(e);
-            FirebaseCrash.report(e);
         } catch (Exception e) {
             Crashlytics.logException(e);
         } catch (Throwable e) {
@@ -122,15 +122,21 @@ public class MyProfil extends AppCompatActivity {
             firebaseAuth = FirebaseAuth.getInstance();
 
             firebaseAuth.signOut();
-            firebaseAuth.addAuthStateListener(new FirebaseAuth.AuthStateListener() {
+
+            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestIdToken(getString(R.string.default_web_client_id))
+                    .requestEmail()
+                    .build();
+            GoogleSignInClient gsc = GoogleSignIn.getClient(context, gso);
+            gsc.signOut().addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
-                public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                public void onComplete(@NonNull Task<Void> task) {
+                    startActivity(new Intent(context, Register.class));
+                    finish();
                 }
             });
 
 
-            startActivity(new Intent(context, Register.class));
-            finish();
         } else {
             // langsung ke resgister
             startActivity(new Intent(context, Register.class));

@@ -23,6 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.trianchatapps.AdapterRecyclerview.AdapterListChat;
 import com.trianchatapps.Auth.Register;
+import com.trianchatapps.GlobalVariabel;
 import com.trianchatapps.R;
 
 import java.util.ArrayList;
@@ -48,7 +49,7 @@ public class FragmentListChat extends Fragment {
     public DatabaseReference databaseReference;
     public ArrayList<String> listchat = new ArrayList<>();
     public AdapterListChat adapter;
-    public String owner;
+    public FirebaseUser firebaseUser;
     public FirebaseAnalytics mFirebaseAnalytics;
 
     @Override
@@ -58,28 +59,53 @@ public class FragmentListChat extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_blank_chat, container, false);
+
         unbinder = ButterKnife.bind(this, view);
+        context = getActivity();
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
-        inisisi();
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+        databaseReference.keepSynced(true);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(context);
+        rv.setLayoutManager(layoutManager);
         datachat();
+
         return view;
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
 
+    public void datachat() {
+        databaseReference
+                .child(GlobalVariabel.CHILD_CHAT)
+                .child(firebaseUser.getUid())
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        listchat.clear();
+                        if (dataSnapshot.exists()) {
+                            linearKosong.setVisibility(View.GONE);
+                            linearIsi.setVisibility(View.VISIBLE);
+                            for (DataSnapshot data : dataSnapshot.getChildren()) {
+                                if (data.exists()) {
+                                    listchat.add(data.getKey());
+                                }
+                            }
+                        } else {
+                            linearKosong.setVisibility(View.VISIBLE);
+                            linearIsi.setVisibility(View.GONE);
+                        }
+                        adapter = new AdapterListChat(context, listchat);
+                        rv.setAdapter(adapter);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
     }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-
-    }
-
 
     @Override
     public void onDestroyView() {
@@ -87,44 +113,13 @@ public class FragmentListChat extends Fragment {
         unbinder.unbind();
     }
 
-    public void inisisi() {
-        context = getActivity();
-        owner = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("CHAT")
-                .child(owner);
-        databaseReference.keepSynced(true);
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
     }
 
-    public void datachat() {
-        RecyclerView.LayoutManager layoutManager =
-                new LinearLayoutManager(context);
-        rv.setLayoutManager(layoutManager);
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                listchat.clear();
-                if (dataSnapshot.exists()) {
-
-                    linearKosong.setVisibility(View.GONE);
-                    linearIsi.setVisibility(View.VISIBLE);
-                    for (DataSnapshot data : dataSnapshot.getChildren()) {
-                        if (data.exists()) {
-                            listchat.add(data.getKey());
-                        }
-                    }
-                } else {
-                    linearKosong.setVisibility(View.VISIBLE);
-                    linearIsi.setVisibility(View.GONE);
-                }
-                adapter = new AdapterListChat(context, listchat);
-                rv.setAdapter(adapter);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
+    @Override
+    public void onDetach() {
+        super.onDetach();
     }
 }

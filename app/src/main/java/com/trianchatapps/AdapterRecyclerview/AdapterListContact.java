@@ -36,13 +36,13 @@ public class AdapterListContact extends RecyclerView.Adapter<AdapterListContact.
     public List<ContactModel> contacts;
     public Context context;
     public DatabaseReference databaseReference;
-    public String saya;
 
 
-    public AdapterListContact(Context context, String owner,List<ContactModel> listkontak) {
+
+    public AdapterListContact(Context context,List<ContactModel> listkontak) {
         this.context = context;
         this.contacts = listkontak;
-        this.saya = owner;
+
     }
 
     @NonNull

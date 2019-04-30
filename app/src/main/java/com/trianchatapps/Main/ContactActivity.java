@@ -1,6 +1,7 @@
 package com.trianchatapps.Main;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -21,8 +23,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.trianchatapps.AdapterRecyclerview.AdapterListContact;
+import com.trianchatapps.Auth.Register;
 import com.trianchatapps.Function;
 import com.trianchatapps.GlobalVariabel;
+import com.trianchatapps.Helper.Bantuan;
 import com.trianchatapps.Model.ContactModel;
 import com.trianchatapps.R;
 
@@ -49,7 +53,6 @@ public class ContactActivity extends AppCompatActivity {
     public DatabaseReference databaseReference;
     public ArrayList<ContactModel> listkontak = new ArrayList<>();
     public AdapterListContact adapter;
-    public String saya;
     private FirebaseAnalytics mFirebaseAnalytics;
     private FirebaseUser firebaseUser;
 
@@ -59,30 +62,29 @@ public class ContactActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_contact);
         ButterKnife.bind(this);
-        getSupportActionBar().setTitle("Kontak Saya");
-        context = ContactActivity.this;
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-        inisisis();
-        datacontact();
-    }
-
-
-
-
-    public void inisisis() {
-
-        databaseReference = FirebaseDatabase.getInstance().getReference();
-        databaseReference.keepSynced(true);
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        saya = FirebaseAuth.getInstance().getCurrentUser().getUid().toString();
+        if (firebaseUser != null){
+            getSupportActionBar().setTitle("Kontak Saya");
+            context = ContactActivity.this;
+            mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+            databaseReference = FirebaseDatabase.getInstance().getReference();
+            databaseReference.keepSynced(true);
+
+            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(context);
+            rv.setLayoutManager(layoutManager);
+
+            datacontact();
+        }else {
+            new Bantuan(context).swal_basic("Sesi anda sudah habis");
+            startActivity(new Intent(context, Register.class));
+            finish();
+        }
     }
 
     public void datacontact() {
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(context);
-        rv.setLayoutManager(layoutManager);
-
-        databaseReference.child(GlobalVariabel.CHILD_CONTACT)
-                .child(saya)
+        databaseReference
+                .child(GlobalVariabel.CHILD_CONTACT)
+                .child(firebaseUser.getUid())
                 .child(GlobalVariabel.CHILD_CONTACT_FRIEND)
                 .addValueEventListener(new ValueEventListener() {
                     @Override
@@ -95,7 +97,7 @@ public class ContactActivity extends AppCompatActivity {
                                        contact  = data.getValue(ContactModel.class);
                             }
                             listkontak.add(contact);
-                            adapter = new AdapterListContact(context, saya,listkontak);
+                            adapter = new AdapterListContact(context,listkontak);
                             rv.setAdapter(adapter);
 
                         }else {
@@ -106,12 +108,9 @@ public class ContactActivity extends AppCompatActivity {
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                        Crashlytics.logException(databaseError.toException());
                     }
                 });
-
-
-
     }
 
 

@@ -60,10 +60,8 @@ public class MainActivity extends AppCompatActivity implements Serializable {
 
     private FirebaseAnalytics mFirebaseAnalytics;
     public Context context;
-    public FirebaseAuth firebaseAuth;
     public DatabaseReference databaseReference;
     public FirebaseUser firebaseUser;
-    public FirebaseAuth.AuthStateListener authStateListener;
 
 
     @Override
@@ -72,16 +70,15 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         context = MainActivity.this;
-        firebaseAuth = FirebaseAuth.getInstance();
-        databaseReference = FirebaseDatabase.getInstance().getReference();
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(context);
-
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
         if (firebaseUser != null) {
             tambahkeuser(firebaseUser);
             txtMainTitle.setText(firebaseUser.getDisplayName());
             txtMainSubtitle.setText(firebaseUser.getEmail());
+            databaseReference = FirebaseDatabase.getInstance().getReference();
+            databaseReference.keepSynced(true);
+            mFirebaseAnalytics = FirebaseAnalytics.getInstance(context);
         } else {
             pindahActivity(1);
         }
@@ -95,6 +92,10 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         viewpager.setAdapter(adapter);
         tab.setupWithViewPager(viewpager);
 
+        cek_notif();
+    }
+
+    private void cek_notif() {
         databaseReference.child(GlobalVariabel.CHILD_CONTACT)
                 .child(firebaseUser.getUid())
                 .child(GlobalVariabel.CHILD_CONTACT_FRIEND_REQUEST)
@@ -116,6 +117,42 @@ public class MainActivity extends AppCompatActivity implements Serializable {
 
                     }
                 });
+    }
+
+    public void pindahActivity(int i) {
+        switch (i) {
+            case 1:
+                startActivity(new Intent(context, Register.class));
+                finish();
+                break;
+        }
+    }
+
+
+    public void tambahkeuser(FirebaseUser user) {
+
+        UserModel userModel = new UserModel();
+        userModel.setDisplayName(firebaseUser.getDisplayName());
+        userModel.setEmail(firebaseUser.getEmail());
+        userModel.setPhotoUrl(firebaseUser.getPhotoUrl().toString());
+        userModel.setUid(firebaseUser.getUid());
+
+        databaseReference.child(GlobalVariabel.CHILD_USER)
+                .child(user.getUid())
+                .setValue(userModel);
+
+        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(new OnSuccessListener<InstanceIdResult>() {
+            @Override
+            public void onSuccess(InstanceIdResult instanceIdResult) {
+                instanceId = instanceIdResult.getToken();
+                databaseReference.child(GlobalVariabel.CHILD_USER)
+                        .child(firebaseUser.getUid())
+                        .child("instanceId")
+                        .setValue(instanceId);
+            }
+        });
+
+
     }
 
     @OnClick(R.id.iv_main_notif)
@@ -162,42 +199,7 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         startActivity(new Intent(context, ContactActivity.class));
     }
 
-    public void pindahActivity(int i) {
-        switch (i) {
-            case 1:
-                startActivity(new Intent(context, Register.class));
-                finish();
-                break;
-        }
-    }
 
-
-    public void tambahkeuser(FirebaseUser user) {
-
-        UserModel userModel = new UserModel();
-        userModel.setDisplayName(firebaseUser.getDisplayName());
-        userModel.setEmail(firebaseUser.getEmail());
-        userModel.setPhotoUrl(firebaseUser.getPhotoUrl().toString());
-        userModel.setUid(firebaseUser.getUid());
-
-
-        databaseReference.child(GlobalVariabel.CHILD_USER)
-                .child(user.getUid())
-                .setValue(userModel);
-
-        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(new OnSuccessListener<InstanceIdResult>() {
-            @Override
-            public void onSuccess(InstanceIdResult instanceIdResult) {
-                instanceId = instanceIdResult.getToken();
-                databaseReference.child(GlobalVariabel.CHILD_USER)
-                        .child(firebaseUser.getUid())
-                        .child("instanceId")
-                        .setValue(instanceId);
-            }
-        });
-
-
-    }
 
 
 }
