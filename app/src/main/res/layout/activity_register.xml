@@ -14,6 +14,13 @@
          android:layout_height="match_parent"
          android:src="@drawable/bg_auth_register"
          />
+    <ProgressBar
+         android:id="@+id/progress_loding"
+         android:visibility="gone"
+         android:layout_width="50dp"
+         android:layout_height="50dp"
+         android:layout_centerInParent="true"
+         android:progressTint="#673AB7"/>
     <LinearLayout
          android:layout_width="match_parent"
          android:layout_height="wrap_content"

@@ -73,12 +73,13 @@ public class MainActivity extends AppCompatActivity implements Serializable {
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
         if (firebaseUser != null) {
-            tambahkeuser(firebaseUser);
+
             txtMainTitle.setText(firebaseUser.getDisplayName());
             txtMainSubtitle.setText(firebaseUser.getEmail());
             databaseReference = FirebaseDatabase.getInstance().getReference();
-            databaseReference.keepSynced(true);
+
             mFirebaseAnalytics = FirebaseAnalytics.getInstance(context);
+            tambahkeuser(firebaseUser);
         } else {
             pindahActivity(1);
         }

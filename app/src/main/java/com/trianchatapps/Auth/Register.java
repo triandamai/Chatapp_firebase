@@ -4,14 +4,16 @@ package com.trianchatapps.Auth;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-
+import android.view.View;
+import android.widget.ProgressBar;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import com.google.android.gms.auth.api.Auth;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.analytics.FirebaseAnalytics;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
@@ -19,11 +21,10 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthCredential;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.auth.*;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -33,11 +34,6 @@ import com.trianchatapps.Helper.Bantuan;
 import com.trianchatapps.Main.MainActivity;
 import com.trianchatapps.Model.UserModel;
 import com.trianchatapps.R;
-
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class Register extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
@@ -51,6 +47,8 @@ public class Register extends AppCompatActivity implements GoogleApiClient.OnCon
 
     @BindView(R.id.btn_sign_google)
     SignInButton signInButton;
+    @BindView(R.id.progress_loding)
+    ProgressBar progressLoding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,6 +101,7 @@ public class Register extends AppCompatActivity implements GoogleApiClient.OnCon
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             if (result.isSuccess()) {
+                progressLoding.setVisibility(View.VISIBLE);
                 GoogleSignInAccount account = result.getSignInAccount();
                 authWithGogle(account);
             }
@@ -119,8 +118,15 @@ public class Register extends AppCompatActivity implements GoogleApiClient.OnCon
                     new Bantuan(context).swal_loading("").dismiss();
                     FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
                     tambahkeuser(firebaseUser);
-                    startActivity(new Intent(context, MainActivity.class));
-                    finish();
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            progressLoding.setVisibility(View.GONE);
+                            startActivity(new Intent(context, MainActivity.class));
+                            finish();
+                        }
+                    }, 1000);
+
                 }
             }
         });

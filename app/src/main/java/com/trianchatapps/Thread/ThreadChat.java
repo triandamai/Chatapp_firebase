@@ -104,7 +104,7 @@ public class ThreadChat extends AppCompatActivity {
         ButterKnife.bind(this);
         context = ThreadChat.this;
         mediaPlayer_new_msg =  MediaPlayer.create(context,R.raw.new_message);
-
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(context);
         databaseReference = FirebaseDatabase.getInstance().getReference();
         databaseReference.keepSynced(true);
@@ -115,6 +115,7 @@ public class ThreadChat extends AppCompatActivity {
             sendFab.requestFocus();
             id_pengirim = intent.getStringExtra("uid");
             id_saya = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            new Function.IsOnline().execute();
             dataUser();
             inisisi_recycler();
         } else {
@@ -127,7 +128,7 @@ public class ThreadChat extends AppCompatActivity {
         inputEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                new Function.IsTyping().execute();
+                new Function.IsOnline().execute();
             }
 
             @Override
@@ -410,19 +411,19 @@ public class ThreadChat extends AppCompatActivity {
                     @Override
                     public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                         adapter.notifyDataSetChanged();
-                        mediaPlayer_new_msg.start();
+
                     }
 
                     @Override
                     public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
                         adapter.notifyDataSetChanged();
-                        mediaPlayer_new_msg.start();
+
                     }
 
                     @Override
                     public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                         adapter.notifyDataSetChanged();
-                        mediaPlayer_new_msg.start();
+
                     }
 
                     @Override
@@ -466,12 +467,17 @@ public class ThreadChat extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        mediaPlayer_new_msg.release();
+        if (firebaseUser != null) {
+            new Function.IsOffline().execute();
+
+        }
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mediaPlayer_new_msg.release();
+    protected void onResume() {
+        super.onResume();
+        if (firebaseUser != null) {
+            new Function.IsOnline().execute();
+        }
     }
 }
