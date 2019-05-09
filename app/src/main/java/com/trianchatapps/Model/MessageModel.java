@@ -1,12 +1,18 @@
 package com.trianchatapps.Model;
 
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.IgnoreExtraProperties;
+import com.trianchatapps.GlobalVariabel;
 
 /*
  * Author Trian on 8/12/2018.
  */
 @IgnoreExtraProperties
-public class MessageModel {
+public class MessageModel  {
 
     public long timestamp;
     public long negatedTimestamp;
@@ -60,4 +66,6 @@ public class MessageModel {
     public void setTick(int tick) {
         this.tick = tick;
     }
+
+
 }
