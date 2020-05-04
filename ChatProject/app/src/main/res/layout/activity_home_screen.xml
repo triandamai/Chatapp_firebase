@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.tdn.ui.view.HomeScreen">
+    <data>
+        <variable
+            name="isLoading"
+            type="boolean" />
+        <variable
+            name="selected"
+            type="com.google.android.material.bottomnavigation.BottomNavigationView.OnNavigationItemSelectedListener" />
+        <variable
+            name="reselected"
+            type="com.google.android.material.bottomnavigation.BottomNavigationView.OnNavigationItemReselectedListener" />
+    </data>
+    <FrameLayout
+        android:id="@+id/container"
+        visibleGone="@{isLoading}"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        onItemSelected="@{selected}"
+        onItemReselected="@{reselected}"
+        app:menu="@menu/menu_navigation_view"/>
+</layout>

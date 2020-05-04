@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable
+            name="chat"
+            type="com.tdn.data.model.ChatModel" />
+        <variable
+            name="user"
+            type="com.tdn.data.model.UserModel" />
+        <variable
+            name="event"
+            type="com.tdn.ui.callback.AdapterItemClicked" />
+
+    </data>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="@{()->event.ItemClicked(user)}">
+
+    </LinearLayout>
+
+</layout>

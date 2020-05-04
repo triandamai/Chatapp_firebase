@@ -1,0 +1,38 @@
+User
+	id 
+		nama
+		username
+		password
+		profilimage
+		lat
+		lang
+		createdAt
+		updatedAt
+
+Chat
+	idUser(owner)
+		idChat
+			idUser(sender)
+			type
+			body
+			media
+			status
+			createdAt
+			updatedAt
+Notifications
+	idChat
+		idUser(sender)
+		type
+		body
+		media
+		status
+		createdAt
+		updatedAt
+
+Contact
+	idUser(owner)
+		idContact
+			idUser(friend)
+			detail
+			createdAt
+			updatedAt

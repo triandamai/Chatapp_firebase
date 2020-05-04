@@ -1,0 +1,32 @@
+User
+	id(primary key(String)) 
+	nama
+	username
+	password
+	profilimage
+	lat
+	lang
+	createdAt
+	updatedAt
+
+Chat
+	idChat(primary key(String))
+	idUser(owner)
+	idUser(sender)
+	type
+	body
+	media
+	status
+	createdAt
+	updatedAt
+
+Notifications
+	idChat(primary key(String))
+	idUser(sender)
+	idUser(receiver)
+	type
+	body
+	media
+	status
+	createdAt
+	updatedAt
